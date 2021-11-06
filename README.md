@@ -21,6 +21,6 @@ Robert Axelrod, professor of political science at the University of Michigan, he
 I plan to run a Prisoner's Dilemma tournament among members of my extended family and friends. This repository will contain a (hopefully) short Python program to run such touraments.
 
 I am aware that there is already existing software for this such as https://evolution-outreach.biomedcentral.com/articles/10.1007/s12052-012-0434-x
-* although I cannot follow the link to the code
+* although the link to the code is broken
 
 ... but it is more fun to write my own.
