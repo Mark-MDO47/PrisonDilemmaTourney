@@ -16,10 +16,11 @@ Robert Axelrod, professor of political science at the University of Michigan, he
 * Later he held another tournament and invited anyone to submit algorithms.
 * The "Tit-For-Tat" algorithm seemed to do the best.
 
-## What is this repository for
+## What is this repository for?
 
 I plan to run a Prisoner's Dilemma tournament among members of my extended family. This repository will contain a (hopefully) short Python program to run such touraments.
 
 I am aware that there is already existing software for this such as https://evolution-outreach.biomedcentral.com/articles/10.1007/s12052-012-0434-x
+* although I cannot follow the link to the code
 
 ... but it is more fun to write my own.
