@@ -84,8 +84,8 @@ def doTournament(number_of_iterations, algo1, algo2):
     for idx in range(number_of_iterations):
         choice1 = algofunc1(selfHist1,selfHist2)
         choice2 = algofunc2(selfHist2,selfHist1)
-        selfHist1.append(choice1)
-        selfHist2.append(choice2)
+        selfHist1 = [choice1] + selfHist1 # latest choice is always [0]
+        selfHist2 = [choice2] + selfHist2
 
     print("Round\t%s\t%s\t" % (algo1, algo2))
     for idx in range(len(selfHist1)):
