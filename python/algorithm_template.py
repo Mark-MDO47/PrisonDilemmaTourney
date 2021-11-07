@@ -37,12 +37,12 @@
 # Later he held another tournament and invited anyone to submit algorithms.
 # The "Tit-For-Tat" algorithm seemed to do the best.
 
-import sys
-import string
-import os
+def algorithm_template(selfHist1, oppHist1):
+    BETRAY = 0
+    KEEPSILENT = 1
 
-BETRAY     = 0
-KEEPSILENT = 1
-
-def algorithm_template():
     return BETRAY
+
+if __name__ == "__main__":
+   sys.stderr.write("ERROR - algorithm_template.py is not intended to be run stand-alone")
+   exit(-1)
