@@ -7,8 +7,8 @@
 Merrill Flood and Melvin Dresher from RAND corporation framed the concept in 1950 to show why two completely rational individuals might not cooperate, even if it appears that it is in their best interests to do so.
 
 There are many scenarios that can be mapped to this concept, but the famous mapping by Albert W. Tucker called the "Prisoner's Dilemma" revolves around two prisoners, "A" and "B", guilty of the same crime and being held in separate interrogation rooms.
-* Due to weak evidence held by the police, if both refuse to betray the other that will lead to a very small sentence for each of them. If one stays silent and the other betrays, the betrayer gets off free and the silent one gets a large sentence. If they both betray each other, they both get an intermediate sentence.
-* (spoiler alert) If the game is played exactly one time, the game-theory best choice for each player is to betray the other player.
+* Due to weak evidence held by the police, if both cooperate (refuse to defect) that will lead to a very small sentence for each of them. If one cooperates and the other defects, the defector gets off free and the cooperator gets a large sentence. If they both defect, they both get an intermediate sentence.
+* (spoiler alert) If the game is played exactly one time, the game-theory best choice for each player is to defect.
 
 Robert Axelrod, professor of political science at the University of Michigan, held a tournament of competing strategies for the famous Prisoner's Dilemma in 1980.
 * He had the insight that if the game is played many times in succession, then the history of play allows each player to take into account the "reputation" of the other player in making their choice of behavior.
