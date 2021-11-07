@@ -38,18 +38,22 @@
 # Later he held another tournament and invited anyone to submit algorithms.
 # The "Tit-For-Tat" algorithm seemed to do the best.
 
+import argparse
+import importlib
+"""
 import sys
 import string
 import os
-import argparse
 import pandas as pd
 import datetime
+"""
 
 BETRAY     = 0
 KEEPSILENT = 1
+TEXT_INTERP = ["BETRAY", "KEEPSILENT"]
 
 
-def convert_to_strings(algo, num):
+def convert_to_strings(algo):
     # get just the module name
     tmp = algo.rfind("\\")
     if -1 != tmp:
@@ -60,25 +64,32 @@ def convert_to_strings(algo, num):
     tmp = algo.rfind(".py")
     if -1 != tmp:
         algo = algo[:tmp]
-    return "import %s as algo%d" % (algo, num), "choice%d = algo%d.%s(selfHist%d,oppHist%d)" % (num, algo, num, num)
+
+    return algo
 
 def doTournament(number_of_iterations, algo1, algo2):
-    print("DEBUG ", number_of_iterations, algo1, algo2)
+    # print("DEBUG ", number_of_iterations, algo1, algo2)
     selfHist1 = [] # do not put these on same line all "=" together
     selfHist2 = []
-    oppHist1 = []
-    oppHist2 = []
-    import_algo1, call_algo1 = convert_to_strings(algo1, 1)
-    import_algo2, call_algo2 = convert_to_strings(algo2, 2)
-    exec(import_algo1)
-    exec(import_algo2)
+    import_algo1 = convert_to_strings(algo1)
+    import_algo2 = convert_to_strings(algo2)
+    # print("DEBUG ", import_algo1)
+
+    algotype1 = importlib.import_module(import_algo1)
+    algofunc1 = getattr(algotype1, import_algo1)
+    algotype2 = importlib.import_module(import_algo2)
+    algofunc2 = getattr(algotype2, import_algo2)
+    # print("DEBUG ", type(algotype1))
+
     for idx in range(number_of_iterations):
-        exec(call_algo1)
-        exec(call_algo2)
+        choice1 = algofunc1(selfHist1,selfHist2)
+        choice2 = algofunc2(selfHist2,selfHist1)
         selfHist1.append(choice1)
         selfHist2.append(choice2)
-        oppHist1.append(choice2)
-        oppHist2.append(choice1)
+
+    print("Round\t%s\t%s\t" % (algo1, algo2))
+    for idx in range(len(selfHist1)):
+        print("%d\t%s\t%s\t" % (idx, TEXT_INTERP[selfHist1[idx]], TEXT_INTERP[selfHist2[idx]]))
 
 
 

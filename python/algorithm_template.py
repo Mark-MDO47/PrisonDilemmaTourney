@@ -37,12 +37,19 @@
 # Later he held another tournament and invited anyone to submit algorithms.
 # The "Tit-For-Tat" algorithm seemed to do the best.
 
-def algorithm_template(selfHist1, oppHist1):
-    BETRAY = 0
-    KEEPSILENT = 1
+import sys
+import PrisonersDilemmaTournament as values # pick up BETRAY and KEEPSILENT
 
-    return BETRAY
+# note: len(selfHist) and len(oppHist) should always be the same
+def algorithm_template(selfHist, oppHist):
+    # print(" algo DEBUG lenself=%d lenopp=%d" % (len(selfHist),len(oppHist)))
+    if (0 == (len(selfHist) % 2)) and (0 == (len(oppHist) % 2)):
+        # print(" algo DEBUG KEEPSILENT=%d" % values.KEEPSILENT)
+        return values.KEEPSILENT
+    else:
+        # print(" algo DEBUG BETRAY=%d" % values.BETRAY)
+        return values.BETRAY
 
 if __name__ == "__main__":
-   sys.stderr.write("ERROR - algorithm_template.py is not intended to be run stand-alone")
+   sys.stderr.write("ERROR - algorithm_template.py is not intended to be run stand-alone\n")
    exit(-1)
