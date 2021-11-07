@@ -8,9 +8,9 @@
 # Each call to the algorithm will have the following for parameters:
 #     list of history all the choices made by both parties in reverse order (latest choice before this is [0], prev [1])
 #       note: len(oppChoices) should be identical to len(myChoices); zero for first call, one for second call
-#     value of each entry is one of BETRAY or KEEPSILENT
+#     value of each entry is one of DEFECT or COOPERATE
 # The algorithm will return
-#     BETRAY or KEEPSILENT
+#     DEFECT or COOPERATE
 #
 # See https://en.wikipedia.org/wiki/Prisoner%27s_dilemma
 # See https://cs.stanford.edu/people/eroberts/courses/soco/projects/1998-99/game-theory/axelrod.html
@@ -22,11 +22,11 @@
 #   "Prisoner's Dilemma" revolves around two prisoners, "A" and "B", guilty of the same crime and being held in
 #   separate interrogation rooms.
 #
-# Due to weak evidence held by the police, if both refuse to betray the other that will lead to a very small sentence
-#   for each of them. If one stays silent and the other betrays, the betrayer gets off free and the silent one gets a
-#   large sentence. If they both betray each other, they both get an intermediate sentence.
+# Due to weak evidence held by the police, if both refuse to DEFECT the other that will lead to a very small sentence
+#   for each of them. If one stays silent and the other DEFECTs, the DEFECTer gets off free and the silent one gets a
+#   large sentence. If they both DEFECT each other, they both get an intermediate sentence.
 # (spoiler alert) If the game is played exactly one time, the game-theory best choice for each player is to
-#   betray the other player.
+#   DEFECT the other player.
 #
 # Robert Axelrod, professor of political science at the University of Michigan, held a tournament of competing
 # strategies for the famous Prisoner's Dilemma in 1980.
@@ -38,17 +38,17 @@
 # The "Tit-For-Tat" algorithm seemed to do the best.
 
 import sys
-import PrisonersDilemmaTournament as values # pick up BETRAY and KEEPSILENT
+import PrisonersDilemmaTournament as values # pick up DEFECT and COOPERATE
 
 # note: len(selfHist) and len(oppHist) should always be the same
 def algorithm_template(selfHist, oppHist):
     # print(" algo DEBUG lenself=%d lenopp=%d" % (len(selfHist),len(oppHist)))
     if (0 == (len(selfHist) % 2)) and (0 == (len(oppHist) % 2)):
-        # print(" algo DEBUG KEEPSILENT=%d" % values.KEEPSILENT)
-        return values.KEEPSILENT
+        # print(" algo DEBUG COOPERATE=%d" % values.COOPERATE)
+        return values.COOPERATE
     else:
-        # print(" algo DEBUG BETRAY=%d" % values.BETRAY)
-        return values.BETRAY
+        # print(" algo DEBUG DEFECT=%d" % values.DEFECT)
+        return values.DEFECT
 
 if __name__ == "__main__":
    sys.stderr.write("ERROR - algorithm_template.py is not intended to be run stand-alone\n")
