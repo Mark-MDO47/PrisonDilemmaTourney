@@ -17,17 +17,17 @@
 # See https://cs.stanford.edu/people/eroberts/courses/soco/projects/1998-99/game-theory/axelrod.html
 #
 # Merrill Flood and Melvin Dresher from RAND corporation framed the concept in 1950 to show why two completely rational
-#   individuals might not DEFECT, even if it appears that it is in their best interests to do so.
+#   individuals might not cooperate, even if it appears that it is in their best interests to do so.
 #
 # There are many scenarios that can be mapped to this concept, but the famous mapping by Albert W. Tucker called the
 #   "Prisoner's Dilemma" revolves around two prisoners, "A" and "B", guilty of the same crime and being held in
 #   separate interrogation rooms.
 #
-# Due to weak evidence held by the police, if both refuse to DEFECT the other that will lead to a very small sentence
-#   for each of them. If one stays silent and the other DEFECTs, the DEFECTer gets off free and the silent one gets a
-#   large sentence. If they both DEFECT each other, they both get an intermediate sentence.
+# Due to weak evidence held by the police, if both cooperate (do not betray the other), that will lead to a small sentence
+#   for each of them. If one cooperates and the other defects, the defector gets off free and the cooperator gets a
+#   large sentence. If they both defect, they both get an intermediate sentence.
 # (spoiler alert) If the game is played exactly one time, the game-theory best choice for each player is to
-#   DEFECT the other player.
+#   defect (or betray the other player).
 #
 # Robert Axelrod, professor of political science at the University of Michigan, held a tournament of competing
 # strategies for the famous Prisoner's Dilemma in 1980.

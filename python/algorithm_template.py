@@ -4,7 +4,7 @@
 #
 # PrisonersDilemmaTournament.py receives a text string with the path to two algorithm python routines
 # For an algorithm python routine in file algo.py, the calling sequence is
-#     choice = algo(oppChoices, myChoices)
+#     choice = algo(myChoices, oppChoices)
 # Each call to the algorithm will have the following for parameters:
 #     list of history all the choices made by both parties in reverse order (latest choice before this is [0], prev [1])
 #       note: len(oppChoices) should be identical to len(myChoices); zero for first call, one for second call
@@ -22,11 +22,11 @@
 #   "Prisoner's Dilemma" revolves around two prisoners, "A" and "B", guilty of the same crime and being held in
 #   separate interrogation rooms.
 #
-# Due to weak evidence held by the police, if both refuse to DEFECT the other that will lead to a very small sentence
-#   for each of them. If one stays silent and the other DEFECTs, the DEFECTer gets off free and the silent one gets a
-#   large sentence. If they both DEFECT each other, they both get an intermediate sentence.
+# Due to weak evidence held by the police, if both cooperate (do not betray the other), that will lead to a small sentence
+#   for each of them. If one cooperates and the other defects, the defector gets off free and the cooperator gets a
+#   large sentence. If they both defect, they both get an intermediate sentence.
 # (spoiler alert) If the game is played exactly one time, the game-theory best choice for each player is to
-#   DEFECT the other player.
+#   defect (or betray the other player).
 #
 # Robert Axelrod, professor of political science at the University of Michigan, held a tournament of competing
 # strategies for the famous Prisoner's Dilemma in 1980.
@@ -42,7 +42,7 @@ import PrisonersDilemmaTournament as values # pick up DEFECT and COOPERATE
 
 # note: len(selfHist) and len(oppHist) should always be the same
 def algorithm_template(selfHist, oppHist):
-    # print(" algo DEBUG lenself=%d lenopp=%d" % (len(selfHist),len(oppHist)))
+    # print(" algo DEBUG len(self)=%d len(opp)=%d" % (len(selfHist),len(oppHist)))
     if (0 == (len(selfHist) % 2)) and (0 == (len(oppHist) % 2)):
         # print(" algo DEBUG COOPERATE=%d" % values.COOPERATE)
         return values.COOPERATE
