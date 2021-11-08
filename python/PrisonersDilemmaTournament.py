@@ -102,12 +102,13 @@ def doTournament(number_of_iterations, algo1, algo2):
 if __name__ == "__main__":
     my_parser = argparse.ArgumentParser(prog='PrisonersDilemmaTournament',
         formatter_class=argparse.RawTextHelpFormatter,
-        description="stdout receives tab-separated-values results of algo1 and algo2\n" +
-                "   note: ok to have algo1 and algo2 be the same",
+        description="stdout receives tab-separated-values results of algo1 and algo2\n",
         epilog="""Example:
 python PrisonersDilemmaTournament.py number_of_iterations algo1.py algo2.py > formattedList.txt
 """,
-        usage='%(prog)s listFname prevRatingsFname')
+        usage='python %(prog)s number_of_iterations algo1.py algo2.py\n' +
+              "   note: algo#.py written per algorithm_template.py\n" +
+              "   note: ok to have algo1 and algo2 be the same filename")
     my_parser.add_argument('number_of_iterations',type=int,help='number of iterations to run')
     my_parser.add_argument('algo1',type=str,help='path to algorithm1.py code')
     my_parser.add_argument('algo2',type=str,help='path to algorithm2.py code')

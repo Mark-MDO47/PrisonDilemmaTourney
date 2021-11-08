@@ -40,6 +40,7 @@
 import sys
 import PrisonersDilemmaTournament as values # pick up DEFECT and COOPERATE
 
+# note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 def algorithm_template(selfHist, oppHist):
     # print(" algo DEBUG len(self)=%d len(opp)=%d" % (len(selfHist),len(oppHist)))
@@ -51,5 +52,5 @@ def algorithm_template(selfHist, oppHist):
         return values.DEFECT
 
 if __name__ == "__main__":
-   sys.stderr.write("ERROR - algorithm_template.py is not intended to be run stand-alone\n")
-   exit(-1)
+    sys.stderr.write("ERROR - algorithm_template.py is not intended to be run stand-alone\n")
+    exit(-1)
