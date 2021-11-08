@@ -4,14 +4,21 @@
 # The algorithms are of the form displayed in algorithm_template.py
 #
 # PrisonersDilemmaTournament.py receives a text string with the path to two algorithm python routines
-# For an algorithm python routine in file algo.py, the calling sequence is
-#     choice = algo(myChoices, oppChoices)
+# For an algorithm python routine in a file (i.e. with filename algo_mdo.py), the calling sequence is
+#     choice = algo_mdo(myChoices, oppChoices)
+#     NOTE that the function name is the same as the python filename with the "*.py" removed
+#     I recommend adding your initials (mine are mdo) to your file/algorithm name so we don't have name collisions
 # Each call to the algorithm will have the following for parameters:
 #     list of history all the choices made by both parties in reverse order (latest choice before this is [0], prev [1])
-#       note: len(oppChoices) should be identical to len(myChoices); zero for first call, one for second call
-#     value of each entry is one of DEFECT or COOPERATE
+#       Thus the opponent choice made in previous round, assuming this isn't the first round, is oppChoices[0].
+#          if len(oppChoices) > 0, there was at least one prior round.
+#       note: len(oppChoices) should be identical to len(myChoices)
+#     value of each entry is one of value.DEFECT or value.COOPERATE
 # The algorithm will return
-#     DEFECT or COOPERATE
+#     value.DEFECT or value.COOPERATE
+#     NOTE: in PrisonersDilemmaTournament.py (this file), these are just DEFECT or COOPERATE.
+#           Algorithm files contain "import PrisonersDilemmaTournament as values" so they refer to these as
+#           value.DEFECT or value.COOPERATE
 #
 # See https://en.wikipedia.org/wiki/Prisoner%27s_dilemma
 # See https://cs.stanford.edu/people/eroberts/courses/soco/projects/1998-99/game-theory/axelrod.html
