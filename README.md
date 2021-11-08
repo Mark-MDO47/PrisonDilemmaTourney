@@ -19,7 +19,9 @@ I plan to run a Prisoner's Dilemma tournament among members of my extended famil
 
 I will create a template for the python code for the algorithms and write code for the 17 basic deterministic strategies from the literature (including the simplest imaginable strategies such as always defect). Thus we will have at least the basics covered.
 
-Idea for the tournament is to create one or more algorithms and submit them, or choose an existing strategy and vote for it. If you wish to implement your own version of a strategy in the 17 I will provide, we will run that also. Then I will have an extra-round-robin tournament in which each strategy plays versus each other strategy and (here is the extra part) also plays against itself.
+Idea for the tournament is to create one or more algorithms and submit them, or choose an existing strategy and vote for it. If you wish to implement your own version of a strategy in the 17 I will provide, we will run that also. I suggest including your initials in the python filename of your algorithm to avoid name collisions.
+
+Then I will have an extra-round-robin tournament in which each strategy plays versus each other strategy and (here is the extra part) also plays against itself.
 
 I am aware that there is already existing software for this type of tournament such as https://evolution-outreach.biomedcentral.com/articles/10.1007/s12052-012-0434-x
 * although the link to the code is broken
