@@ -2,6 +2,10 @@
 #
 # algo_mdo_template.py a template for Prisoner's Dilemma algorithms.
 #
+# The algorithm in this template file behaves as follows:
+#    On the first round it returns COOPERATE
+#    On all subsequent rounds, it alternates between DEFECT and COOPERATE
+#
 # For an algorithm python routine in a file (i.e. with filename algo_mdo.py), the calling sequence is
 #     choice = algo_mdo(myChoices, oppChoices)
 #     NOTE that the function name is the same as the python filename with the "*.py" removed
@@ -46,9 +50,11 @@ import sys
 import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choices.COOPERATE
 
 # note: the function name should be exactly the same as the filename but without the ".py"
-# note: len(selfHist) and len(oppHist) should always be the same; I put both tests in just to demonstrate this
 #
-# this code alternates between choices.COOPERATE and choices.DEFECT
+# The algorithm in this template file behaves as follows:
+#    On the first round it returns COOPERATE
+#    On all subsequent rounds, it alternates between DEFECT and COOPERATE
+# note: len(selfHist) and len(oppHist) should always be the same; I put both tests in just to demonstrate this
 #
 # NOTE: this has the debug code removed to show how simple the actual code is
 def algo_mdo_template(selfHist, oppHist):
