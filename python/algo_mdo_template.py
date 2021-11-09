@@ -1,12 +1,12 @@
 # Author: Mark Olson 2021-11-06 https://github.com/Mark-MDO47/PrisonDilemmaTourney
 #
-# algorithm_template.py a template for Prisoner's Dilemma algorithms.
+# algo_mdo_template.py a template for Prisoner's Dilemma algorithms.
 #
 # For an algorithm python routine in a file (i.e. with filename algo_mdo.py), the calling sequence is
 #     choice = algo_mdo(myChoices, oppChoices)
 #     NOTE that the function name is the same as the python filename with the "*.py" removed
 #     I recommend adding your initials (mine are mdo) to your file/algorithm name so we don't have name collisions
-#     This template file is named algorithm_template.py so the function name is algorithm_template
+#     This template file is named algo_mdo_template.py so the function name is algo_mdo_template
 # Each call to the algorithm will have the following for parameters:
 #     list of history all the choices made by both parties in reverse order (latest choice before this is [0], prev [1])
 #       Thus the opponent choice made in previous round, assuming this isn't the first round, is oppChoices[0].
@@ -43,19 +43,24 @@
 # The "Tit-For-Tat" algorithm seemed to do the best.
 
 import sys
-import PrisonersDilemmaTournament as values # pick up value.DEFECT and value.COOPERATE
+import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choices.COOPERATE
 
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
-def algorithm_template(selfHist, oppHist):
-    # print(" algo DEBUG len(self)=%d len(opp)=%d" % (len(selfHist),len(oppHist)))
+def algo_mdo_template(selfHist, oppHist):
+    DEBUG_ALGO = False
+
+    if DEBUG_ALGO:
+        print(" algo_mdo_template DEBUG    len(self)=%d len(opp)=%d" % (len(selfHist),len(oppHist)))
     if (0 == (len(selfHist) % 2)) and (0 == (len(oppHist) % 2)):
-        # print(" algo DEBUG COOPERATE=%d" % values.COOPERATE)
-        return values.COOPERATE
+        if DEBUG_ALGO:
+            print(" algo_mdo_template DEBUG round %d choice=%s" % (len(oppHist), choices.TEXT_INTERP[choices.COOPERATE]))
+        return choices.COOPERATE
     else:
-        # print(" algo DEBUG DEFECT=%d" % values.DEFECT)
-        return values.DEFECT
+        if DEBUG_ALGO:
+            print(" algo_mdo_template DEBUG round %d choice=%s" % (len(oppHist), choices.TEXT_INTERP[choices.DEFECT]))
+        return choices.DEFECT
 
 if __name__ == "__main__":
-    sys.stderr.write("ERROR - algorithm_template.py is not intended to be run stand-alone\n")
+    sys.stderr.write("ERROR - algo_mdo_template.py is not intended to be run stand-alone\n")
     exit(-1)

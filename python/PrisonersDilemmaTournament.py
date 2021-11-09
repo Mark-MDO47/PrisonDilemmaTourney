@@ -1,7 +1,7 @@
 # Author: Mark Olson 2021-11-06 https://github.com/Mark-MDO47/PrisonDilemmaTourney
 #
 # PrisonersDilemmaTournament.py will run a tournament for Prisoner's Dilemma algorithms.
-# The algorithms are of the form displayed in algorithm_template.py
+# The algorithms are of the form displayed in algo_mdo_template.py
 #
 # PrisonersDilemmaTournament.py receives a text string with the path to two algorithm python routines
 # For an algorithm python routine in a file (i.e. with filename algo_mdo.py), the calling sequence is
@@ -115,7 +115,7 @@ if __name__ == "__main__":
 python PrisonersDilemmaTournament.py number_of_iterations algo1.py algo2.py > formattedList.txt
 """,
         usage='python %(prog)s number_of_iterations algo1.py algo2.py\n' +
-              "   note: algo#.py written per algorithm_template.py\n" +
+              "   note: algo#.py written per algo_mdo_template.py\n" +
               "   note: ok to have algo1 and algo2 be the same filename")
     my_parser.add_argument('number_of_iterations',type=int,help='number of iterations to run')
     my_parser.add_argument('algo1',type=str,help='path to algorithm1.py code')

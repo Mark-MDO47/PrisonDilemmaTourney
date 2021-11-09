@@ -1,6 +1,6 @@
 # Author: Mark Olson 2021-11-06 https://github.com/Mark-MDO47/PrisonDilemmaTourney
 #
-# algo_tit_for_tat_mdo.py - Prisoner's Dilemma tournament algorithm file for Tit-for-Tat algorithm.
+# algo_mdo_tit_for_tat.py - Prisoner's Dilemma tournament algorithm file for Tit-for-Tat algorithm.
 #
 # The Tit-for-Tat algorithm behaves as follows:
 #    On the first round it cooperates
@@ -18,10 +18,10 @@
 #       Thus the opponent choice made in previous round, assuming this isn't the first round, is oppChoices[0].
 #          if len(oppChoices) > 0, there was at least one prior round.
 #       note: len(oppChoices) should be identical to len(myChoices)
-#     value of each entry  in xxxChoices is one of value.DEFECT or value.COOPERATE
+#     value of each entry  in xxxChoices is one of choices.DEFECT or choices.COOPERATE
 #
 # The algorithm will return
-#     value.DEFECT or value.COOPERATE
+#     choices.DEFECT or choices.COOPERATE
 #
 # See https://en.wikipedia.org/wiki/Prisoner%27s_dilemma
 # See https://cs.stanford.edu/people/eroberts/courses/soco/projects/1998-99/game-theory/axelrod.html
@@ -49,22 +49,32 @@
 # The "Tit-For-Tat" algorithm seemed to do the best.
 
 import sys
-import PrisonersDilemmaTournament as values # pick up value.DEFECT and value.COOPERATE
+import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choices.COOPERATE
 
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
-def algo_tit_for_tat_mdo(selfHist, oppHist):
-    print(" algo_tit_for_tat_mdo DEBUG len(self)=%d len(opp)=%d" % (len(selfHist),len(oppHist)))
+def algo_mdo_tit_for_tat(selfHist, oppHist):
+    DEBUG_ALGO = False
+
+    if DEBUG_ALGO:
+        print(" algo_mdo_tit_for_tat DEBUG    len(self)=%d len(opp)=%d" % (len(selfHist),len(oppHist)))
     if len(oppHist) <= 0: # first round
-        print(" algo_tit_for_tat_mdo DEBUG first round COOPERATE=%d" % values.COOPERATE)
-        return values.COOPERATE
+        if DEBUG_ALGO:
+            print(" algo_mdo_tit_for_tat DEBUG round %d choice=%s" % (len(oppHist), choices.TEXT_INTERP[choices.COOPERATE]))
+        return choices.COOPERATE
     else:
         if len(oppHist) >= 2:
-            print(" algo_tit_for_tat_mdo DEBUG oppHist[0]=%d oppHist[1]=%d" % (oppHist[0], oppHist[1]))
+            if DEBUG_ALGO:
+                print(" algo_mdo_tit_for_tat DEBUG    oppHist[0]=%s oppHist[1]=%s" %
+                      (choices.TEXT_INTERP[oppHist[0]], choices.TEXT_INTERP[oppHist[1]]))
         else:
-            print(" algo_tit_for_tat_mdo DEBUG oppHist[0]=%d" % oppHist[0])
+            if DEBUG_ALGO:
+                print(" algo_mdo_tit_for_tat DEBUG    oppHist[0]=%s" % choices.TEXT_INTERP[oppHist[0]])
+
+        if DEBUG_ALGO:
+            print(" algo_mdo_tit_for_tat DEBUG round %d choice=%s" % (len(oppHist), choices.TEXT_INTERP[oppHist[0]]))
         return oppHist[0]
 
 if __name__ == "__main__":
-    sys.stderr.write("ERROR - algo_tit_for_tat_mdo.py is not intended to be run stand-alone\n")
+    sys.stderr.write("ERROR - algo_mdo_tit_for_tat.py is not intended to be run stand-alone\n")
     exit(-1)
