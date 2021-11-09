@@ -97,7 +97,7 @@ def doTournament(number_of_iterations, algo1, algo2):
     print("Round\t%s\t%s\t" % (algo1, algo2))
     maxHist_m1 = len(selfHist1) - 1
     for idx in range(maxHist_m1 + 1):
-        print("%d\t%s\t%s\t" % (idx, TEXT_INTERP[selfHist1[maxHist_m1 - idx]], TEXT_INTERP[selfHist2[maxHist_m1 - idx]]))
+        print("%d\t%s\t%s\t" % (1+idx, TEXT_INTERP[selfHist1[maxHist_m1 - idx]], TEXT_INTERP[selfHist2[maxHist_m1 - idx]]))
 
 
 

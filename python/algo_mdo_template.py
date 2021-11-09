@@ -46,20 +46,33 @@ import sys
 import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choices.COOPERATE
 
 # note: the function name should be exactly the same as the filename but without the ".py"
-# note: len(selfHist) and len(oppHist) should always be the same
+# note: len(selfHist) and len(oppHist) should always be the same; I put both tests in just to demonstrate this
+#
+# this code alternates between choices.COOPERATE and choices.DEFECT
+#
+# NOTE: this has the debug code removed to show how simple the actual code is
 def algo_mdo_template(selfHist, oppHist):
-    DEBUG_ALGO = False
+    if (0 == (len(selfHist) % 2)) and (0 == (len(oppHist) % 2)):
+        return choices.COOPERATE
+    else:
+        return choices.DEFECT
+
+"""
+# NOTE: Don't Panic! This just shows some potential debug code, not necessary!
+def algo_mdo_template(selfHist, oppHist):
+    DEBUG_ALGO = True
 
     if DEBUG_ALGO:
         print(" algo_mdo_template DEBUG    len(self)=%d len(opp)=%d" % (len(selfHist),len(oppHist)))
     if (0 == (len(selfHist) % 2)) and (0 == (len(oppHist) % 2)):
         if DEBUG_ALGO:
-            print(" algo_mdo_template DEBUG round %d choice=%s" % (len(oppHist), choices.TEXT_INTERP[choices.COOPERATE]))
+            print(" algo_mdo_template DEBUG round %d choice=%s" % (1+len(oppHist), choices.TEXT_INTERP[choices.COOPERATE]))
         return choices.COOPERATE
     else:
         if DEBUG_ALGO:
-            print(" algo_mdo_template DEBUG round %d choice=%s" % (len(oppHist), choices.TEXT_INTERP[choices.DEFECT]))
+            print(" algo_mdo_template DEBUG round %d choice=%s" % (1+len(oppHist), choices.TEXT_INTERP[choices.DEFECT]))
         return choices.DEFECT
+"""
 
 if __name__ == "__main__":
     sys.stderr.write("ERROR - algo_mdo_template.py is not intended to be run stand-alone\n")
