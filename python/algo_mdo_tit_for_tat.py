@@ -51,6 +51,11 @@
 import sys
 import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choices.COOPERATE
 
+# The Tit-for-Tat algorithm behaves as follows:
+#    On the first round it cooperates
+#    On all subsequent rounds, it does what the opponent did on the previous round
+#       if the opponent did DEFECT last round, we do DEFECT this round
+#       if the opponent did COOPERATE last round, we do COOPERATE this round
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
