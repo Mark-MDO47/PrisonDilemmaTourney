@@ -60,10 +60,30 @@ import datetime
 DEFECT    = 0
 COOPERATE = 1
 TEXT_INTERP = ["DEFECT", "COOPERATE"]
-RESULT_D_C = 0
-RESULT_C_C = 1
-RESULT_D_D = 5
-RESULT_C_D = 10
+
+# for results, T > R > P > S and T + S < 2R
+CALC_RESULT_RANGES = { "001-Classical Range": [0,1,3,5], "002-Extended Range": [0,1,5,10] }
+IDX_RESULT_D_C = 0 # "S" in literature
+IDX_RESULT_C_C = 1 # "R" in literature
+IDX_RESULT_D_D = 2 # "P" in literature
+IDX_RESULT_C_D = 3 # "T" in literature
+
+###################################################################################
+# calcResult - calculate the results of a round for one player
+#
+def calcResult(range, selfChoice, oppChoice):
+    the_result = 0
+    if (DEFECT == selfChoice) and (DEFECT == oppChoice):
+        the_result = CALC_RESULT_RANGES[range][IDX_RESULT_D_D]
+    elif (COOPERATE == selfChoice) and (COOPERATE == oppChoice):
+        the_result = CALC_RESULT_RANGES[range][IDX_RESULT_C_C]
+    elif (DEFECT == selfChoice) and (COOPERATE == oppChoice):
+        the_result = CALC_RESULT_RANGES[range][IDX_RESULT_D_C]
+    elif (COOPERATE == selfChoice) and (DEFECT == oppChoice):
+        the_result = CALC_RESULT_RANGES[range][IDX_RESULT_C_D]
+    return the_result
+
+    # end calcResult()
 
 ###################################################################################
 # get_algos - do directory and return information and funcptr to algorithms
@@ -85,23 +105,6 @@ def get_algos():
     # end get_algos()
 
 ###################################################################################
-# calcResult - calculate the results of a round for one player
-#
-def calcResult(selfChoice, oppChoice):
-    the_result = 0
-    if (DEFECT == selfChoice) and (DEFECT == oppChoice):
-        the_result = RESULT_D_D
-    elif (COOPERATE == selfChoice) and (COOPERATE == oppChoice):
-        the_result = RESULT_C_C
-    elif (DEFECT == selfChoice) and (COOPERATE == oppChoice):
-        the_result = RESULT_D_C
-    elif (COOPERATE == selfChoice) and (DEFECT == oppChoice):
-        the_result = RESULT_C_D
-    return the_result
-
-    # end calcResult()
-
-###################################################################################
 # doTournament - conducts a round-robin tournament among algorithms found in "."
 #
 # Tournament includes competing each algorithm against itself
@@ -110,28 +113,33 @@ def doTournament(number_of_iterations):
     algolist, algofunc = get_algos()
 
     results = [0]*len(algolist)
-    for idx1 in range(len(algolist)):
-        for idx2 in range(idx1, len(algolist)):
-            selfHist1 = []
-            selfHist2 = []
-            for idx3 in range(number_of_iterations):
-                choice1 = algofunc[idx1](selfHist1,selfHist2)
-                choice2 = algofunc[idx2](selfHist2,selfHist1)
-                selfHist1 = [choice1] + selfHist1 # latest choice is always [0]
-                selfHist2 = [choice2] + selfHist2
-                results[idx1] += calcResult(choice1, choice2)
-                results[idx2] += calcResult(choice2, choice1)
+    results_ranges = sorted(CALC_RESULT_RANGES.keys())
 
-            print("\nRound\t%s\t%s\t" % (algolist[idx1], algolist[idx2]))
-            maxHist_m1 = len(selfHist1) - 1
-            for idx in range(maxHist_m1 + 1):
-                print("%d\t%s\t%s\t" % (1+idx, TEXT_INTERP[selfHist1[maxHist_m1 - idx]], TEXT_INTERP[selfHist2[maxHist_m1 - idx]]))
+    for result_range in results_ranges:
+        for idx1 in range(len(algolist)):
+            for idx2 in range(idx1, len(algolist)):
+                selfHist1 = []
+                selfHist2 = []
+                for idx3 in range(number_of_iterations):
+                    choice1 = algofunc[idx1](selfHist1,selfHist2)
+                    choice2 = algofunc[idx2](selfHist2,selfHist1)
+                    selfHist1 = [choice1] + selfHist1 # latest choice is always [0]
+                    selfHist2 = [choice2] + selfHist2
+                    results[idx1] += calcResult(result_range, choice1, choice2)
+                    results[idx2] += calcResult(result_range, choice2, choice1)
 
-    print("\n\nResults of Prisoner's Dilemma Tournament: %d rounds, params: D_D=%d C_C=%d D_C=%d C_D=%d" % \
-          (number_of_iterations, RESULT_D_D, RESULT_C_C, RESULT_D_C, RESULT_C_D))
-    print("\nAlgorithm\tTotalScore")
-    for idx1 in range(len(algolist)):
-        print("%s\t%s" % (algolist[idx1], results[idx1]))
+                print("\nRound\t%s\t%s\t" % (algolist[idx1], algolist[idx2]))
+                maxHist_m1 = len(selfHist1) - 1
+                for idx in range(maxHist_m1 + 1):
+                    print("%d\t%s\t%s\t" % (1+idx, TEXT_INTERP[selfHist1[maxHist_m1 - idx]], TEXT_INTERP[selfHist2[maxHist_m1 - idx]]))
+
+        print("\n\nResults of Prisoner's Dilemma Tournament: %d rounds, ResultsCalc=%s: D_D=%d C_C=%d D_C=%d C_D=%d" % \
+              (number_of_iterations, result_range, CALC_RESULT_RANGES[result_range][IDX_RESULT_D_D],
+               CALC_RESULT_RANGES[result_range][IDX_RESULT_C_C], CALC_RESULT_RANGES[result_range][IDX_RESULT_D_C],
+               CALC_RESULT_RANGES[result_range][IDX_RESULT_C_D]))
+        print("\nAlgorithm\tTotalScore")
+        for idx1 in range(len(algolist)):
+            print("%s\t%s" % (algolist[idx1], results[idx1]))
 
     # end doTournament()
 
