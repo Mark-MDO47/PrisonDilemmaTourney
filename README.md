@@ -15,7 +15,7 @@ There are many scenarios that can be mapped to this concept, but the famous mapp
 Robert Axelrod, professor of political science at the University of Michigan, had the insight that if the game is played many times in succession, then the history of play allows each player to take into account the "reputation" of the other player in making their choice of behavior. He held tournaments of competing strategies for the Prisoner's Dilemma starting in 1980, and this led to a great deal of research.
 * The "Tit-For-Tat" algorithm seemed to do the best.
 
-Of course, there has been a lot of thinking about the issues around this game since then. For an excellent and gentle interactive introduction to the basics and then many of the factors that can affect the tournament, I highly recommend https://ncase.me/trust/
+Of course, there has been a lot of thinking about the issues around this game since then. For an excellent and gentle interactive introduction to the basics and then many of the factors that can affect the tournament, I highly recommend https://ncase.me/trust/, which is based on Robert Axelrod's the book `THE EVOLUTION OF COOPERATION`.
 
 ## What is this repository for?
 
@@ -41,7 +41,11 @@ There is the possibility of sensitivity of tournament results to the values used
 This tournament will be played under several different payoff ranges, each with `S` > `P` > `R` > `T`.
 
 Personally, I find this `S` > `P` > `R` > `T` nomenclature a little hard to remember. I think of it (and the code refers to it) as the result a self-choice and an opponent-choice. Thinking of one of the participants as self and the other as opponent, here are the results as `self-choice`_`opponent-choice`:
-* `C`_`D` = `S` = I nobly `cooperate` but my dastardly opponent `defects`
-* `D`_`D` = `P` = I reluctantly follow my short-term best interests and `defect` and my dastardly opponent self-interestedly `defects` too
-* `C`_`C` = `R` = I nobly `cooperate` and my opponent probably slips and chooses to `cooperate` too
-* `D`_`C` = `T` = I slyly defect and my naive opponent cooperates
+* `C_D` = `S` = I nobly `cooperate` but my dastardly opponent `defects`
+* `D_D` = `P` = I reluctantly follow my short-term best interests and `defect` and my dastardly opponent self-interestedly `defects` too
+* `C_C` = `R` = I nobly `cooperate` and my opponent probably slips and chooses to `cooperate` too
+* `D_C` = `T` = I slyly defect and my naive opponent cooperates
+
+Another factor that can affect the tournament is the concept of errors. In the real world, sometimes factors intervene to prevent us from implementing the choice we made. This tournament will range through some percentage of these errors.
+
+Another factor is the number of rounds per match. Again, this tournament will range through a range of rounds per match. If the number of rounds was known to be 10, you could have an algorithm always `defect` on the last round!
