@@ -15,7 +15,7 @@ There are many scenarios that can be mapped to this concept, but the famous mapp
 Robert Axelrod, professor of political science at the University of Michigan, had the insight that if the game is played many times in succession, then the history of play allows each player to take into account the "reputation" of the other player in making their choice of behavior. He held tournaments of competing strategies for the Prisoner's Dilemma starting in 1980, and this led to a great deal of research.
 * The "Tit-For-Tat" algorithm seemed to do the best.
 
-Of course, there has been a lot of thinking about the issues around this game since then. For an excellent and gentle interactive introduction to the basics and then many of the factors that can affect the tournament, I highly recommend https://ncase.me/trust/, which is based on Robert Axelrod's the book `THE EVOLUTION OF COOPERATION`.
+Of course, there has been a lot of thinking about the issues around this game since then. For an excellent and gentle interactive introduction to the basics and then many of the factors that can affect the tournament, I highly recommend https://ncase.me/trust/, which is based on Robert Axelrod's book `THE EVOLUTION OF COOPERATION`.
 
 ## What is this repository for?
 
