@@ -37,3 +37,9 @@ There is the possibility of sensitivity of tournament results to the values used
 | **Defect** | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **S** <BR> `T`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **P** <BR> `P`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
 
 This tournament will be played under several different payoff ranges, each with `S` > `P` > `R` > `T`.
+
+Personally, I find this `S` > `P` > `R` > `T` nomenclature a little hard to remember. I think of it (and the code refers to it) as the result a self-choice and an opponent-choice. Thinking of one of the participants as self and the other as opponent, here are the results as `self-choice`_`opponent-choice`:
+* `C`_`D` = `S` = I nobly `cooperate` but my dastardly opponent `defects`
+* `D`_`D` = `P` = I reluctantly follow my short-term best interests and `defect` and my dastardly opponent self-interestedly `defects` too
+* `C`_`C` = `R` = I nobly `cooperate` and my opponent probably slips and chooses to `cooperate` too
+* `D`_`C` = `T` = I slyly defect and my naive opponent cooperates
