@@ -47,6 +47,8 @@
 
 import argparse
 import importlib
+import os
+
 """
 import sys
 import string
@@ -58,47 +60,80 @@ import datetime
 DEFECT    = 0
 COOPERATE = 1
 TEXT_INTERP = ["DEFECT", "COOPERATE"]
+RESULT_D_C = 0
+RESULT_C_C = 1
+RESULT_D_D = 5
+RESULT_C_D = 10
 
+###################################################################################
+# get_algos - do directory and return information and funcptr to algorithms
+#
+# algorithms are implemented in algo_<<<initials>>>_<<<algorithm_name>>>.py
+#
+# returns sorted list of algorithm names and algorithm funcptrs
+def get_algos():
+    flist = sorted(os.listdir("."))
+    algolist = []
+    for fname in flist:
+        if (0 == fname.find("algo_")) and (".py" == fname[-len(".py"):]):
+            algolist.append(fname[:-len(".py")])
+    algofunc = []
+    for algo in algolist:
+        algofunc.append(getattr(importlib.import_module(algo), algo))
+    return algolist, algofunc
 
-def convert_to_strings(algo):
-    # get just the module name
-    tmp = algo.rfind("\\")
-    if -1 != tmp:
-        algo = algo[tmp + 1:]
-    tmp = algo.rfind("/")
-    if -1 != tmp:
-        algo = algo[tmp + 1:]
-    tmp = algo.rfind(".py")
-    if -1 != tmp:
-        algo = algo[:tmp]
+    # end get_algos()
 
-    return algo
+###################################################################################
+# calcResult - calculate the results of a round for one player
+#
+def calcResult(selfChoice, oppChoice):
+    the_result = 0
+    if (DEFECT == selfChoice) and (DEFECT == oppChoice):
+        the_result = RESULT_D_D
+    elif (COOPERATE == selfChoice) and (COOPERATE == oppChoice):
+        the_result = RESULT_C_C
+    elif (DEFECT == selfChoice) and (COOPERATE == oppChoice):
+        the_result = RESULT_D_C
+    elif (COOPERATE == selfChoice) and (DEFECT == oppChoice):
+        the_result = RESULT_C_D
+    return the_result
 
-def doTournament(number_of_iterations, algo1, algo2):
-    # print("DEBUG ", number_of_iterations, algo1, algo2)
-    selfHist1 = [] # do not put these on same line all "=" together
-    selfHist2 = []
-    import_algo1 = convert_to_strings(algo1)
-    import_algo2 = convert_to_strings(algo2)
-    # print("DEBUG ", import_algo1)
+    # end calcResult()
 
-    algotype1 = importlib.import_module(import_algo1)
-    algofunc1 = getattr(algotype1, import_algo1)
-    algotype2 = importlib.import_module(import_algo2)
-    algofunc2 = getattr(algotype2, import_algo2)
-    # print("DEBUG ", type(algotype1))
+###################################################################################
+# doTournament - conducts a round-robin tournament among algorithms found in "."
+#
+# Tournament includes competing each algorithm against itself
+#
+def doTournament(number_of_iterations):
+    algolist, algofunc = get_algos()
 
-    for idx in range(number_of_iterations):
-        choice1 = algofunc1(selfHist1,selfHist2)
-        choice2 = algofunc2(selfHist2,selfHist1)
-        selfHist1 = [choice1] + selfHist1 # latest choice is always [0]
-        selfHist2 = [choice2] + selfHist2
+    results = [0]*len(algolist)
+    for idx1 in range(len(algolist)):
+        for idx2 in range(idx1, len(algolist)):
+            selfHist1 = []
+            selfHist2 = []
+            for idx3 in range(number_of_iterations):
+                choice1 = algofunc[idx1](selfHist1,selfHist2)
+                choice2 = algofunc[idx2](selfHist2,selfHist1)
+                selfHist1 = [choice1] + selfHist1 # latest choice is always [0]
+                selfHist2 = [choice2] + selfHist2
+                results[idx1] += calcResult(choice1, choice2)
+                results[idx2] += calcResult(choice2, choice1)
 
-    print("Round\t%s\t%s\t" % (algo1, algo2))
-    maxHist_m1 = len(selfHist1) - 1
-    for idx in range(maxHist_m1 + 1):
-        print("%d\t%s\t%s\t" % (1+idx, TEXT_INTERP[selfHist1[maxHist_m1 - idx]], TEXT_INTERP[selfHist2[maxHist_m1 - idx]]))
+            print("\nRound\t%s\t%s\t" % (algolist[idx1], algolist[idx2]))
+            maxHist_m1 = len(selfHist1) - 1
+            for idx in range(maxHist_m1 + 1):
+                print("%d\t%s\t%s\t" % (1+idx, TEXT_INTERP[selfHist1[maxHist_m1 - idx]], TEXT_INTERP[selfHist2[maxHist_m1 - idx]]))
 
+    print("\n\nResults of Prisoner's Dilemma Tournament: %d rounds, params: D_D=%d C_C=%d D_C=%d C_D=%d" % \
+          (number_of_iterations, RESULT_D_D, RESULT_C_C, RESULT_D_C, RESULT_C_D))
+    print("\nAlgorithm\tTotalScore")
+    for idx1 in range(len(algolist)):
+        print("%s\t%s" % (algolist[idx1], results[idx1]))
+
+    # end doTournament()
 
 
 ###################################################################################
@@ -118,11 +153,9 @@ python PrisonersDilemmaTournament.py number_of_iterations algo1.py algo2.py > fo
               "   note: algo#.py written per algo_mdo_template.py\n" +
               "   note: ok to have algo1 and algo2 be the same filename")
     my_parser.add_argument('number_of_iterations',type=int,help='number of iterations to run')
-    my_parser.add_argument('algo1',type=str,help='path to algorithm1.py code')
-    my_parser.add_argument('algo2',type=str,help='path to algorithm2.py code')
     args = my_parser.parse_args()
 
     # all the real work is done here
-    doTournament(args.number_of_iterations, args.algo1, args.algo2)
+    doTournament(args.number_of_iterations)
 
     # end of "__main__"
