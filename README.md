@@ -12,7 +12,7 @@ There are many scenarios that can be mapped to this concept, but the famous mapp
 * In my "sentence" formulation for a Prisoner's Dilemma (instead of the "reward" formulation), `S` > `P` > `R` > `T`. Because `P` > `R`, mutual cooperation pays off better than mutual defection.
 * If the game is played only once, the game-theoretic best response for each player is to defect (betray the other person).
 
-There is the possibility of sensitivity of tournament results to the values used to calculate the score (number of years of sentence) under the different choices. Let's call the two participants X and Y and their choices (`C` or `D`) are selected by the horizontal and vertical axes of the table, respectively. The cells 
+There is the possibility of sensitivity of tournament results to the values used to calculate the score (number of years of sentence) under the different choices. Let's call the two participants X and Y and their choices (`C` or `D`) are selected by the horizontal and vertical axes of the table, respectively. 
 
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; X <BR> `Y`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Cooperate | Defect |
 | --- | --- | --- |
