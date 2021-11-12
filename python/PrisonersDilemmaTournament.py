@@ -147,11 +147,11 @@ if __name__ == "__main__":
         formatter_class=argparse.RawTextHelpFormatter,
         description="stdout receives tab-separated-values results of algo1 and algo2\n",
         epilog="""Example:
-python PrisonersDilemmaTournament.py number_of_iterations algo1.py algo2.py > formattedList.txt
+python PrisonersDilemmaTournament.py number_of_iterations > formattedResults.txt
 """,
-        usage='python %(prog)s number_of_iterations algo1.py algo2.py\n' +
-              "   note: algo#.py written per algo_mdo_template.py\n" +
-              "   note: ok to have algo1 and algo2 be the same filename")
+        usage='python %(prog)s number_of_iterations\n' +
+              "   note: runs all files algo_*.py in directory\n" +
+              "   note: algo_*.py written per algo_mdo_template.py")
     my_parser.add_argument('number_of_iterations',type=int,help='number of iterations to run')
     args = my_parser.parse_args()
 
