@@ -213,7 +213,7 @@ def doTournament():
                             results_pairing[idx2] += result2
 
                         print("\nRound\t%s\t%s\t%s%s mistakes\tResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s" % \
-                              (algolist[idx1], algolist[idx2], mistake_percent, "%", reward_key,
+                              (algolist[idx1], algolist[idx2], "%0.0f" % (100.0*mistake_percent), "%", reward_key,
                                rslttbl[IDX_RESULT_D_C], rslttbl[IDX_RESULT_C_C], rslttbl[IDX_RESULT_D_D],
                                rslttbl[IDX_RESULT_C_D]))
                         maxHist_m1 = len(selfHist1) - 1
