@@ -13,37 +13,51 @@
 #       Thus the opponent choice made in previous round, assuming this isn't the first round, is oppChoices[0].
 #          if len(oppChoices) > 0, there was at least one prior round.
 #       note: len(oppChoices) should be identical to len(myChoices)
-#     value of each entry is one of value.DEFECT or value.COOPERATE
+#     value of each entry is one of choices.DEFECT or choices.COOPERATE
 # The algorithm will return
-#     value.DEFECT or value.COOPERATE
+#     choices.DEFECT or choices.COOPERATE
 #     NOTE: in PrisonersDilemmaTournament.py (this file), these are just DEFECT or COOPERATE.
-#           Algorithm files contain "import PrisonersDilemmaTournament as values" so they refer to these as
-#           value.DEFECT or value.COOPERATE
+#           Algorithm files contain "import PrisonersDilemmaTournament as choices" so they refer to these as
+#           choices.DEFECT or choices.COOPERATE
 #
 # See https://en.wikipedia.org/wiki/Prisoner%27s_dilemma
 # See https://cs.stanford.edu/people/eroberts/courses/soco/projects/1998-99/game-theory/axelrod.html
+# See https://www.pnas.org/content/109/26/10409
+# See https://ncase.me/trust/
 #
-# Merrill Flood and Melvin Dresher from RAND corporation framed the concept in 1950 to show why two completely rational
-#   individuals might not cooperate, even if it appears that it is in their best interests to do so.
+# Merrill Flood and Melvin Dresher from RAND corporation framed the concept in 1950 to show why two completely
+#   rational individuals might not cooperate, even if it appears that it is in their best interests to do so.
 #
-# There are many scenarios that can be mapped to this concept, but the famous mapping by Albert W. Tucker called the
-#   "Prisoner's Dilemma" revolves around two prisoners, "A" and "B", guilty of the same crime and being held in
+# There are many scenarios that can be mapped to this concept, but the famous mapping by Albert W. Tucker called
+#   the "Prisoner's Dilemma" revolves around two prisoners, "A" and "B", guilty of the same crime and being held in
 #   separate interrogation rooms.
 #
-# Due to weak evidence held by the police, if both cooperate (do not betray the other), that will lead to a small sentence
-#   for each of them. If one cooperates and the other defects, the defector gets off free and the cooperator gets a
-#   large sentence. If they both defect, they both get an intermediate sentence.
-# (spoiler alert) If the game is played exactly one time, the game-theory best choice for each player is to
-#   defect (or betray the other player).
+# Due to weak evidence held by the police, if both choose to cooperate (C) (refuse to defect (D)) that will lead to
+#    an intermediate sentence R for each of them. If one chooses to cooperate and the other chooses to defect,
+#    the defector gets a very low sentence T (usually zero) and the cooperator gets a large sentence S. If they both
+#    choose to defect, they both get an intermediate sentence P.
+# In my "sentence" formulation for a Prisoner's Dilemma (instead of the "reward" formulation),
+#    S > P > R > T. Because P > R, mutual cooperation pays off better than mutual defection.
+# If the game is played only once, the game-theoretic best response for each player is to defect
+#    (betray the other person).
 #
-# Robert Axelrod, professor of political science at the University of Michigan, held a tournament of competing
-# strategies for the famous Prisoner's Dilemma in 1980.
+# Personally, I find this S > P > R > T nomenclature a little hard to remember.
+#    I think of it (and the code refers to it) as the result a self-choice and an opponent-choice.
+#    Thinking of one of the participants as self and the other as opponent, here are the results as
+#    self-choice_opponent-choice:
+#        C_D = S = I nobly cooperate but my dastardly opponent defects
+#        D_D = P = I reluctantly follow my short-term best interests and defect and my dastardly opponent
+#                    self-interestedly defects too
+#        C_C = R = I nobly cooperate and my opponent probably slips and chooses to cooperate too
+#        D_C = T = I slyly defect and my naive opponent cooperates
 #
-# He had the insight that if the game is played many times in succession, then the history of play allows each player
-#   to take into account the "reputation" of the other player in making their choice of behavior.
-# He invited some game theorists to submit algorithms that would be competed against each other in a computer tournament.
-# Later he held another tournament and invited anyone to submit algorithms.
-# The "Tit-For-Tat" algorithm seemed to do the best.
+# Robert Axelrod, professor of political science at the University of Michigan, had the insight that if the game
+#    is played many times in succession, then the history of play allows each player to take into account the
+#    "reputation" of the other player in making their choice of behavior. He held tournaments of competing strategies
+#    for the Prisoner's Dilemma starting in 1980, and this led to a great deal of research.
+# The "Tit-For-Tat" algorithm seemed to do the best. Later it was found that there are scenarios where other
+#    algorithms can do as well or better.
+#
 
 import argparse
 import importlib
