@@ -64,6 +64,7 @@
 import argparse
 import importlib
 import random
+import time
 import os
 
 """
@@ -249,7 +250,7 @@ python PrisonersDilemmaTournament.py > formattedResults.txt
     if args.randseed[0].isdigit():
         random.seed(int(args.randseed))
     else:
-        random.seed(42) # FIXME - random seed, maybe based on time
+        random.seed(round(time.time() * 1000)) # random seed based on time in milliseconds
 
     # all the real work is done here
     doTournament()
