@@ -63,6 +63,7 @@
 
 import argparse
 import importlib
+import random
 import os
 
 """
@@ -125,6 +126,16 @@ def get_algos():
     # end get_algos()
 
 ###################################################################################
+def whoopsie(result1, result2, mistake_percent):
+    if random.random() < mistake_percent:
+        result1 = 1-result1
+    if random.random() < mistake_percent:
+        result2 = 1-result2
+    return result1, result2
+
+    # end whoopsie()
+
+###################################################################################
 # print_results - print results
 #
 def print_results(title, algolist, num_rounds, mistake_percent, percent_symb, reward_key, rslttbl, results_type):
@@ -171,6 +182,7 @@ def doTournament():
                             selfHist2 = [choice2] + selfHist2
                             result1, rlsttbl = calcResult(reward_key, choice1, choice2)
                             result2, rslttbl = calcResult(reward_key, choice2, choice1)
+                            result1, result2 = whoopsie(result1, result2, mistake_percent)
                             results_overall[idx1] += result1
                             results_overall[idx2] += result2
                             results_mistakes[idx1] += result1
@@ -208,10 +220,16 @@ if __name__ == "__main__":
         epilog="""Example:
 python PrisonersDilemmaTournament.py > formattedResults.txt
 """,
-        usage='python %(prog)s num_rounds\n' +
+        usage='python %(prog)s randseed\n' +
               "   note: runs all files algo_*.py in directory\n" +
               "   note: algo_*.py written per algo_mdo_template.py")
+    my_parser.add_argument('randseed', type=str, help='if integer, seed for random number; else random seed')
     args = my_parser.parse_args()
+
+    if args.randseed[0].isdigit():
+        random.seed(int(args.randseed))
+    else:
+        random.seed(42) # FIXME - random seed, maybe based on time
 
     # all the real work is done here
     doTournament()
