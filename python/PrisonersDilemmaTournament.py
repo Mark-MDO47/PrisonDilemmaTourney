@@ -3,12 +3,14 @@
 # PrisonersDilemmaTournament.py will run a tournament for Prisoner's Dilemma algorithms.
 # The algorithms are of the form displayed in algo_mdo_template.py
 #
-# PrisonersDilemmaTournament.py receives a text string with the path to two algorithm python routines
-# For an algorithm python routine in a file (i.e. with filename algo_mdo.py), the calling sequence is
-#     choice = algo_mdo(myChoices, oppChoices)
+# PrisonersDilemmaTournament.py gets its algorithms by searching the current directory for algo_*.py.
+#     I recommend adding your initials (mine are mdo) to your file/algorithm name so we don't have name collisions.
+#     For example: algo_mdo_something.py
+#
+# For an algorithm python routine in a file (i.e. with filename algo_mdo_something.py), the calling sequence is
+#     choice = algo_mdo_something(myChoices, oppChoices)
 #     NOTE that the function name is the same as the python filename with the "*.py" removed
-#     I recommend adding your initials (mine are mdo) to your file/algorithm name so we don't have name collisions
-# Each call to the algorithm will have the following for parameters:
+# Each call to the algorithm will have the following parameters:
 #     list of history all the choices made by both parties in reverse order (latest choice before this is [0], prev [1])
 #       Thus the opponent choice made in previous round, assuming this isn't the first round, is oppChoices[0].
 #          if len(oppChoices) > 0, there was at least one prior round.
