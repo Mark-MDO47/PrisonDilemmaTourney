@@ -124,6 +124,9 @@ def get_algos():
 
     # end get_algos()
 
+###################################################################################
+# print_results - print results
+#
 def print_results(title, algolist, num_rounds, mistake_percent, percent_symb, reward_key, rslttbl, results_type):
     print("\n\n%s Results of Prisoner's Dilemma Tournament: %s rounds, %s%s mistakes, ResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s" % \
         (title, num_rounds, mistake_percent, percent_symb, reward_key,
@@ -132,6 +135,7 @@ def print_results(title, algolist, num_rounds, mistake_percent, percent_symb, re
     for idx1 in range(len(algolist)):
         print("%s\t%s" % (algolist[idx1], results_type[idx1]))
 
+    # end print_results()
 
 ###################################################################################
 # doTournament - conducts a round-robin tournament among algorithms found in "."
@@ -144,15 +148,16 @@ def doTournament():
 
     # get the algorithms in the directory
     algolist, algofunc = get_algos()
+    results_rewards_keys = sorted(CALC_RESULT_RANGES.keys())
 
     # do the tournament over the various ranges
     results_overall = [0]*len(algolist)
-    results_rewards_keys = sorted(CALC_RESULT_RANGES.keys())
     for mistake_percent in mistake_percentages_list:
         results_mistakes = [0] * len(algolist)
         for reward_key in results_rewards_keys:
             results_rewardstbl = [0] * len(algolist)
             for num_rounds in rounds_ranges:
+
                 # now do pairing of two algorithms
                 results_pairing = [0] * len(algolist)
                 for idx1 in range(len(algolist)):
@@ -175,7 +180,10 @@ def doTournament():
                             results_pairing[idx1] += result1
                             results_pairing[idx2] += result2
 
-                        print("\nRound\t%s\t%s\t" % (algolist[idx1], algolist[idx2]))
+                        print("\nRound\t%s\t%s\t%s%s mistakes\tResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s" % \
+                              (algolist[idx1], algolist[idx2], mistake_percent, "%", reward_key,
+                               rslttbl[IDX_RESULT_D_C], rslttbl[IDX_RESULT_C_C], rslttbl[IDX_RESULT_D_D],
+                               rslttbl[IDX_RESULT_C_D]))
                         maxHist_m1 = len(selfHist1) - 1
                         for idx in range(maxHist_m1 + 1):
                             print("%d\t%s\t%s\t" % (1+idx, TEXT_INTERP[selfHist1[maxHist_m1 - idx]], TEXT_INTERP[selfHist2[maxHist_m1 - idx]]))
