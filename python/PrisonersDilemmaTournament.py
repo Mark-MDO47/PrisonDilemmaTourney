@@ -73,15 +73,19 @@ IDX_RESULT_C_D = 3 # "T" in literature
 #
 def calcResult(range, selfChoice, oppChoice):
     the_result = 0
+    D_C = CALC_RESULT_RANGES[range][IDX_RESULT_D_C]
+    C_C = CALC_RESULT_RANGES[range][IDX_RESULT_C_C]
+    D_D = CALC_RESULT_RANGES[range][IDX_RESULT_D_D]
+    C_D = CALC_RESULT_RANGES[range][IDX_RESULT_C_D]
     if (DEFECT == selfChoice) and (DEFECT == oppChoice):
-        the_result = CALC_RESULT_RANGES[range][IDX_RESULT_D_D]
+        the_result = D_D
     elif (COOPERATE == selfChoice) and (COOPERATE == oppChoice):
-        the_result = CALC_RESULT_RANGES[range][IDX_RESULT_C_C]
+        the_result = C_C
     elif (DEFECT == selfChoice) and (COOPERATE == oppChoice):
-        the_result = CALC_RESULT_RANGES[range][IDX_RESULT_D_C]
+        the_result = D_C
     elif (COOPERATE == selfChoice) and (DEFECT == oppChoice):
-        the_result = CALC_RESULT_RANGES[range][IDX_RESULT_C_D]
-    return the_result
+        the_result = C_D
+    return the_result, (D_C, C_C, D_D, C_D)
 
     # end calcResult()
 
@@ -104,43 +108,66 @@ def get_algos():
 
     # end get_algos()
 
+def print_results(title, algolist, num_rounds, mistake_percent, percent_symb, reward_key, rslttbl, results_type):
+    print("\n\n%s Results of Prisoner's Dilemma Tournament: %s rounds, %s%s mistakes, ResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s" % \
+        (title, num_rounds, mistake_percent, percent_symb, reward_key,
+         rslttbl[IDX_RESULT_D_C], rslttbl[IDX_RESULT_C_C], rslttbl[IDX_RESULT_D_D], rslttbl[IDX_RESULT_C_D]))
+    print("Algorithm\tTotalScore")
+    for idx1 in range(len(algolist)):
+        print("%s\t%s" % (algolist[idx1], results_type[idx1]))
+
+
 ###################################################################################
 # doTournament - conducts a round-robin tournament among algorithms found in "."
 #
 # Tournament includes competing each algorithm against itself
 #
-def doTournament(number_of_iterations):
+def doTournament():
+    rounds_ranges = [ 3, 5, 10, 20, 50, 100 ]
+    mistake_percentages_list = [ 0.0, 0.05, 0.10, 0.15, 0.20, 0.25 ]
+
+    # get the algorithms in the directory
     algolist, algofunc = get_algos()
 
-    results = [0]*len(algolist)
-    results_ranges = sorted(CALC_RESULT_RANGES.keys())
+    # do the tournament over the various ranges
+    results_overall = [0]*len(algolist)
+    results_rewards_keys = sorted(CALC_RESULT_RANGES.keys())
+    for mistake_percent in mistake_percentages_list:
+        results_mistakes = [0] * len(algolist)
+        for reward_key in results_rewards_keys:
+            results_rewardstbl = [0] * len(algolist)
+            for num_rounds in rounds_ranges:
+                # now do pairing of two algorithms
+                results_pairing = [0] * len(algolist)
+                for idx1 in range(len(algolist)):
+                    for idx2 in range(idx1, len(algolist)):
+                        selfHist1 = []
+                        selfHist2 = []
+                        for idx3 in range(num_rounds):
+                            choice1 = algofunc[idx1](selfHist1,selfHist2)
+                            choice2 = algofunc[idx2](selfHist2,selfHist1)
+                            selfHist1 = [choice1] + selfHist1 # latest choice is always [0]
+                            selfHist2 = [choice2] + selfHist2
+                            result1, rlsttbl = calcResult(reward_key, choice1, choice2)
+                            result2, rslttbl = calcResult(reward_key, choice2, choice1)
+                            results_overall[idx1] += result1
+                            results_overall[idx2] += result2
+                            results_mistakes[idx1] += result1
+                            results_mistakes[idx2] += result2
+                            results_rewardstbl[idx1] += result1
+                            results_rewardstbl[idx2] += result2
+                            results_pairing[idx1] += result1
+                            results_pairing[idx2] += result2
 
-    for result_range in results_ranges:
-        for idx1 in range(len(algolist)):
-            for idx2 in range(idx1, len(algolist)):
-                selfHist1 = []
-                selfHist2 = []
-                for idx3 in range(number_of_iterations):
-                    choice1 = algofunc[idx1](selfHist1,selfHist2)
-                    choice2 = algofunc[idx2](selfHist2,selfHist1)
-                    selfHist1 = [choice1] + selfHist1 # latest choice is always [0]
-                    selfHist2 = [choice2] + selfHist2
-                    results[idx1] += calcResult(result_range, choice1, choice2)
-                    results[idx2] += calcResult(result_range, choice2, choice1)
+                        print("\nRound\t%s\t%s\t" % (algolist[idx1], algolist[idx2]))
+                        maxHist_m1 = len(selfHist1) - 1
+                        for idx in range(maxHist_m1 + 1):
+                            print("%d\t%s\t%s\t" % (1+idx, TEXT_INTERP[selfHist1[maxHist_m1 - idx]], TEXT_INTERP[selfHist2[maxHist_m1 - idx]]))
 
-                print("\nRound\t%s\t%s\t" % (algolist[idx1], algolist[idx2]))
-                maxHist_m1 = len(selfHist1) - 1
-                for idx in range(maxHist_m1 + 1):
-                    print("%d\t%s\t%s\t" % (1+idx, TEXT_INTERP[selfHist1[maxHist_m1 - idx]], TEXT_INTERP[selfHist2[maxHist_m1 - idx]]))
-
-        print("\n\nResults of Prisoner's Dilemma Tournament: %d rounds, ResultsCalc=%s: D_D=%d C_C=%d D_C=%d C_D=%d" % \
-              (number_of_iterations, result_range, CALC_RESULT_RANGES[result_range][IDX_RESULT_D_D],
-               CALC_RESULT_RANGES[result_range][IDX_RESULT_C_C], CALC_RESULT_RANGES[result_range][IDX_RESULT_D_C],
-               CALC_RESULT_RANGES[result_range][IDX_RESULT_C_D]))
-        print("\nAlgorithm\tTotalScore")
-        for idx1 in range(len(algolist)):
-            print("%s\t%s" % (algolist[idx1], results[idx1]))
-
+                print_results("Pairing", algolist, num_rounds, "%0.0f" % (100.0*mistake_percent), "%", reward_key, rslttbl, results_pairing)
+            print_results("RewardsTable", algolist, "N/A", "%0.0f" % (100.0*mistake_percent), "%", reward_key, rslttbl, results_rewardstbl)
+        print_results("Mistakes", algolist, "N/A", "%0.0f" % (100.0*mistake_percent), "%", "N/A", ("N/A", "N/A", "N/A", "N/A"), results_mistakes)
+    print_results("Overall", algolist, "N/A", "N/A", "", "N/A", ("N/A", "N/A", "N/A", "N/A"), results_overall)
     # end doTournament()
 
 
@@ -155,15 +182,14 @@ if __name__ == "__main__":
         formatter_class=argparse.RawTextHelpFormatter,
         description="stdout receives tab-separated-values results of algo1 and algo2\n",
         epilog="""Example:
-python PrisonersDilemmaTournament.py number_of_iterations > formattedResults.txt
+python PrisonersDilemmaTournament.py > formattedResults.txt
 """,
-        usage='python %(prog)s number_of_iterations\n' +
+        usage='python %(prog)s num_rounds\n' +
               "   note: runs all files algo_*.py in directory\n" +
               "   note: algo_*.py written per algo_mdo_template.py")
-    my_parser.add_argument('number_of_iterations',type=int,help='number of iterations to run')
     args = my_parser.parse_args()
 
     # all the real work is done here
-    doTournament(args.number_of_iterations)
+    doTournament()
 
     # end of "__main__"
