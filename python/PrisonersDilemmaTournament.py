@@ -126,11 +126,29 @@ def get_algos():
     # end get_algos()
 
 ###################################################################################
+# whoopsie - insert "real world" errors into choices
+#
+whoopsie_count = 0
+whoopsie_checkit = [DEFECT, COOPERATE]
 def whoopsie(result1, result2, mistake_percent):
+    global whoopsie_count
+
+    whoopsie_count += 1
+    if (result1 not in whoopsie_checkit) or (result2 not in whoopsie_checkit):
+        print("ERROR: input to whoopsie is %d %d on count %d" % (result1, result2, whoopsie_count))
+        exit()
     if random.random() < mistake_percent:
         result1 = 1-result1
+        # print("DEBUG whoopsie   change result1=%d %0.0f" % (result1, 100*mistake_percent))
+    else:
+        # print("DEBUG whoopsie nochange result1=%d %0.0f" % (result1, 100*mistake_percent))
+        pass
     if random.random() < mistake_percent:
         result2 = 1-result2
+        # print("DEBUG whoopsie   change result2=%d %0.0f" % (result2, 100 * mistake_percent))
+    else:
+        # print("DEBUG whoopsie nochange result2=%d %0.0f" % (result2, 100 * mistake_percent))
+        pass
     return result1, result2
 
     # end whoopsie()
@@ -178,11 +196,13 @@ def doTournament():
                         for idx3 in range(num_rounds):
                             choice1 = algofunc[idx1](selfHist1,selfHist2)
                             choice2 = algofunc[idx2](selfHist2,selfHist1)
+                            choice1, choice2 = whoopsie(choice1, choice2, mistake_percent)
+
                             selfHist1 = [choice1] + selfHist1 # latest choice is always [0]
                             selfHist2 = [choice2] + selfHist2
                             result1, rlsttbl = calcResult(reward_key, choice1, choice2)
                             result2, rslttbl = calcResult(reward_key, choice2, choice1)
-                            result1, result2 = whoopsie(result1, result2, mistake_percent)
+
                             results_overall[idx1] += result1
                             results_overall[idx2] += result2
                             results_mistakes[idx1] += result1

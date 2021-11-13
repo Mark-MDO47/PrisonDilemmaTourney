@@ -58,10 +58,12 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 #
 # NOTE: this has the debug code removed to show how simple the actual code is
 def algo_mdo_template(selfHist, oppHist):
+    rtn = choices.DEFECT
     if (0 == (len(selfHist) % 2)) and (0 == (len(oppHist) % 2)):
-        return choices.COOPERATE
+        rtn = choices.COOPERATE
     else:
-        return choices.DEFECT
+        rtn = choices.DEFECT
+    return rtn
 
 """
 # NOTE: Don't Panic! This just shows some potential debug code, not necessary!
