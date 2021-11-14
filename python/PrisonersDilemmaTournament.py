@@ -155,24 +155,24 @@ def whoopsie(result1, result2, mistake_percent):
     # end whoopsie()
 
 ###################################################################################
-# print_results - print results
+# print_scores - print results
 #
-def print_results(title, algolist, num_rounds, mistake_percent, percent_symb, reward_key, rslttbl, results_type):
-    print("\n\n%s Results of Prisoner's Dilemma Tournament: %s rounds, %s%s mistakes, ResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s" % \
-        (title, num_rounds, mistake_percent, percent_symb, reward_key,
+def print_scores(title, algolist, num_rounds, mistake_percent, percent_symb, rand_seed, reward_key, rslttbl, results_type):
+    print("\n\n%s Results of Prisoner's Dilemma Tournament: %s rounds, %s%s mistakes (seed %s), ResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s" % \
+        (title, num_rounds, mistake_percent, percent_symb, rand_seed, reward_key,
          rslttbl[IDX_RESULT_D_C], rslttbl[IDX_RESULT_C_C], rslttbl[IDX_RESULT_D_D], rslttbl[IDX_RESULT_C_D]))
     print("Algorithm\tTotalScore")
     for idx1 in range(len(algolist)):
         print("%s\t%s" % (algolist[idx1], results_type[idx1]))
 
-    # end print_results()
+    # end print_scores()
 
 ###################################################################################
 # doTournament - conducts a round-robin tournament among algorithms found in "."
 #
 # Tournament includes competing each algorithm against itself
 #
-def doTournament():
+def doTournament(rand_seed, print_detail):
     rounds_ranges = [ 3, 5, 10, 20, 50, 100 ]
     mistake_percentages_list = [ 0.0, 0.05, 0.10, 0.15, 0.20, 0.25 ]
 
@@ -181,15 +181,15 @@ def doTournament():
     results_rewards_keys = sorted(CALC_RESULT_RANGES.keys())
 
     # do the tournament over the various ranges
-    results_overall = [0]*len(algolist)
+    scores_overall = [0]*len(algolist)
     for mistake_percent in mistake_percentages_list:
-        results_mistakes = [0] * len(algolist)
+        scores_mistakes = [0] * len(algolist)
         for reward_key in results_rewards_keys:
-            results_rewardstbl = [0] * len(algolist)
+            scores_rewardstbl = [0] * len(algolist)
             for num_rounds in rounds_ranges:
 
                 # now do pairing of two algorithms
-                results_pairing = [0] * len(algolist)
+                scores_pairing = [0] * len(algolist)
                 for idx1 in range(len(algolist)):
                     for idx2 in range(idx1, len(algolist)):
                         selfHist1 = []
@@ -204,27 +204,28 @@ def doTournament():
                             result1, rlsttbl = calcResult(reward_key, choice1, choice2)
                             result2, rslttbl = calcResult(reward_key, choice2, choice1)
 
-                            results_overall[idx1] += result1
-                            results_overall[idx2] += result2
-                            results_mistakes[idx1] += result1
-                            results_mistakes[idx2] += result2
-                            results_rewardstbl[idx1] += result1
-                            results_rewardstbl[idx2] += result2
-                            results_pairing[idx1] += result1
-                            results_pairing[idx2] += result2
+                            scores_overall[idx1] += result1
+                            scores_overall[idx2] += result2
+                            scores_mistakes[idx1] += result1
+                            scores_mistakes[idx2] += result2
+                            scores_rewardstbl[idx1] += result1
+                            scores_rewardstbl[idx2] += result2
+                            scores_pairing[idx1] += result1
+                            scores_pairing[idx2] += result2
 
-                        print("\nRound\t%s\t%s\t%s%s mistakes\tResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s" % \
-                              (algolist[idx1], algolist[idx2], "%0.0f" % (100.0*mistake_percent), "%", reward_key,
-                               rslttbl[IDX_RESULT_D_C], rslttbl[IDX_RESULT_C_C], rslttbl[IDX_RESULT_D_D],
-                               rslttbl[IDX_RESULT_C_D]))
-                        maxHist_m1 = len(selfHist1) - 1
-                        for idx in range(maxHist_m1 + 1):
-                            print("%d\t%s\t%s\t" % (1+idx, TEXT_INTERP[selfHist1[maxHist_m1 - idx]], TEXT_INTERP[selfHist2[maxHist_m1 - idx]]))
+                        if print_detail:
+                            print("\nRound\t%s\t%s\t%s%s mistakes (seed %s)\tResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s" % \
+                                  (algolist[idx1], algolist[idx2], "%0.0f" % (100.0*mistake_percent), "%", rand_seed,
+                                   reward_key, rslttbl[IDX_RESULT_D_C], rslttbl[IDX_RESULT_C_C], rslttbl[IDX_RESULT_D_D],
+                                   rslttbl[IDX_RESULT_C_D]))
+                            maxHist_m1 = len(selfHist1) - 1
+                            for idx in range(maxHist_m1 + 1):
+                                print("%d\t%s\t%s\t" % (1+idx, TEXT_INTERP[selfHist1[maxHist_m1 - idx]], TEXT_INTERP[selfHist2[maxHist_m1 - idx]]))
 
-                print_results("Pairing", algolist, num_rounds, "%0.0f" % (100.0*mistake_percent), "%", reward_key, rslttbl, results_pairing)
-            print_results("RewardsTable", algolist, "N/A", "%0.0f" % (100.0*mistake_percent), "%", reward_key, rslttbl, results_rewardstbl)
-        print_results("Mistakes", algolist, "N/A", "%0.0f" % (100.0*mistake_percent), "%", "N/A", ("N/A", "N/A", "N/A", "N/A"), results_mistakes)
-    print_results("Overall", algolist, "N/A", "N/A", "", "N/A", ("N/A", "N/A", "N/A", "N/A"), results_overall)
+                print_scores("Pairing", algolist, num_rounds, "%0.0f" % (100.0*mistake_percent), "%", rand_seed, reward_key, rslttbl, scores_pairing)
+            print_scores("RewardsTable", algolist, "N/A", "%0.0f" % (100.0*mistake_percent), "%", rand_seed, reward_key, rslttbl, scores_rewardstbl)
+        print_scores("Mistakes", algolist, "N/A", "%0.0f" % (100.0*mistake_percent), "%", rand_seed, "N/A", ("N/A", "N/A", "N/A", "N/A"), scores_mistakes)
+    print_scores("Overall", algolist, "N/A", "N/A", "", rand_seed, "N/A", ("N/A", "N/A", "N/A", "N/A"), scores_overall)
     # end doTournament()
 
 
@@ -245,14 +246,19 @@ python PrisonersDilemmaTournament.py > formattedResults.txt
               "   note: runs all files algo_*.py in directory\n" +
               "   note: algo_*.py written per algo_mdo_template.py")
     my_parser.add_argument('randseed', type=str, help='if integer, seed for random number; else random seed')
+    my_parser.add_argument('-d',
+                           '--print-detail',
+                           action='store_true',
+                           help='print detailed blow-by-blow for each pairing')
     args = my_parser.parse_args()
 
     if args.randseed[0].isdigit():
-        random.seed(int(args.randseed))
+        theSeed = int(args.randseed)
     else:
-        random.seed(round(time.time() * 1000)) # random seed based on time in milliseconds
+        theSeed = round(time.time() * 1000) # random seed based on time in milliseconds
+    random.seed(theSeed)
 
     # all the real work is done here
-    doTournament()
+    doTournament(theSeed, args.print_detail)
 
     # end of "__main__"
