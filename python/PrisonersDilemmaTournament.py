@@ -175,6 +175,7 @@ def print_scores(title, algolist, num_rounds, mistake_percent, percent_symb, ran
 def doTournament(rand_seed, print_detail):
     rounds_ranges = [ 3, 5, 10, 20, 50, 100 ]
     mistake_percentages_list = [ 0.0, 0.05, 0.10, 0.15, 0.20, 0.25 ]
+    whoopsie_marker = "-whoopsie" # how whoopsie is flagged in detail printout
 
     # get the algorithms in the directory
     algolist, algofunc = get_algos()
@@ -194,24 +195,28 @@ def doTournament(rand_seed, print_detail):
                     for idx2 in range(idx1, len(algolist)):
                         selfHist1 = []
                         selfHist2 = []
+                        origHist1 = []
+                        origHist2 = []
                         for idx3 in range(num_rounds):
-                            choice1 = algofunc[idx1](selfHist1,selfHist2)
-                            choice2 = algofunc[idx2](selfHist2,selfHist1)
-                            choice1, choice2 = whoopsie(choice1, choice2, mistake_percent)
+                            orig_choice1 = algofunc[idx1](selfHist1,selfHist2)
+                            orig_choice2 = algofunc[idx2](selfHist2,selfHist1)
+                            choice1, choice2 = whoopsie(orig_choice1, orig_choice2, mistake_percent)
 
                             selfHist1 = [choice1] + selfHist1 # latest choice is always [0]
                             selfHist2 = [choice2] + selfHist2
+                            origHist1 = [orig_choice1] + origHist1 # scoring is based on orig choice + whoopsie
+                            origHist2 = [orig_choice1] + origHist2
                             result1, rlsttbl = calcResult(reward_key, choice1, choice2)
                             result2, rslttbl = calcResult(reward_key, choice2, choice1)
 
-                            scores_overall[idx1] += result1
-                            scores_overall[idx2] += result2
-                            scores_mistakes[idx1] += result1
-                            scores_mistakes[idx2] += result2
-                            scores_rewardstbl[idx1] += result1
-                            scores_rewardstbl[idx2] += result2
                             scores_pairing[idx1] += result1
                             scores_pairing[idx2] += result2
+                            scores_rewardstbl[idx1] += result1
+                            scores_rewardstbl[idx2] += result2
+                            scores_mistakes[idx1] += result1
+                            scores_mistakes[idx2] += result2
+                            scores_overall[idx1] += result1
+                            scores_overall[idx2] += result2
 
                         if print_detail:
                             print("\nRound\t%s\t%s\t%s%s mistakes (seed %s)\tResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s" % \
@@ -220,7 +225,14 @@ def doTournament(rand_seed, print_detail):
                                    rslttbl[IDX_RESULT_C_D]))
                             maxHist_m1 = len(selfHist1) - 1
                             for idx in range(maxHist_m1 + 1):
-                                print("%d\t%s\t%s\t" % (1+idx, TEXT_INTERP[selfHist1[maxHist_m1 - idx]], TEXT_INTERP[selfHist2[maxHist_m1 - idx]]))
+                                revIdx = maxHist_m1 - idx
+                                move1 = TEXT_INTERP[selfHist1[revIdx]]
+                                if origHist1[revIdx] != selfHist1[revIdx]:
+                                    move1 += whoopsie_marker
+                                move2 = TEXT_INTERP[selfHist2[revIdx]]
+                                if origHist2[revIdx] != selfHist2[revIdx]:
+                                    move2 += whoopsie_marker
+                                print("%d\t%s\t%s\t" % (1+idx, move1, move2))
 
                 print_scores("Pairing", algolist, num_rounds, "%0.0f" % (100.0*mistake_percent), "%", rand_seed, reward_key, rslttbl, scores_pairing)
             print_scores("RewardsTable", algolist, "N/A", "%0.0f" % (100.0*mistake_percent), "%", rand_seed, reward_key, rslttbl, scores_rewardstbl)
@@ -240,7 +252,8 @@ if __name__ == "__main__":
         formatter_class=argparse.RawTextHelpFormatter,
         description="stdout receives tab-separated-values results of algo1 and algo2\n",
         epilog="""Example:
-python PrisonersDilemmaTournament.py > formattedResults.txt
+python PrisonersDilemmaTournament.py randomseed > formattedResults_just_the_facts.txt
+python PrisonersDilemmaTournament.py --print-detail 47 > formattedResults_detailed.txt
 """,
         usage='python %(prog)s randseed\n' +
               "   note: runs all files algo_*.py in directory\n" +
