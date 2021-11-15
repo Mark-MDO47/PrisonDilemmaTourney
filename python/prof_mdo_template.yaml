@@ -1,3 +1,7 @@
+#
+# MISTAKE_PERCENTAGES_LIST is a list of the fraction of choices made that will not be performed correctly.
+#    For instance, a DEFECT might turn into a COOPERATE or vice versa
+#
 MISTAKE_PERCENTAGES_LIST:
 - 0.0
 - 0.05
@@ -5,6 +9,9 @@ MISTAKE_PERCENTAGES_LIST:
 - 0.15
 - 0.2
 - 0.25
+#
+# NUM_ROUNDS_LIST is a list of lengths of contests to run
+#
 NUM_ROUNDS_LIST:
 - 3
 - 5
@@ -12,6 +19,13 @@ NUM_ROUNDS_LIST:
 - 20
 - 50
 - 100
+#
+# The REWARDS_DICT gives a range of rewards to cycle through.
+# The order of rewards (lengths of prison sentences) is:
+#    [S,R,P,T] or alternatively [D_C, C_C, D_D, C_D]
+# The general rule for sentences for being in a "prisoner's dilemma" contest is T > R > P > S
+#    Some feel there is another rule that T + S > 2R
+#
 REWARDS_DICT:
   001-Classical Range:
   - 0
@@ -23,4 +37,7 @@ REWARDS_DICT:
   - 1
   - 5
   - 10
+#
+#WHOOPSIE_MARKER is just a text string that will go in the detailed printout to show which choices were not performed correctly.
+#
 WHOOPSIE_MARKER: -whoopsie
