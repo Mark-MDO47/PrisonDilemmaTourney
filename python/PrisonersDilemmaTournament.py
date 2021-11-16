@@ -145,24 +145,21 @@ def whoopsie(choice1, choice2, mistake_percent):
 
     whoopsie_count += 1
     if (choice1 not in whoopsie_checkit) or (choice2 not in whoopsie_checkit):
-        print("ERROR: input to whoopsie is %d %d on count %d" % (choice1, choice2, whoopsie_count))
+        print("ERROR: input to whoopsie is %d %d %0.2f on count %d" % (choice1, choice2, mistake_percent, whoopsie_count))
         exit()
     try1 = random.random()
     if try1 < mistake_percent:
-        if 0.0 == mistake_percent:
-            print("ERROR whoopsie: try1=%0.2f, mistake_percent=0.0, whoopsie")
         choice1 = 1-choice1
-        # print("DEBUG whoopsie   change choice1=%d %0.0f" % (choice1, 100*mistake_percent))
+        # print("DEBUG whoopsie   change choice1=%d try1 %0.2f mistake %0.0f" % (choice1, try1, 100*mistake_percent))
     else:
-        # print("DEBUG whoopsie nochange choice1=%d %0.0f" % (choice1, 100*mistake_percent))
+        # print("DEBUG whoopsie nochange choice1=%d try1 %0.2f mistake %0.0f" % (choice1, try1, 100*mistake_percent))
         pass
     try2 = random.random()
     if try2 < mistake_percent:
-        print("ERROR whoopsie: try2=%0.2f, mistake_percent=0.0, whoopsie")
         choice2 = 1-choice2
-        # print("DEBUG whoopsie   change choice2=%d %0.0f" % (choice2, 100 * mistake_percent))
+        # print("DEBUG whoopsie   change choice2=%d try2 %0.2f mistake %0.0f" % (choice2, try2, 100 * mistake_percent))
     else:
-        # print("DEBUG whoopsie nochange choice2=%d %0.0f" % (choice2, 100 * mistake_percent))
+        # print("DEBUG whoopsie nochange choice2=%d try2 %0.2f mistake %0.0f" % (choice2, try2, 100 * mistake_percent))
         pass
     return choice1, choice2
 
