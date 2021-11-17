@@ -52,8 +52,8 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 # note: the function name should be exactly the same as the filename but without the ".py"
 #
 # The algorithm in this template file behaves as follows:
-#    On the first round it returns COOPERATE
-#    On all subsequent rounds, it alternates between DEFECT and COOPERATE
+#    On the first move it returns COOPERATE
+#    On all subsequent move, it alternates between DEFECT and COOPERATE
 # note: len(selfHist) and len(oppHist) should always be the same; I put both tests in just to demonstrate this
 #
 # NOTE: this has the debug code removed to show how simple the actual code is
@@ -74,11 +74,11 @@ def algo_mdo_template(selfHist, oppHist):
         print(" algo_mdo_template DEBUG    len(self)=%d len(opp)=%d" % (len(selfHist),len(oppHist)))
     if (0 == (len(selfHist) % 2)) and (0 == (len(oppHist) % 2)):
         if DEBUG_ALGO:
-            print(" algo_mdo_template DEBUG round %d choice=%s" % (1+len(oppHist), choices.TEXT_INTERP[choices.COOPERATE]))
+            print(" algo_mdo_template DEBUG move %d choice=%s" % (1+len(oppHist), choices.TEXT_INTERP[choices.COOPERATE]))
         return choices.COOPERATE
     else:
         if DEBUG_ALGO:
-            print(" algo_mdo_template DEBUG round %d choice=%s" % (1+len(oppHist), choices.TEXT_INTERP[choices.DEFECT]))
+            print(" algo_mdo_template DEBUG move %d choice=%s" % (1+len(oppHist), choices.TEXT_INTERP[choices.DEFECT]))
         return choices.DEFECT
 """
 

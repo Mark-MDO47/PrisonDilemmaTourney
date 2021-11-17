@@ -3,10 +3,10 @@
 # algo_mdo_tit_for_tat.py - Prisoner's Dilemma tournament algorithm file for Tit-for-Tat algorithm.
 #
 # The Tit-for-Tat algorithm behaves as follows:
-#    On the first round it cooperates
-#    On all subsequent rounds, it does what the opponent did on the previous round
-#       if the opponent did DEFECT last round, we do DEFECT this round
-#       if the opponent did COOPERATE last round, we do COOPERATE this round
+#    On the first move it cooperates
+#    On all subsequent moves, it does what the opponent did on the previous move
+#       if the opponent did DEFECT last move, we do DEFECT this move
+#       if the opponent did COOPERATE last move, we do COOPERATE this move
 #
 # For an algorithm python routine in a file (i.e. with filename algo_mdo.py), the calling sequence is
 #     choice = algo_mdo(myChoices, oppChoices)
@@ -15,8 +15,8 @@
 #     This template file is named algorithm_template.py so the function name is algorithm_template
 # Each call to the algorithm will have the following for parameters:
 #     list of history all the choices made by both parties in reverse order (latest choice before this is [0], prev [1])
-#       Thus the opponent choice made in previous round, assuming this isn't the first round, is oppChoices[0].
-#          if len(oppChoices) > 0, there was at least one prior round.
+#       Thus the opponent choice made in previous move, assuming this isn't the first move, is oppChoices[0].
+#          if len(oppChoices) > 0, there was at least one prior move.
 #       note: len(oppChoices) should be identical to len(myChoices)
 #     value of each entry  in xxxChoices is one of choices.DEFECT or choices.COOPERATE
 #
@@ -52,16 +52,16 @@ import sys
 import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choices.COOPERATE
 
 # The Tit-for-Tat algorithm behaves as follows:
-#    On the first round it cooperates
-#    On all subsequent rounds, it does what the opponent did on the previous round
-#       if the opponent did DEFECT last round, we do DEFECT this round
-#       if the opponent did COOPERATE last round, we do COOPERATE this round
+#    On the first move it cooperates
+#    On all subsequent moves, it does what the opponent did on the previous move
+#       if the opponent did DEFECT last move, we do DEFECT this move
+#       if the opponent did COOPERATE last move, we do COOPERATE this move
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
 # NOTE: this has the debug code removed to show how simple the actual code is
 def algo_mdo_tit_for_tat(selfHist, oppHist):
-    if len(oppHist) <= 0: # first round
+    if len(oppHist) <= 0: # first move
         return choices.COOPERATE
     else:
         return oppHist[0]
@@ -73,9 +73,9 @@ def algo_mdo_tit_for_tat(selfHist, oppHist):
 
     if DEBUG_ALGO:
         print(" algo_mdo_tit_for_tat DEBUG    len(self)=%d len(opp)=%d" % (len(selfHist),len(oppHist)))
-    if len(oppHist) <= 0: # first round
+    if len(oppHist) <= 0: # first move
         if DEBUG_ALGO:
-            print(" algo_mdo_tit_for_tat DEBUG round %d choice=%s" % (1+len(oppHist), choices.TEXT_INTERP[choices.COOPERATE]))
+            print(" algo_mdo_tit_for_tat DEBUG move %d choice=%s" % (1+len(oppHist), choices.TEXT_INTERP[choices.COOPERATE]))
         return choices.COOPERATE
     else:
         if DEBUG_ALGO:
@@ -84,7 +84,7 @@ def algo_mdo_tit_for_tat(selfHist, oppHist):
                       (choices.TEXT_INTERP[oppHist[0]], choices.TEXT_INTERP[oppHist[1]]))
             else:
                 print(" algo_mdo_tit_for_tat DEBUG    oppHist[0]=%s" % choices.TEXT_INTERP[oppHist[0]])
-            print(" algo_mdo_tit_for_tat DEBUG round %d choice=%s" % (1+len(oppHist), choices.TEXT_INTERP[oppHist[0]]))
+            print(" algo_mdo_tit_for_tat DEBUG move %d choice=%s" % (1+len(oppHist), choices.TEXT_INTERP[oppHist[0]]))
         return oppHist[0]
 """
 

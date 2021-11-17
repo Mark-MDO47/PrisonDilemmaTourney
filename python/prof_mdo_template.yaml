@@ -10,9 +10,9 @@ MISTAKE_PERCENTAGES_LIST:
 - 0.2
 - 0.25
 #
-# NUM_ROUNDS_LIST is a list of lengths of contests to run
+# NUM_MOVES_LIST is a list of lengths of contests to run
 #
-NUM_ROUNDS_LIST:
+NUM_MOVES_LIST:
 - 3
 - 5
 - 10

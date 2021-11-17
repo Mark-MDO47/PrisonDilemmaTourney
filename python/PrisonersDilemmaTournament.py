@@ -13,8 +13,8 @@
 #     NOTE that the function name is the same as the python filename with the "*.py" removed
 # Each call to the algorithm will have the following parameters:
 #     list of history all the choices made by both parties in reverse order (latest choice before this is [0], prev [1])
-#       Thus the opponent choice made in previous round, assuming this isn't the first round, is oppChoices[0].
-#          if len(oppChoices) > 0, there was at least one prior round.
+#       Thus the opponent choice made in previous move, assuming this isn't the first move, is oppChoices[0].
+#          if len(oppChoices) > 0, there was at least one prior move.
 #       note: len(oppChoices) should be identical to len(myChoices)
 #     value of each entry is one of choices.DEFECT or choices.COOPERATE
 # The algorithm will return
@@ -86,12 +86,12 @@ IDX_RESULT_C_C = 1 # "R" in literature
 IDX_RESULT_D_D = 2 # "P" in literature
 IDX_RESULT_C_D = 3 # "T" in literature
 REWARDS_DICT = {}
-NUM_ROUNDS_LIST = []
+NUM_MOVES_LIST = []
 MISTAKE_PERCENTAGES_LIST = []
 WHOOPSIE_MARKER = "*"
 
 ###################################################################################
-# calcResult - calculate the results of a round for one player
+# calcResult - calculate the results for one player of a move
 #
 # D_C is my result if I defect and my opponent cooperates    ("S" in literature)
 # C_C is my result if I cooperate and my opponent cooperates ("R" in literature)
@@ -168,9 +168,9 @@ def whoopsie(choice1, choice2, mistake_percent):
 ###################################################################################
 # print_scores - print results
 #
-def print_scores(title, algolist, num_rounds, mistake_percent, percent_symb, rand_seed, reward_key, rslttbl, results_type):
-    print("\n\n%s Results of Prisoner's Dilemma Tournament: %s rounds, %s%s mistakes (seed %s), ResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s" % \
-        (title, num_rounds, mistake_percent, percent_symb, rand_seed, reward_key,
+def print_scores(title, algolist, num_moves, mistake_percent, percent_symb, rand_seed, reward_key, rslttbl, results_type):
+    print("\n\n%s Results of Prisoner's Dilemma Tournament: %s moves, %s%s mistakes (seed %s), ResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s" % \
+        (title, num_moves, mistake_percent, percent_symb, rand_seed, reward_key,
          rslttbl[IDX_RESULT_D_C], rslttbl[IDX_RESULT_C_C], rslttbl[IDX_RESULT_D_D], rslttbl[IDX_RESULT_C_D]))
     print("Algorithm\tTotalScore")
     for idx1 in range(len(algolist)):
@@ -183,7 +183,7 @@ def print_scores(title, algolist, num_rounds, mistake_percent, percent_symb, ran
 #
 def doReadParms(fname):
     global REWARDS_DICT
-    global NUM_ROUNDS_LIST
+    global NUM_MOVES_LIST
     global MISTAKE_PERCENTAGES_LIST
     global WHOOPSIE_MARKER
 
@@ -191,7 +191,7 @@ def doReadParms(fname):
         data_loaded = yaml.safe_load(stream)
 
     REWARDS_DICT = data_loaded["REWARDS_DICT"]
-    NUM_ROUNDS_LIST = data_loaded["NUM_ROUNDS_LIST"]
+    NUM_MOVES_LIST = data_loaded["NUM_MOVES_LIST"]
     MISTAKE_PERCENTAGES_LIST = data_loaded["MISTAKE_PERCENTAGES_LIST"]
     WHOOPSIE_MARKER = data_loaded["WHOOPSIE_MARKER"]
 
@@ -214,7 +214,7 @@ def doTournament(rand_seed, print_detail):
         scores_mistakes = [0] * len(algolist)
         for this_reward_key in rewards_keys:
             scores_rewardstbl = [0] * len(algolist)
-            for num_rounds in NUM_ROUNDS_LIST:
+            for num_moves in NUM_MOVES_LIST:
 
                 # now do pairing of two algorithms
                 scores_pairing = [0] * len(algolist)
@@ -226,7 +226,7 @@ def doTournament(rand_seed, print_detail):
                         selfScore2 = []
                         origHist1 = []
                         origHist2 = []
-                        for idx3 in range(num_rounds):
+                        for idx3 in range(num_moves):
                             orig_choice1 = algofunc[idx1](selfHist1,selfHist2)
                             orig_choice2 = algofunc[idx2](selfHist2,selfHist1)
                             choice1, choice2 = whoopsie(orig_choice1, orig_choice2, mistake_percent)
@@ -254,7 +254,7 @@ def doTournament(rand_seed, print_detail):
                             scores_overall[idx2] += result2
 
                         if print_detail:
-                            print("\nRound\t%s\tScore\t%s\tScore\t%s%s mistakes (seed %s)\tResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s" % \
+                            print("\nMove\t%s\tScore\t%s\tScore\t%s%s mistakes (seed %s)\tResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s" % \
                                   (algolist[idx1], algolist[idx2], "%0.0f" % (100.0*mistake_percent), "%", rand_seed,
                                    this_reward_key, rslttbl[IDX_RESULT_D_C], rslttbl[IDX_RESULT_C_C], rslttbl[IDX_RESULT_D_D],
                                    rslttbl[IDX_RESULT_C_D]))
@@ -274,7 +274,7 @@ def doTournament(rand_seed, print_detail):
                                 sum2 += selfScore2[revIdx]
                             print("Final Score\t%s\t%s\t%s\t%s\t" % (algolist[idx1], sum1, algolist[idx2], sum2))
 
-                print_scores("Pairing", algolist, num_rounds, "%0.0f" % (100.0*mistake_percent), "%", rand_seed, this_reward_key, rslttbl, scores_pairing)
+                print_scores("Pairing", algolist, num_moves, "%0.0f" % (100.0*mistake_percent), "%", rand_seed, this_reward_key, rslttbl, scores_pairing)
             print_scores("RewardsTable", algolist, "N/A", "%0.0f" % (100.0*mistake_percent), "%", rand_seed, this_reward_key, rslttbl, scores_rewardstbl)
         print_scores("Mistakes", algolist, "N/A", "%0.0f" % (100.0*mistake_percent), "%", rand_seed, "N/A", ("N/A", "N/A", "N/A", "N/A"), scores_mistakes)
     print_scores("Overall", algolist, "N/A", "N/A", "", rand_seed, "N/A", ("N/A", "N/A", "N/A", "N/A"), scores_overall)
@@ -300,7 +300,7 @@ python PrisonersDilemmaTournament.py --print-detail 47 prof_mdo_template.yaml > 
               "   note: runs all files algo_*.py in directory\n" +
               "   note: algo_*.py written per algo_mdo_template.py")
     my_parser.add_argument('randseed', type=str, help='if integer, seed for random number; else random seed')
-    my_parser.add_argument('fname_parms', type=str, help='filename in YAML format of parameters to range such as num_rounds')
+    my_parser.add_argument('fname_parms', type=str, help='filename in YAML format of parameters to range such as num_moves')
     my_parser.add_argument('-d', '--print-detail', action='store_true',
                            help='print detailed blow-by-blow for each pairing')
     args = my_parser.parse_args()
