@@ -88,6 +88,8 @@ IDX_RESULT_C_D = 3 # "T" in literature
 REWARDS_DICT = {}
 NUM_MOVES_LIST = []
 MISTAKE_PERCENTAGES_LIST = []
+EVOLUTION_START_MULTIPLE = []
+EVOLUTION_REPLACE = []
 WHOOPSIE_MARKER = "*"
 
 ###################################################################################
@@ -197,6 +199,55 @@ def doReadParms(fname):
 
     # end doReadParms()
 
+
+###################################################################################
+# doEvolution - conducts an evolution run among algorithms found in "."
+#
+# So you say you want an evolution - well, you know... The Beatles (sic)
+#
+def doEvolution(algolist, algofunc, rand_seed, print_detail):
+    rewards_keys = sorted(REWARDS_DICT.keys())
+    population_algoidx = []
+    population_score = []
+    selfHist1 = []
+    selfHist2 = []
+    selfScore1 = []
+    selfScore2 = []
+
+    for mistake_percent in MISTAKE_PERCENTAGES_LIST:
+        for this_reward_key in rewards_keys:
+            for num_moves in NUM_MOVES_LIST:
+                # build the data for tracking the results
+                for num_starting in EVOLUTION_START_MULTIPLE:
+                    population_algoidx = []
+                    population_score = []
+                    for num_replace in EVOLUTION_REPLACE:
+                        for algo_idx in algolist:
+                            for idx_num_start in range(num_starting):
+                                population_algoidx.append(idx_algo)
+                                population_score.append(0)
+                    # round-robin we don't compete against ourselves
+                    for pop_idx1 in range(len(population_algoidx)):
+                        for pop_idx2 in range(1, len(population_algoidx)):
+                            selfHist1 = []
+                            selfHist2 = []
+                            for moves_idx in range(num_moves):
+                                orig_choice1 = algofunc[population_algoidx[pop_idx1]](selfHist1, selfHist2)
+                                orig_choice2 = algofunc[population_algoidx[pop_idx2]](selfHist2, selfHist1)
+                                choice1, choice2 = whoopsie(orig_choice1, orig_choice2, mistake_percent)
+                                selfHist1 = [choice1] + selfHist1 # latest choice is always [0]
+                                selfHist2 = [choice2] + selfHist2
+                                result1, rlsttbl = calcResult(this_reward_key, choice1, choice2)
+                                result2, rslttbl = calcResult(this_reward_key, choice2, choice1)
+                                population_score[pop_idx1] += result1
+                                population_score[pop_idx2] += result2
+                    # do a sorted list of population
+                    for pop_idx in range(population_algoidx):
+                        pass # FIXME
+
+
+# end doEvolution()
+
 ###################################################################################
 # doTournament - conducts a round-robin tournament among algorithms found in "."
 #
@@ -278,6 +329,8 @@ def doTournament(rand_seed, print_detail):
             print_scores("RewardsTable", algolist, "N/A", "%0.0f" % (100.0*mistake_percent), "%", rand_seed, this_reward_key, rslttbl, scores_rewardstbl)
         print_scores("Mistakes", algolist, "N/A", "%0.0f" % (100.0*mistake_percent), "%", rand_seed, "N/A", ("N/A", "N/A", "N/A", "N/A"), scores_mistakes)
     print_scores("Overall", algolist, "N/A", "N/A", "", rand_seed, "N/A", ("N/A", "N/A", "N/A", "N/A"), scores_overall)
+    return algolist, algofunc
+
     # end doTournament()
 
 
@@ -314,6 +367,7 @@ python PrisonersDilemmaTournament.py --print-detail 47 prof_mdo_template.yaml > 
     doReadParms(args.fname_parms)
 
     # all the real work is done here
-    doTournament(theSeed, args.print_detail)
+    algolist, algofunc = doTournament(theSeed, args.print_detail)
+    doEvolution(algolist, algofunc, theSeed, args.print_detail)
 
     # end of "__main__"

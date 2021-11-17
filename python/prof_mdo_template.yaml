@@ -38,6 +38,23 @@ REWARDS_DICT:
   - 5
   - 10
 #
-#WHOOPSIE_MARKER is just a text string that will go in the detailed printout to show which choices were not performed correctly.
+# WHOOPSIE_MARKER is just a text string that will go in the detailed printout to show which choices were not performed correctly.
 #
 WHOOPSIE_MARKER: -whoopsie
+#
+# EVOLUTION_START_MULTIPLE is a list of how many of each type to start
+#
+EVOLUTION_START_MULTIPLE:
+- 3
+- 5
+- 7
+- 9
+- 11
+#
+# EVOLUTION_REPLACE is how many to replace from bottom of list
+#
+EVOLUTION_REPLACE
+- 3
+- 4
+- 5
+- 6
