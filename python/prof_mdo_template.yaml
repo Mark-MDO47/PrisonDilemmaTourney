@@ -58,3 +58,11 @@ EVOLUTION_REPLACE
 - 4
 - 5
 - 6
+#
+# EVOLUTION_MOVES is how many times to move in each evolution pairing
+#
+- 50
+#
+# EVOLUTION_ITERATIONS is how many times to iterate pairings before taking score
+#
+- 100
