@@ -1,8 +1,8 @@
 # Author: Mark Olson 2021-11-06 https://github.com/Mark-MDO47/PrisonDilemmaTourney
 #
-# algo_susp_mdo_tit_for_tat.py - Prisoner's Dilemma tournament algorithm file
+# algo_mdo_susp_tit_for_tat.py - Prisoner's Dilemma tournament algorithm file
 #
-# The Suspicious Tit-for-Tat algorithm behaves as follows:
+# The algo_mdo_susp_tit_for_tat algorithm behaves as follows:
 #    On the first move it returns choices.DEFECT
 #    On all subsequent moves, it does what the opponent did on the previous move
 #       if the opponent did choices.DEFECT last move, we return choices.DEFECT this move
@@ -59,12 +59,12 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
-def algo_susp_mdo_tit_for_tat(selfHist, oppHist):
+def algo_mdo_susp_tit_for_tat(selfHist, oppHist):
     if len(oppHist) <= 0: # first move
         return choices.DEFECT
     else:
         return oppHist[0]
 
 if __name__ == "__main__":
-    sys.stderr.write("ERROR - algo_susp_mdo_tit_for_tat.py is not intended to be run stand-alone\n")
+    sys.stderr.write("ERROR - algo_mdo_susp_tit_for_tat.py is not intended to be run stand-alone\n")
     exit(-1)

@@ -1,8 +1,8 @@
 # Author: Mark Olson 2021-11-06 https://github.com/Mark-MDO47/PrisonDilemmaTourney
 #
-# algo_per_ccd.py - Prisoner's Dilemma tournament algorithm file
+# algo_mdo_per_ccd.py - Prisoner's Dilemma tournament algorithm file
 #
-# The algo_per_ccd algorithm behaves as follows:
+# The algo_mdo_per_ccd algorithm behaves as follows:
 #    if the modulo w.r.t 3 of the number of moves is
 #        0 or 1: return choices.COOPERATE
 #        2: return choices.DEFECT
@@ -50,7 +50,7 @@
 import sys
 import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choices.COOPERATE
 
-# The algo_per_ccd algorithm behaves as follows:
+# The algo_mdo_per_ccd algorithm behaves as follows:
 #    if the modulo w.r.t 3 of the number of moves is
 #        0 or 1: return choices.COOPERATE
 #        2: return choices.DEFECT
@@ -58,12 +58,12 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
-def algo_per_ccd(selfHist, oppHist):
+def algo_mdo_per_ccd(selfHist, oppHist):
     if 2 == (len(oppHist) % 3):
         return choices.DEFECT
     else:
         return choices.COOPERATE
 
 if __name__ == "__main__":
-    sys.stderr.write("ERROR - algo_per_ccd.py is not intended to be run stand-alone\n")
+    sys.stderr.write("ERROR - algo_mdo_per_ccd.py is not intended to be run stand-alone\n")
     exit(-1)
