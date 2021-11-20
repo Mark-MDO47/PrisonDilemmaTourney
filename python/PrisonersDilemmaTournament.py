@@ -328,6 +328,7 @@ def doEvolution(algolist, algofunc, rand_seed, print_detail):
 def doTournament(algolist, algofunc, rand_seed, print_detail):
 
     rewards_keys = sorted(REWARDS_DICT.keys())
+    rslttbl = []  # so python knows it exists
 
     # do the tournament over the various ranges
     scores_overall = [0]*len(algolist)
