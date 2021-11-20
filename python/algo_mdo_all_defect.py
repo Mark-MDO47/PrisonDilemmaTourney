@@ -1,6 +1,6 @@
 # Author: Mark Olson 2021-11-06 https://github.com/Mark-MDO47/PrisonDilemmaTourney
 #
-# algo_mdo_all_defect.py - Prisoner's Dilemma tournament algorithm file for forgiving Tit-for-Tat algorithm.
+# algo_mdo_all_defect.py - Prisoner's Dilemma tournament algorithm file
 #
 # The Always Defect algorithm behaves as follows:
 #    On every move it returns choices.DEFECT
@@ -53,7 +53,6 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
-# NOTE: this has the debug code removed to show how simple the actual code is
 def algo_mdo_all_defect(selfHist, oppHist):
     return choices.DEFECT
 

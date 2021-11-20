@@ -1,7 +1,7 @@
 # Author: Mark Olson 2021-11-06 https://github.com/Mark-MDO47/PrisonDilemmaTourney
 #
 # PrisonersDilemmaTournament.py will run a tournament for Prisoner's Dilemma algorithms.
-# The algorithms are of the form displayed in algo_mdo_template.py
+# The algorithms are of the form displayed in algorithm_template.py
 # The profile of parameters to explore are stored in a file of the form prof_mdo_template.yaml
 #
 # PrisonersDilemmaTournament.py gets its algorithms by searching the current directory for algo_*.py.
@@ -149,21 +149,21 @@ def whoopsie(choice1, choice2, mistake_percent):
 
     whoopsie_count += 1
     if (choice1 not in whoopsie_checkit) or (choice2 not in whoopsie_checkit):
-        print("ERROR: input to whoopsie is %d %d %0.2f on count %d" % (choice1, choice2, mistake_percent, whoopsie_count))
+        print("ERROR: input to whoopsie is %d %d %0.3f on count %d" % (choice1, choice2, mistake_percent, whoopsie_count))
         exit()
     try1 = random.random()
     if try1 < mistake_percent:
         choice1 = 1-choice1
-        # print("DEBUG whoopsie   change choice1=%d try1 %0.2f mistake %0.0f" % (choice1, try1, 100*mistake_percent))
+        # print("DEBUG whoopsie   change choice1=%d try1 %0.3f mistake %0.1f" % (choice1, try1, 100*mistake_percent))
     else:
-        # print("DEBUG whoopsie nochange choice1=%d try1 %0.2f mistake %0.0f" % (choice1, try1, 100*mistake_percent))
+        # print("DEBUG whoopsie nochange choice1=%d try1 %0.3f mistake %0.1f" % (choice1, try1, 100*mistake_percent))
         pass
     try2 = random.random()
     if try2 < mistake_percent:
         choice2 = 1-choice2
-        # print("DEBUG whoopsie   change choice2=%d try2 %0.2f mistake %0.0f" % (choice2, try2, 100 * mistake_percent))
+        # print("DEBUG whoopsie   change choice2=%d try2 %0.3f mistake %0.1f" % (choice2, try2, 100 * mistake_percent))
     else:
-        # print("DEBUG whoopsie nochange choice2=%d try2 %0.2f mistake %0.0f" % (choice2, try2, 100 * mistake_percent))
+        # print("DEBUG whoopsie nochange choice2=%d try2 %0.3f mistake %0.1f" % (choice2, try2, 100 * mistake_percent))
         pass
     return choice1, choice2
 
@@ -278,7 +278,7 @@ def doEvolution(algolist, algofunc, rand_seed, print_detail):
             for idx_num_start in range(evolve_start_multiple):
                 population_algoidx.append(algo_idx)
                 population_score.append(0)
-        sys.stdout.write("EvolutionNum\t")
+        sys.stdout.write("\nEvolutionNum\t")
         for algo_name in algolist:
             sys.stdout.write("%s\t" % algo_name)
         sys.stdout.write("\t\t")
@@ -286,7 +286,8 @@ def doEvolution(algolist, algofunc, rand_seed, print_detail):
             sys.stdout.write("%s: %s\t" % (paramname, this_param_set[idx]))
         sys.stdout.write("\n")
         # print starting population counts
-        print_algo_population(-1, algolist, population_algoidx)
+        if print_detail:
+            print_algo_population(-1, algolist, population_algoidx)
 
         # round-robin we don't compete against ourselves
         for evolve_iter in range(evolve_iteration_max):
@@ -314,7 +315,8 @@ def doEvolution(algolist, algofunc, rand_seed, print_detail):
                 ignore1, ignore2, loser = sorting_list[-idx].split(",")
                 population_algoidx[int(loser)] = population_algoidx[int(winner)]
             # print current population counts
-            print_algo_population(evolve_iter, algolist, population_algoidx)
+            if print_detail or ((evolve_iter+1) == evolve_iteration_max):
+                print_algo_population(evolve_iter, algolist, population_algoidx)
 
     # end doEvolution()
 
@@ -323,10 +325,8 @@ def doEvolution(algolist, algofunc, rand_seed, print_detail):
 #
 # Tournament includes competing each algorithm against itself
 #
-def doTournament(rand_seed, print_detail):
+def doTournament(algolist, algofunc, rand_seed, print_detail):
 
-    # get the algorithms in the directory
-    algolist, algofunc = get_algos()
     rewards_keys = sorted(REWARDS_DICT.keys())
 
     # do the tournament over the various ranges
@@ -376,7 +376,7 @@ def doTournament(rand_seed, print_detail):
 
                         if print_detail:
                             print("\nMove\t%s\tScore\t%s\tScore\t%s%s mistakes (seed %s)\tResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s" % \
-                                  (algolist[idx1], algolist[idx2], "%0.0f" % (100.0*mistake_percent), "%", rand_seed,
+                                  (algolist[idx1], algolist[idx2], "%0.1f" % (100.0*mistake_percent), "%", rand_seed,
                                    this_reward_key, rslttbl[IDX_RESULT_D_C], rslttbl[IDX_RESULT_C_C], rslttbl[IDX_RESULT_D_D],
                                    rslttbl[IDX_RESULT_C_D]))
                             maxHist_m1 = len(selfHist1) - 1
@@ -395,11 +395,10 @@ def doTournament(rand_seed, print_detail):
                                 sum2 += selfScore2[revIdx]
                             print("Final Score\t%s\t%s\t%s\t%s\t" % (algolist[idx1], sum1, algolist[idx2], sum2))
 
-                print_scores("Pairing", algolist, num_moves, "%0.0f" % (100.0*mistake_percent), "%", rand_seed, this_reward_key, rslttbl, scores_pairing)
-            print_scores("RewardsTable", algolist, "N/A", "%0.0f" % (100.0*mistake_percent), "%", rand_seed, this_reward_key, rslttbl, scores_rewardstbl)
-        print_scores("Mistakes", algolist, "N/A", "%0.0f" % (100.0*mistake_percent), "%", rand_seed, "N/A", ("N/A", "N/A", "N/A", "N/A"), scores_mistakes)
+                print_scores("Pairing", algolist, num_moves, "%0.1f" % (100.0*mistake_percent), "%", rand_seed, this_reward_key, rslttbl, scores_pairing)
+            print_scores("RewardsTable", algolist, "N/A", "%0.1f" % (100.0*mistake_percent), "%", rand_seed, this_reward_key, rslttbl, scores_rewardstbl)
+        print_scores("Mistakes", algolist, "N/A", "%0.1f" % (100.0*mistake_percent), "%", rand_seed, "N/A", ("N/A", "N/A", "N/A", "N/A"), scores_mistakes)
     print_scores("Overall", algolist, "N/A", "N/A", "", rand_seed, "N/A", ("N/A", "N/A", "N/A", "N/A"), scores_overall)
-    return algolist, algofunc
 
     # end doTournament()
 
@@ -414,18 +413,27 @@ def doTournament(rand_seed, print_detail):
 if __name__ == "__main__":
     my_parser = argparse.ArgumentParser(prog='PrisonersDilemmaTournament',
         formatter_class=argparse.RawTextHelpFormatter,
-        description="stdout receives tab-separated-values results of algo1 and algo2\n",
+        description="stdout receives tab-separated-values results of tournament or evolution or both\n",
         epilog="""Example:
-python PrisonersDilemmaTournament.py randomseed prof_mdo_template.yaml > formattedResults_just_the_facts.txt
-python PrisonersDilemmaTournament.py --print-detail 47 prof_mdo_template.yaml > formattedResults_detailed.txt
+python PrisonersDilemmaTournament.py -e randomseed prof_mdo_template.yaml > formattedResults_just_the_facts.txt
+python PrisonersDilemmaTournament.py -t -dt 47 prof_mdo_template.yaml > formattedResults_detailed.txt
 """,
         usage='python %(prog)s randseed\n' +
               "   note: runs all files algo_*.py in directory\n" +
-              "   note: algo_*.py written per algo_mdo_template.py")
+              "   note: algo_*.py written per algorithm_template.py")
     my_parser.add_argument('randseed', type=str, help='if integer, seed for random number; else random seed')
-    my_parser.add_argument('fname_parms', type=str, help='filename in YAML format of parameters to range such as num_moves')
-    my_parser.add_argument('-d', '--print-detail', action='store_true',
+    my_parser.add_argument('fname_parms', type=str, help='filename in YAML format of parameters to range such as NUM_MOVES_LIST')
+    my_parser.add_argument('-dt', '--print-detail-tournament', action='store_true',
                            help='print detailed blow-by-blow for each pairing')
+    my_parser.add_argument('-de', '--print-detail-evolution', action='store_true',
+                           help='print detailed blow-by-blow for each evolution')
+    my_group = my_parser.add_mutually_exclusive_group(required=False)
+    my_group.add_argument('-t', '--tournament', action='store_true',
+                           help='run the tournament only')
+    my_group.add_argument('-e', '--evolution', action='store_true',
+                           help='run the evolution only')
+    my_group.add_argument('-b', '--both', action='store_true',
+                           help='(default) run both the tournament and evolution')
     args = my_parser.parse_args()
 
     if args.randseed[0].isdigit():
@@ -434,10 +442,22 @@ python PrisonersDilemmaTournament.py --print-detail 47 prof_mdo_template.yaml > 
         theSeed = round(time.time() * 1000) # random seed based on time in milliseconds
     random.seed(theSeed)
 
+    doTourn = True
+    doEvolu = True
+    if args.tournament:
+        doEvolu = False
+    elif args.evolution:
+        doTourn = False
+
+    # get parameters from YAML file
     doReadParms(args.fname_parms)
+    # get the algorithms in the directory
+    algolist, algofunc = get_algos()
 
     # all the real work is done here
-    algolist, algofunc = doTournament(theSeed, args.print_detail)
-    doEvolution(algolist, algofunc, theSeed, args.print_detail)
+    if doTourn:
+        doTournament(algolist, algofunc, theSeed, args.print_detail_tournament)
+    if doEvolu:
+        doEvolution(algolist, algofunc, theSeed, args.print_detail_evolution)
 
     # end of "__main__"

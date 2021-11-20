@@ -1,6 +1,6 @@
 # Author: Mark Olson 2021-11-06 https://github.com/Mark-MDO47/PrisonDilemmaTourney
 #
-# algo_mdo_tit_for_tat.py - Prisoner's Dilemma tournament algorithm file for Tit-for-Tat algorithm.
+# algo_mdo_tit_for_tat.py - Prisoner's Dilemma tournament algorithm file
 #
 # The Tit-for-Tat algorithm behaves as follows:
 #    On the first move it returns choices.COOPERATE
@@ -59,34 +59,11 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
-# NOTE: this has the debug code removed to show how simple the actual code is
 def algo_mdo_tit_for_tat(selfHist, oppHist):
     if len(oppHist) <= 0: # first move
         return choices.COOPERATE
     else:
         return oppHist[0]
-
-"""
-# NOTE: Don't Panic! This just shows some potential debug code, not necessary!
-def algo_mdo_tit_for_tat(selfHist, oppHist):
-    DEBUG_ALGO = True
-
-    if DEBUG_ALGO:
-        print(" algo_mdo_tit_for_tat DEBUG    len(self)=%d len(opp)=%d" % (len(selfHist),len(oppHist)))
-    if len(oppHist) <= 0: # first move
-        if DEBUG_ALGO:
-            print(" algo_mdo_tit_for_tat DEBUG move %d choice=%s" % (1+len(oppHist), choices.TEXT_INTERP[choices.COOPERATE]))
-        return choices.COOPERATE
-    else:
-        if DEBUG_ALGO:
-            if len(oppHist) >= 2:
-                print(" algo_mdo_tit_for_tat DEBUG    oppHist[0]=%s oppHist[1]=%s" %
-                      (choices.TEXT_INTERP[oppHist[0]], choices.TEXT_INTERP[oppHist[1]]))
-            else:
-                print(" algo_mdo_tit_for_tat DEBUG    oppHist[0]=%s" % choices.TEXT_INTERP[oppHist[0]])
-            print(" algo_mdo_tit_for_tat DEBUG move %d choice=%s" % (1+len(oppHist), choices.TEXT_INTERP[oppHist[0]]))
-        return oppHist[0]
-"""
 
 if __name__ == "__main__":
     sys.stderr.write("ERROR - algo_mdo_tit_for_tat.py is not intended to be run stand-alone\n")

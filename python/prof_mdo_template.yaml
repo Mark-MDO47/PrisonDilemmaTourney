@@ -1,14 +1,16 @@
 #
 # MISTAKE_PERCENTAGES_LIST is a list of the fraction of choices made that will not be performed correctly.
 #    For instance, a DEFECT might turn into a COOPERATE or vice versa
+# This is the percentage chance for EACH move by each player; this makes things more sensitive than
+#    what is reported in the literature. It is not exactly clear to me what their percentages mean.
 #
 MISTAKE_PERCENTAGES_LIST:
-- 0.0
-- 0.05
-- 0.1
-- 0.15
-- 0.2
-- 0.25
+- 0.000
+- 0.005
+- 0.010
+- 0.015
+- 0.020
+- 0.025
 #
 # NUM_MOVES_LIST is a list of lengths of contests to run
 #
@@ -45,18 +47,13 @@ WHOOPSIE_MARKER: -whoopsie
 # EVOLUTION_START_MULTIPLE is a list of how many of each type to start
 #
 EVOLUTION_START_MULTIPLE:
-- 3
-- 5
 - 7
-- 9
 - 11
 #
 # EVOLUTION_REPLACE is how many to replace from bottom of list
 #
 EVOLUTION_REPLACE:
 - 3
-- 4
-- 5
 - 6
 #
 # EVOLUTION_MOVES is how many times to move in each evolution pairing

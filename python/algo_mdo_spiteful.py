@@ -1,6 +1,6 @@
 # Author: Mark Olson 2021-11-06 https://github.com/Mark-MDO47/PrisonDilemmaTourney
 #
-# algo_mdo_spiteful.py - Prisoner's Dilemma tournament algorithm file for forgiving Tit-for-Tat algorithm.
+# algo_mdo_spiteful.py - Prisoner's Dilemma tournament algorithm file
 #
 # The algo_mdo_spiteful algorithm behaves as follows:
 #    On the first move it returns choices.COOPERATE
@@ -50,12 +50,13 @@
 import sys
 import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choices.COOPERATE
 
-# The Always Cooperate algorithm behaves as follows:
-#    On every move it returns choices.COOPERATE
+# The algo_mdo_spiteful algorithm behaves as follows:
+#    On the first move it returns choices.COOPERATE
+#    After that, it always returns choices.COOPERATE unless the opponent ever does choices.DEFECT
+#    Once seeing a choices.DEFECT, it will return choices.DEFECT forever
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
-# NOTE: this has the debug code removed to show how simple the actual code is
 ALGO_MDO_SPITEFUL_DEFECT = False
 def algo_mdo_spiteful(selfHist, oppHist):
     global ALGO_MDO_SPITEFUL_DEFECT # need some static storage or else it gets tedious
