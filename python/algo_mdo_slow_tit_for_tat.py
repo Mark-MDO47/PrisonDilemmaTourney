@@ -8,8 +8,8 @@
 #       if the last two opponent moves were the same, it switches its state to that move
 #       it returns its state
 #
-# For an algorithm python routine in a file (i.e. with filename algo_mdo.py), the calling sequence is
-#     choice = algo_mdo(myChoices, oppChoices)
+# For an algorithm python routine in a file (i.e. with filename algo_mdo_something.py), the calling sequence is
+#     choice = algo_mdo_something(myChoices, oppChoices)
 #     NOTE that the function name is the same as the python filename with the "*.py" removed
 #     I recommend adding your initials (mine are mdo) to your file/algorithm name so we don't have name collisions
 #     This template file is named algorithm_template.py so the function name is algorithm_template

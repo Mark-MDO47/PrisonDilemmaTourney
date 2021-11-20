@@ -7,7 +7,7 @@
 #
 # This strategy acts as tit-for-tat, except when it is time to forgive and remember the past. It uses cooperation on
 # the first move and then continues to do so as long as the other player cooperates. Then after the ﬁrst defection
-# of the other player, it defects one time and cooperatestwo times; after the second defection of the opponent, it
+# of the other player, it defects one time and cooperates two times; after the second defection of the opponent, it
 # defects two times and cooperates two times, ... after the nth defection it reacts with n consecutive defections and
 # then calms down its opponent with two cooperations. As we can see this strategy has the same qualities as
 # those described by Axelrod in [2] for tit-for-tat except one: the simplicity. Gradual has a memory of the game
@@ -26,8 +26,8 @@
 #           if "more defects" is > 0, decrement "more defects" and return choices.DEFECT
 #           else if "more defects" is == 0, set state choices.COOPERATE, set "more cooperates" to 1, and return choices.COOPERATE
 #
-# For an algorithm python routine in a file (i.e. with filename algo_mdo.py), the calling sequence is
-#     choice = algo_mdo(myChoices, oppChoices)
+# For an algorithm python routine in a file (i.e. with filename algo_mdo_something.py), the calling sequence is
+#     choice = algo_mdo_something(myChoices, oppChoices)
 #     NOTE that the function name is the same as the python filename with the "*.py" removed
 #     I recommend adding your initials (mine are mdo) to your file/algorithm name so we don't have name collisions
 #     This template file is named algorithm_template.py so the function name is algorithm_template
@@ -103,12 +103,12 @@ def algo_mdo_gradual(selfHist, oppHist):
         ALGO_MDO_GRADUAL_STATE = choices.COOPERATE
         ALGO_MDO_GRADUAL_MORE_COOP = 0
         ALGO_MDO_GRADUAL_MORE_DEFECTS = 0
-    elif ALGO_MDO_GRADUAL_STATE = choices.COOPERATE:
+    elif ALGO_MDO_GRADUAL_STATE == choices.COOPERATE:
         if ALGO_MDO_GRADUAL_MORE_COOP > 0:
             ALGO_MDO_GRADUAL_MORE_COOP -= 1
         elif choices.DEFECT == oppHist[0]:
             ALGO_MDO_GRADUAL_STATE = choices.DEFECT
-            ALGO_MDO_GRADUAL_MORE_DEFECTS = 0
+            ALGO_MDO_GRADUAL_MORE_DEFECTS = ALGO_MDO_GRADUAL_NUM_OPP_DEFECTS-1
     else: # if ALGO_MDO_GRADUAL_STATE = choices.DEFECT:
         if ALGO_MDO_GRADUAL_MORE_DEFECTS > 0:
             ALGO_MDO_GRADUAL_MORE_DEFECTS -= 1
