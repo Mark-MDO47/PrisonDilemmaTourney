@@ -85,12 +85,14 @@ IDX_RESULT_D_C = 0 # "S" in literature
 IDX_RESULT_C_C = 1 # "R" in literature
 IDX_RESULT_D_D = 2 # "P" in literature
 IDX_RESULT_C_D = 3 # "T" in literature
-REWARDS_DICT = {}
-NUM_MOVES_LIST = []
-MISTAKE_PERCENTAGES_LIST = []
-EVOLUTION_START_MULTIPLE = []
-EVOLUTION_REPLACE = []
-WHOOPSIE_MARKER = "*"
+REWARDS_DICT = {}             # how to score the pairings
+NUM_MOVES_LIST = []           # how many moves per pairing in tournament
+MISTAKE_PERCENTAGES_LIST = [] # chances of mistake per move per player
+EVOLUTION_ITERATIONS = []     # how many iterations of pairings for each parameter combination
+EVOLUTION_MOVES = []          # how many moves per pairing in evolution
+EVOLUTION_START_MULTIPLE = [] # how many of each algo in total population at start
+EVOLUTION_REPLACE = []        # how many of lowest to replace with highest after each iteration
+WHOOPSIE_MARKER = "*"         # in detail tournament printout, marks the mistakes made
 
 ###################################################################################
 # calcResult - calculate the results for one player of a move
@@ -187,6 +189,10 @@ def doReadParms(fname):
     global REWARDS_DICT
     global NUM_MOVES_LIST
     global MISTAKE_PERCENTAGES_LIST
+    global EVOLUTION_ITERATIONS
+    global EVOLUTION_MOVES
+    global EVOLUTION_START_MULTIPLE
+    global EVOLUTION_REPLACE
     global WHOOPSIE_MARKER
 
     with open(fname, 'rt') as stream:
@@ -195,10 +201,56 @@ def doReadParms(fname):
     REWARDS_DICT = data_loaded["REWARDS_DICT"]
     NUM_MOVES_LIST = data_loaded["NUM_MOVES_LIST"]
     MISTAKE_PERCENTAGES_LIST = data_loaded["MISTAKE_PERCENTAGES_LIST"]
+    EVOLUTION_ITERATIONS = data_loaded["EVOLUTION_ITERATIONS"]
+    EVOLUTION_MOVES = data_loaded["EVOLUTION_MOVES"]
+    EVOLUTION_START_MULTIPLE = data_loaded["EVOLUTION_START_MULTIPLE"]
+    EVOLUTION_REPLACE = data_loaded["EVOLUTION_REPLACE"]
     WHOOPSIE_MARKER = data_loaded["WHOOPSIE_MARKER"]
 
     # end doReadParms()
 
+###################################################################################
+# make_combos - makes a list of combinations from the list of lists
+#
+# a = [1, 2, 3] ; b = ["a", "b", "c"] ; c = [10, 20] ; d = [100]
+# x = make_combos((a, b, c, d))
+# print(x)
+# [[1, 'a', 10, 100], [1, 'a', 20, 100], [1, 'b', 10, 100], [1, 'b', 20, 100], [1, 'c', 10, 100], [1, 'c', 20, 100],
+#  [2, 'a', 10, 100], [2, 'a', 20, 100], [2, 'b', 10, 100], [2, 'b', 20, 100], [2, 'c', 10, 100], [2, 'c', 20, 100],
+#  [3, 'a', 10, 100], [3, 'a', 20, 100], [3, 'b', 10, 100], [3, 'b', 20, 100], [3, 'c', 10, 100], [3, 'c', 20, 100]]
+#
+
+def make_combos(list_of_lists):
+    all_combos = []
+    for param in list_of_lists[0]:
+        all_combos.append([param])
+    for next_param_list in list_of_lists[1:]:
+        new_combos = []
+        for combo in all_combos:
+            for param in next_param_list:
+                new_combos.append(combo + [param])
+        all_combos = new_combos
+        del new_combos
+    return all_combos
+
+    # end make_combos()
+
+###################################################################################
+# print_algo_population - print evolution population counts
+#
+def print_algo_population(evolve_iter, algolist, population_algoidx):
+    # count the population for each algorithm
+    population_count = [0] * len(algolist)
+    # sys.stdout.write("DEBUG print_algo_population: evolve_iter=%s algolist=%s population_algoidx=%s\n" % (evolve_iter, algolist, population_algoidx))
+    for idx_pop in population_algoidx:
+        population_count[idx_pop] += 1
+    # print the population count for this iteration
+    sys.stdout.write("%d\t" % (1 + evolve_iter))
+    for algo_idx in range(len(algolist)):
+        sys.stdout.write("%d\t" % population_count[algo_idx])
+    sys.stdout.write("\n")
+
+    # end print_algo_population()
 
 ###################################################################################
 # doEvolution - conducts an evolution run among algorithms found in "."
@@ -214,39 +266,57 @@ def doEvolution(algolist, algofunc, rand_seed, print_detail):
     selfScore1 = []
     selfScore2 = []
 
-    for mistake_percent in MISTAKE_PERCENTAGES_LIST:
-        for this_reward_key in rewards_keys:
-            for num_moves in NUM_MOVES_LIST:
-                # build the data for tracking the results
-                for num_starting in EVOLUTION_START_MULTIPLE:
-                    population_algoidx = []
-                    population_score = []
-                    for num_replace in EVOLUTION_REPLACE:
-                        for algo_idx in algolist:
-                            for idx_num_start in range(num_starting):
-                                population_algoidx.append(idx_algo)
-                                population_score.append(0)
-                    # round-robin we don't compete against ourselves
-                    for pop_idx1 in range(len(population_algoidx)):
-                        for pop_idx2 in range(1, len(population_algoidx)):
-                            selfHist1 = []
-                            selfHist2 = []
-                            for moves_idx in range(num_moves):
-                                orig_choice1 = algofunc[population_algoidx[pop_idx1]](selfHist1, selfHist2)
-                                orig_choice2 = algofunc[population_algoidx[pop_idx2]](selfHist2, selfHist1)
-                                choice1, choice2 = whoopsie(orig_choice1, orig_choice2, mistake_percent)
-                                selfHist1 = [choice1] + selfHist1 # latest choice is always [0]
-                                selfHist2 = [choice2] + selfHist2
-                                result1, rlsttbl = calcResult(this_reward_key, choice1, choice2)
-                                result2, rslttbl = calcResult(this_reward_key, choice2, choice1)
-                                population_score[pop_idx1] += result1
-                                population_score[pop_idx2] += result2
-                    # do a sorted list of population
-                    for pop_idx in range(population_algoidx):
-                        pass # FIXME
+    param_combos = make_combos ((MISTAKE_PERCENTAGES_LIST, rewards_keys, EVOLUTION_ITERATIONS, EVOLUTION_REPLACE, EVOLUTION_START_MULTIPLE, EVOLUTION_MOVES))
+    param_names = ["% Mistakes", "Rewards", "NumEvolveIter", "NumEvolveReplace", "NumEvolveStart", "NumEvolveMoves"]
+    for mistake_percent, this_reward_key, evolve_iteration_max, evolve_replace, evolve_start_multiple, evolve_moves \
+            in param_combos:
+        # build the data for tracking the results
+        this_param_set = [mistake_percent, this_reward_key, evolve_iteration_max, evolve_replace, evolve_start_multiple, evolve_moves]
+        population_algoidx = []
+        population_score = []
+        for algo_idx in range(len(algolist)):
+            for idx_num_start in range(evolve_start_multiple):
+                population_algoidx.append(algo_idx)
+                population_score.append(0)
+        sys.stdout.write("EvolutionNum\t")
+        for algo_name in algolist:
+            sys.stdout.write("%s\t" % algo_name)
+        sys.stdout.write("\t\t")
+        for idx, paramname in enumerate(param_names):
+            sys.stdout.write("%s: %s\t" % (paramname, this_param_set[idx]))
+        sys.stdout.write("\n")
+        # print starting population counts
+        print_algo_population(-1, algolist, population_algoidx)
 
+        # round-robin we don't compete against ourselves
+        for evolve_iter in range(evolve_iteration_max):
+            for pop_idx1 in range(len(population_algoidx)):
+                for pop_idx2 in range(1, len(population_algoidx)):
+                    selfHist1 = []
+                    selfHist2 = []
+                    for moves_idx in range(evolve_moves):
+                        orig_choice1 = algofunc[population_algoidx[pop_idx1]](selfHist1, selfHist2)
+                        orig_choice2 = algofunc[population_algoidx[pop_idx2]](selfHist2, selfHist1)
+                        choice1, choice2 = whoopsie(orig_choice1, orig_choice2, mistake_percent)
+                        selfHist1 = [choice1] + selfHist1  # latest choice is always [0]
+                        selfHist2 = [choice2] + selfHist2
+                        result1, rlsttbl = calcResult(this_reward_key, choice1, choice2)
+                        result2, rslttbl = calcResult(this_reward_key, choice2, choice1)
+                        population_score[pop_idx1] += result1
+                        population_score[pop_idx2] += result2
+            # do a sorted list of population scores; small score wins, random if same score
+            sorting_list = []
+            for pop_idx in range(len(population_algoidx)):
+                sorting_list.append("%08d,%0.4f,%s" % (population_score[pop_idx], random.random(), pop_idx))
+            sorting_list = sorted(sorting_list)
+            for idx in range(evolve_replace):
+                ignore1, ignore2, winner = sorting_list[idx].split(",")
+                ignore1, ignore2, loser = sorting_list[-idx].split(",")
+                population_algoidx[int(loser)] = population_algoidx[int(winner)]
+            # print current population counts
+            print_algo_population(evolve_iter, algolist, population_algoidx)
 
-# end doEvolution()
+    # end doEvolution()
 
 ###################################################################################
 # doTournament - conducts a round-robin tournament among algorithms found in "."
