@@ -1,12 +1,18 @@
 # Author: Mark Olson 2021-11-06 https://github.com/Mark-MDO47/PrisonDilemmaTourney
 #
-# algo_mdo_tit_for_tat.py - Prisoner's Dilemma tournament algorithm file for Tit-for-Tat algorithm.
+# algo_mdo_forgiv_tit_for_tat.py - Prisoner's Dilemma tournament algorithm file for forgiving Tit-for-Tat algorithm.
 #
 # The Tit-for-Tat algorithm behaves as follows:
-#    On the first move it returns choices.COOPERATE
+#    On the first move it cooperates
 #    On all subsequent moves, it does what the opponent did on the previous move
-#       if the opponent did choices.DEFECT last move, we return choices.DEFECT this move
-#       if the opponent did choices.COOPERATE last move, we return choices.COOPERATE this move
+#       if the opponent did DEFECT last move, we do DEFECT this move
+#       if the opponent did COOPERATE last move, we do COOPERATE this move
+# The forgiving Tit-for-Tat algorithm behaves as follows:
+#    On the first move it cooperates
+#    On the second move it cooperates (there were not two previous moves to look at)
+#    On subsequent moves
+#       if the opponent did DEFECT last two moves, we do DEFECT this move
+#       otherwise we COOPERATE
 #
 # For an algorithm python routine in a file (i.e. with filename algo_mdo.py), the calling sequence is
 #     choice = algo_mdo(myChoices, oppChoices)
@@ -51,42 +57,25 @@
 import sys
 import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choices.COOPERATE
 
-# The Tit-for-Tat algorithm behaves as follows:
+# The forgiving Tit-for-Tat algorithm behaves as follows:
 #    On the first move it cooperates
-#    On all subsequent moves, it does what the opponent did on the previous move
-#       if the opponent did DEFECT last move, we do DEFECT this move
-#       if the opponent did COOPERATE last move, we do COOPERATE this move
+#    On the second move it cooperates (there were not two previous moves to look at)
+#    On subsequent moves
+#       if the opponent did DEFECT last two moves, we do DEFECT this move
+#       otherwise we COOPERATE
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
 # NOTE: this has the debug code removed to show how simple the actual code is
-def algo_mdo_tit_for_tat(selfHist, oppHist):
-    if len(oppHist) <= 0: # first move
-        return choices.COOPERATE
+def algo_mdo_forgiv_tit_for_tat(selfHist, oppHist):
+    myChoice = choices.COOPERATE
+    if len(oppHist) <= 1: # first move or second move
+        pass # return COOPERATE
     else:
-        return oppHist[0]
+        if (choices.DEFECT == oppHist[0]) and (choices.DEFECT == oppHist[1]):
+            myChoice = choices.DEFECT # only if two DEFECT in a row
+    return myChoice
 
-"""
-# NOTE: Don't Panic! This just shows some potential debug code, not necessary!
-def algo_mdo_tit_for_tat(selfHist, oppHist):
-    DEBUG_ALGO = True
-
-    if DEBUG_ALGO:
-        print(" algo_mdo_tit_for_tat DEBUG    len(self)=%d len(opp)=%d" % (len(selfHist),len(oppHist)))
-    if len(oppHist) <= 0: # first move
-        if DEBUG_ALGO:
-            print(" algo_mdo_tit_for_tat DEBUG move %d choice=%s" % (1+len(oppHist), choices.TEXT_INTERP[choices.COOPERATE]))
-        return choices.COOPERATE
-    else:
-        if DEBUG_ALGO:
-            if len(oppHist) >= 2:
-                print(" algo_mdo_tit_for_tat DEBUG    oppHist[0]=%s oppHist[1]=%s" %
-                      (choices.TEXT_INTERP[oppHist[0]], choices.TEXT_INTERP[oppHist[1]]))
-            else:
-                print(" algo_mdo_tit_for_tat DEBUG    oppHist[0]=%s" % choices.TEXT_INTERP[oppHist[0]])
-            print(" algo_mdo_tit_for_tat DEBUG move %d choice=%s" % (1+len(oppHist), choices.TEXT_INTERP[oppHist[0]]))
-        return oppHist[0]
-"""
 
 if __name__ == "__main__":
     sys.stderr.write("ERROR - algo_mdo_tit_for_tat.py is not intended to be run stand-alone\n")
