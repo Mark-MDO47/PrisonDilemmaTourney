@@ -1,0 +1,51 @@
+# THIS YAML FILE IS USED TO TEST NEW ALGORITHMS IN TOURNAMENT MODE
+#
+# MISTAKE_PERCENTAGES_LIST is a list of the fraction of choices made that will not be performed correctly.
+#    For instance, a DEFECT might turn into a COOPERATE or vice versa
+# This is the percentage chance for EACH move by each player; this makes things more sensitive than
+#    what is reported in the literature. It is not exactly clear to me what their percentages mean.
+#
+MISTAKE_PERCENTAGES_LIST:
+- 0.000
+#
+# NUM_MOVES_LIST is a list of lengths of contests to run
+#
+NUM_MOVES_LIST:
+- 20
+#
+# The REWARDS_DICT gives a range of rewards to cycle through.
+# The order of rewards (lengths of prison sentences) is:
+#    [S,R,P,T] or alternatively [D_C, C_C, D_D, C_D]
+# The general rule for sentences for being in a "prisoner's dilemma" contest is T > R > P > S
+#    Some feel there is another rule that T + S > 2R
+#
+REWARDS_DICT:
+  001-Classical Range:
+  - 0
+  - 1
+  - 3
+  - 5
+#
+# WHOOPSIE_MARKER is just a text string that will go in the detailed printout to show which choices were not performed correctly.
+#
+WHOOPSIE_MARKER: -whoopsie
+#
+# EVOLUTION_START_MULTIPLE is a list of how many of each type to start
+#
+EVOLUTION_START_MULTIPLE:
+- 7
+#
+# EVOLUTION_REPLACE is how many to replace from bottom of list
+#
+EVOLUTION_REPLACE:
+- 3
+#
+# EVOLUTION_MOVES is how many times to move in each evolution pairing
+#
+EVOLUTION_MOVES:
+- 50
+#
+# EVOLUTION_ITERATIONS is how many times to iterate pairings before taking score
+#
+EVOLUTION_ITERATIONS:
+- 100
