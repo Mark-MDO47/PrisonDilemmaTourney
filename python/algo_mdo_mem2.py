@@ -1,12 +1,15 @@
 # Author: Mark Olson 2021-11-06 https://github.com/Mark-MDO47/PrisonDilemmaTourney
 #
-# algo_mdo_tit_for_2_tat.py - Prisoner's Dilemma tournament algorithm file
+# algo_mdo_mem2.py - Prisoner's Dilemma tournament algorithm file
 #
-# The algo_mdo_tit_for_2_tat algorithm behaves as follows:
-#    On the first two moves it returns choices.COOPERATE
-#    On all subsequent moves:
-#       if the opponent did choices.DEFECT in the last two moves, we return choices.DEFECT this move
-#       else we return choices.COOPERATE this move
+#
+# The algo_mdo_mem2 algorithm behaves as follows:
+#    the first two moves are the same as TIT-FOR-TAT
+#    following that, it continually evaluates the previous two moves
+#       if both of the previous two moves by both sides are COOPERATE, then play TIT-FOR-TAT the following 2 moves
+#       if both of the previous two moves by both sides are opposite each other, then play TIT-FOR-2-TAT next 2 moves
+#       in all other cases play ALL-D the next two moves, keeping track of how often this is done
+#          if ALL-D gets picked twice (ever) then that decision becomes permanent
 #
 # For an algorithm python routine in a file (i.e. with filename algo_mdo_something.py), the calling sequence is
 #     choice = algo_mdo_something(myChoices, oppChoices)
@@ -51,24 +54,64 @@
 import sys
 import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choices.COOPERATE
 
-# The algo_mdo_tit_for_2_tat algorithm behaves as follows:
-#    On the first two moves it returns choices.COOPERATE
-#    On all subsequent moves:
-#       if the opponent did choices.DEFECT in the last two moves, we return choices.DEFECT this move
-#       else we return choices.COOPERATE this move
+# The algo_mdo_mem2 algorithm behaves as follows:
+#    the first two moves are the same as TIT-FOR-TAT
+#    following that, it continually evaluates the previous two moves
+#       if both of the previous two moves by both sides are COOPERATE, then play TIT-FOR-TAT the following 2 moves
+#       if both of the previous two moves by both sides are opposite each other, then play TIT-FOR-2-TAT next 2 moves
+#       in all other cases play ALL-D the next two moves, keeping track of how often this is done
+#          if ALL-D gets picked twice (ever) then that decision becomes permanent
 #
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
-def algo_mdo_tit_for_2_tat(selfHist, oppHist):
-    if len(selfHist) <= 1: # first two moves
-        return choices.COOPERATE
+ALGO_MDO_MEM2_BEHAVIOR = "TIT-FOR-TAT"
+ALGO_MDO_MEM2_BEHAVE_COUNT = 2
+ALGO_MDO_MEM2_ALL_D_COUNT = 0
+def algo_mdo_mem2(selfHist, oppHist):
+    global ALGO_MDO_MEM2_BEHAVIOR
+    global ALGO_MDO_MEM2_BEHAVE_COUNT
+    global ALGO_MDO_MEM2_ALL_D_COUNT
+
+    # handle the first move in the game
+    if 0 == len(selfHist):
+        ALGO_MDO_MEM2_BEHAVIOR = "TIT-FOR-TAT" # must reinitialize each "game"
+        ALGO_MDO_MEM2_BEHAVE_COUNT = 2
+        ALGO_MDO_MEM2_ALL_D_COUNT = 0
+
+    # make sure we are in the correct state to choose a move
+    if 2 <= ALGO_MDO_MEM2_ALL_D_COUNT:
+        pass # stay ALL-D forever
+    elif 0 >= ALGO_MDO_MEM2_BEHAVE_COUNT: # reached another decision point
+        if (choices.COOPERATE == selfHist[1]) and (choices.COOPERATE == oppHist[1]) and \
+                (choices.COOPERATE == selfHist[0]) and (choices.COOPERATE == oppHist[0]):
+            ALGO_MDO_MEM2_BEHAVIOR = "TIT-FOR-TAT"
+            ALGO_MDO_MEM2_BEHAVE_COUNT = 2
+    elif (oppHist[1] != selfHist[1]) and (oppHist[0] != selfHist[0]):
+        ALGO_MDO_MEM2_BEHAVIOR = "TIT-FOR-2-TAT"
+        ALGO_MDO_MEM2_BEHAVE_COUNT = 2
     else:
+        ALGO_MDO_MEM2_BEHAVIOR = "ALL-D"
+        ALGO_MDO_MEM2_BEHAVE_COUNT = 2
+        ALGO_MDO_MEM2_ALL_D_COUNT += 1
+
+    if 1 <= ALGO_MDO_MEM2_BEHAVE_COUNT: # this is not really needed
+        ALGO_MDO_MEM2_BEHAVE_COUNT -= 1
+    if ("ALL-D" == ALGO_MDO_MEM2_BEHAVIOR) or (2 <= ALGO_MDO_MEM2_ALL_D_COUNT):
+        return choices.DEFECT # always return DEFECT
+    elif "TIT-FOR-TAT" == ALGO_MDO_MEM2_BEHAVIOR:
+        if len(oppHist) <= 0:  # first move
+            return choices.COOPERATE
+        else:
+            return oppHist[0]
+    elif "TIT-FOR-2-TAT" == ALGO_MDO_MEM2_BEHAVIOR:
         if (choices.DEFECT == oppHist[1]) or (choices.DEFECT == oppHist[0]):
             return choices.DEFECT
         else:
             return oppHist[0]
+    else:
+        sys.stderr.write("\nERROR algo_mdo_mem2 - invalid state %s\n\n" % ALGO_MDO_MEM2_BEHAVIOR)
 
 if __name__ == "__main__":
-    sys.stderr.write("ERROR - algo_mdo_tit_for_2_tat.py is not intended to be run stand-alone\n")
+    sys.stderr.write("ERROR - algo_mdo_mem2.py is not intended to be run stand-alone\n")
     exit(-1)

@@ -1,12 +1,12 @@
 # Author: Mark Olson 2021-11-06 https://github.com/Mark-MDO47/PrisonDilemmaTourney
 #
-# algo_mdo_tit_for_2_tat.py - Prisoner's Dilemma tournament algorithm file
+# algo_mdo_prober.py - Prisoner's Dilemma tournament algorithm file
 #
-# The algo_mdo_tit_for_2_tat algorithm behaves as follows:
-#    On the first two moves it returns choices.COOPERATE
-#    On all subsequent moves:
-#       if the opponent did choices.DEFECT in the last two moves, we return choices.DEFECT this move
-#       else we return choices.COOPERATE this move
+# The algo_mdo_prober algorithm behaves as follows:
+#    the first three moves are choices.DEFECT, choices.COOPERATE and choices.COOPERATE
+#    on the fourth move it evaluates if its opponent has cooperated in the moves 2 and 3
+#        If so: return choices.DEFECT from then on
+#        else: play as in tit_for_tat
 #
 # For an algorithm python routine in a file (i.e. with filename algo_mdo_something.py), the calling sequence is
 #     choice = algo_mdo_something(myChoices, oppChoices)
@@ -51,24 +51,35 @@
 import sys
 import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choices.COOPERATE
 
-# The algo_mdo_tit_for_2_tat algorithm behaves as follows:
-#    On the first two moves it returns choices.COOPERATE
-#    On all subsequent moves:
-#       if the opponent did choices.DEFECT in the last two moves, we return choices.DEFECT this move
-#       else we return choices.COOPERATE this move
+# The algo_mdo_prober algorithm behaves as follows:
+#    the first three moves are choices.DEFECT, choices.COOPERATE and choices.COOPERATE
+#    on the fourth move it evaluates if its opponent has cooperated in the moves 2 and 3
+#        If so: return choices.DEFECT from then on
+#        else: play as in tit_for_tat
 #
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
-def algo_mdo_tit_for_2_tat(selfHist, oppHist):
-    if len(selfHist) <= 1: # first two moves
+ALGO_MDO_PROBER_BEHAVIOR = "NONE"
+def algo_mdo_prober(selfHist, oppHist):
+    global ALGO_MDO_PROBER_BEHAVIOR
+
+    if 0 == len(selfHist):
+        ALGO_MDO_PROBER_BEHAVIOR = "NONE" # must reinitialize each "game"
+        return choices.DEFECT
+    elif (1 == len(selfHist)) or (2 == len(selfHist)):
         return choices.COOPERATE
-    else:
-        if (choices.DEFECT == oppHist[1]) or (choices.DEFECT == oppHist[0]):
-            return choices.DEFECT
+    elif 3 == len(selfHist):
+        if (choices.COOPERATE == oppHist[0]) or (choices.COOPERATE == oppHist[1]):
+            ALGO_MDO_PROBER_BEHAVIOR = "DEFECT"
         else:
-            return oppHist[0]
+            ALGO_MDO_PROBER_BEHAVIOR = "TIT-FOR-TAT"
+
+    if "DEFECT" == ALGO_MDO_PROBER_BEHAVIOR:
+        return choices.DEFECT # always return DEFECT
+    else: # "TIT-FOR-TAT" == ALGO_MDO_PROBER_BEHAVIOR:
+        return oppHist[0]
 
 if __name__ == "__main__":
-    sys.stderr.write("ERROR - algo_mdo_tit_for_2_tat.py is not intended to be run stand-alone\n")
+    sys.stderr.write("ERROR - algo_mdo_prober.py is not intended to be run stand-alone\n")
     exit(-1)
