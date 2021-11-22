@@ -73,7 +73,7 @@ def algo_mdo_prober(selfHist, oppHist, ID):
     if 0 == len(selfHist):
         BEHAVIOR = "NONE"
         rtn = choices.DEFECT
-    elif 2 <= len(selfHist):
+    elif 2 >= len(selfHist):
         rtn = choices.COOPERATE
     elif 3 == len(selfHist):
         if (choices.COOPERATE == oppHist[0]) or (choices.COOPERATE == oppHist[1]):
