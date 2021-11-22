@@ -17,19 +17,19 @@ Robert Axelrod, professor of political science at the University of Michigan, ha
 
 Of course, there has been a lot of thinking about the issues around this game since then. For an excellent and gentle interactive introduction to the basics and then many of the factors that can affect the tournament, I highly recommend https://ncase.me/trust/, which is based on Robert Axelrod's book `THE EVOLUTION OF COOPERATION`.
 
-## What is this repository for?
+## What is this tournament?
 
-I plan to run an Iterated Prisoner's Dilemma tournament among members of my extended family and friends. This repository will contain a (hopefully) short Python program to run such touraments.
+I plan to run an Iterated Prisoner's Dilemma tournament among members of my extended family and friends. This repository will contain a (hopefully) short Python program to run such touraments. It will also have an evolutionary competition.
 
-I will create a template for the python code for the algorithms and write code for the 17 basic deterministic strategies from the literature (including the simplest imaginable strategies such as always defect). Thus we will have at least the basics covered.
+I will create a template for the python code for the algorithms and write code for the 19 basic deterministic strategies from the literature (including the simplest imaginable strategies such as always defect). Thus we will have at least the basics covered.
 
-Idea for the tournament is to create one or more algorithms and submit them, or choose an existing strategy and vote for it. If you wish to implement your own version of a strategy in the 17 I will provide, we will run that also. I suggest including your initials in the python filename of your algorithm to avoid name collisions.
+Idea for the tournament is to create one or more algorithms and submit them, or choose an existing strategy and vote for it. If you wish to implement your own version of a strategy in the 19 I will provide, we will run that also. I suggest including your initials in the python filename of your algorithm to avoid name collisions.
 
 Then I will have an extra-round-robin tournament in which each strategy plays versus each other strategy and (here is the extra part) also plays against itself.
 
 I am aware that there is already existing software for this type of tournament such as https://evolution-outreach.biomedcentral.com/articles/10.1007/s12052-012-0434-x
-* although the link to the code is broken
-* ... even if link was not broken, it is more fun to write my own.
+* although the link to the code is broken...
+* ... even if the link was not broken, it is more fun to write my own!
 
 There is the possibility of sensitivity of tournament results to the values used to calculate the score (number of years of sentence) under the different choices. Let's call the two participants X and Y and their choices (`C` or `D`) are selected by the horizontal and vertical axes of the table, respectively. 
 
@@ -49,3 +49,6 @@ Personally, I find this `S` > `P` > `R` > `T` nomenclature a little hard to reme
 Another factor that can affect the tournament is the concept of errors. In the real world, sometimes factors intervene to prevent us from implementing the choice we made. This tournament will range through some percentage of these errors.
 
 Another factor is the number of rounds per match. Again, this tournament will range through a range of rounds per match. If the number of rounds was known to be 10, you could have an algorithm always `defect` on the last round!
+
+The tournament will also include an "evolution" section, in which multiples of each algorithm are all started. In each evolution, each instance of algorithm is competed against all the others and then the worst few scorers are replaced with instances of the highest few scorers. This usually shows a clear winner pretty soon, with most eliminated and perhaps one or two others persisting at a low level.
+  
