@@ -296,8 +296,8 @@ def doEvolution(algolist, algofunc, rand_seed, print_detail):
                     selfHist1 = []
                     selfHist2 = []
                     for moves_idx in range(evolve_moves):
-                        orig_choice1 = algofunc[population_algoidx[pop_idx1]](selfHist1, selfHist2)
-                        orig_choice2 = algofunc[population_algoidx[pop_idx2]](selfHist2, selfHist1)
+                        orig_choice1 = algofunc[population_algoidx[pop_idx1]](selfHist1, selfHist2, 0)
+                        orig_choice2 = algofunc[population_algoidx[pop_idx2]](selfHist2, selfHist1, 1)
                         choice1, choice2 = whoopsie(orig_choice1, orig_choice2, mistake_percent)
                         selfHist1 = [choice1] + selfHist1  # latest choice is always [0]
                         selfHist2 = [choice2] + selfHist2
@@ -349,8 +349,8 @@ def doTournament(algolist, algofunc, rand_seed, print_detail):
                         origHist1 = []
                         origHist2 = []
                         for idx3 in range(num_moves):
-                            orig_choice1 = algofunc[idx1](selfHist1,selfHist2)
-                            orig_choice2 = algofunc[idx2](selfHist2,selfHist1)
+                            orig_choice1 = algofunc[idx1](selfHist1,selfHist2, 0)
+                            orig_choice2 = algofunc[idx2](selfHist2,selfHist1, 1)
                             choice1, choice2 = whoopsie(orig_choice1, orig_choice2, mistake_percent)
 
                             # print("DEBUG doTournament: orig_choice1 %s choice1 %s" % (orig_choice1, choice1))

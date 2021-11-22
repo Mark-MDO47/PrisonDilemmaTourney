@@ -8,7 +8,7 @@
 #    Once seeing a choices.DEFECT, it will return choices.DEFECT forever
 #
 # For an algorithm python routine in a file (i.e. with filename algo_mdo_something.py), the calling sequence is
-#     choice = algo_mdo_something(myChoices, oppChoices)
+#     algo_mdo_something(selfHist, oppHist, ID))
 #     NOTE that the function name is the same as the python filename with the "*.py" removed
 #     I recommend adding your initials (mine are mdo) to your file/algorithm name so we don't have name collisions
 #     This template file is named algorithm_template.py so the function name is algorithm_template
@@ -17,7 +17,7 @@
 #       Thus the opponent choice made in previous move, assuming this isn't the first move, is oppChoices[0].
 #          if len(oppChoices) > 0, there was at least one prior move.
 #       note: len(oppChoices) should be identical to len(myChoices)
-#     value of each entry  in xxxChoices is one of choices.DEFECT or choices.COOPERATE
+#     value of each entry  in xxxHist is one of choices.DEFECT or choices.COOPERATE
 #
 # The algorithm will return
 #     choices.DEFECT or choices.COOPERATE
@@ -58,7 +58,7 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 # note: len(selfHist) and len(oppHist) should always be the same
 #
 ALGO_MDO_SPITEFUL_DEFECT = False
-def algo_mdo_spiteful(selfHist, oppHist):
+def algo_mdo_spiteful(selfHist, oppHist, ID):
     global ALGO_MDO_SPITEFUL_DEFECT # need some static storage or else it gets tedious
 
     if len(oppHist) <= 0: # first move

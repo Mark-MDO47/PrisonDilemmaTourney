@@ -27,7 +27,7 @@
 #           else if "more defects" is == 0, set state choices.COOPERATE, set "more cooperates" to 1, and return choices.COOPERATE
 #
 # For an algorithm python routine in a file (i.e. with filename algo_mdo_something.py), the calling sequence is
-#     choice = algo_mdo_something(myChoices, oppChoices)
+#     algo_mdo_something(selfHist, oppHist, ID))
 #     NOTE that the function name is the same as the python filename with the "*.py" removed
 #     I recommend adding your initials (mine are mdo) to your file/algorithm name so we don't have name collisions
 #     This template file is named algorithm_template.py so the function name is algorithm_template
@@ -36,7 +36,7 @@
 #       Thus the opponent choice made in previous move, assuming this isn't the first move, is oppChoices[0].
 #          if len(oppChoices) > 0, there was at least one prior move.
 #       note: len(oppChoices) should be identical to len(myChoices)
-#     value of each entry  in xxxChoices is one of choices.DEFECT or choices.COOPERATE
+#     value of each entry  in xxxHist is one of choices.DEFECT or choices.COOPERATE
 #
 # The algorithm will return
 #     choices.DEFECT or choices.COOPERATE
@@ -85,11 +85,12 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
+ALGO_MDO_GRADUAL_STORAGE = {}
 ALGO_MDO_GRADUAL_STATE = choices.COOPERATE
 ALGO_MDO_GRADUAL_MORE_COOP = 0
 ALGO_MDO_GRADUAL_MORE_DEFECTS = 0
 ALGO_MDO_GRADUAL_NUM_OPP_DEFECTS = 0
-def algo_mdo_gradual(selfHist, oppHist):
+def algo_mdo_gradual(selfHist, oppHist, ID):
     global ALGO_MDO_GRADUAL_STATE # need some static storage
     global ALGO_MDO_GRADUAL_MORE_COOP
     global ALGO_MDO_GRADUAL_MORE_DEFECTS

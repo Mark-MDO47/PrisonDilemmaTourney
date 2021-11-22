@@ -12,7 +12,7 @@
 #          if ALL-D gets picked twice (ever) then that decision becomes permanent
 #
 # For an algorithm python routine in a file (i.e. with filename algo_mdo_something.py), the calling sequence is
-#     choice = algo_mdo_something(myChoices, oppChoices)
+#     algo_mdo_something(selfHist, oppHist, ID))
 #     NOTE that the function name is the same as the python filename with the "*.py" removed
 #     I recommend adding your initials (mine are mdo) to your file/algorithm name so we don't have name collisions
 #     This template file is named algorithm_template.py so the function name is algorithm_template
@@ -21,7 +21,7 @@
 #       Thus the opponent choice made in previous move, assuming this isn't the first move, is oppChoices[0].
 #          if len(oppChoices) > 0, there was at least one prior move.
 #       note: len(oppChoices) should be identical to len(myChoices)
-#     value of each entry  in xxxChoices is one of choices.DEFECT or choices.COOPERATE
+#     value of each entry  in xxxHist is one of choices.DEFECT or choices.COOPERATE
 #
 # The algorithm will return
 #     choices.DEFECT or choices.COOPERATE
@@ -68,7 +68,7 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 ALGO_MDO_MEM2_BEHAVIOR = "TIT-FOR-TAT"
 ALGO_MDO_MEM2_BEHAVE_COUNT = 2
 ALGO_MDO_MEM2_ALL_D_COUNT = 0
-def algo_mdo_mem2(selfHist, oppHist):
+def algo_mdo_mem2(selfHist, oppHist, ID):
     global ALGO_MDO_MEM2_BEHAVIOR
     global ALGO_MDO_MEM2_BEHAVE_COUNT
     global ALGO_MDO_MEM2_ALL_D_COUNT
@@ -79,18 +79,29 @@ def algo_mdo_mem2(selfHist, oppHist):
         ALGO_MDO_MEM2_BEHAVE_COUNT = 2
         ALGO_MDO_MEM2_ALL_D_COUNT = 0
 
+    sys.stderr.write("DEBUG move=%d VIOR=%s VE_COUNT=%s D_COUNT=%s\n   selfhist = %s\n    opphist = %s\n" % \
+                     (len(selfHist), ALGO_MDO_MEM2_BEHAVIOR, ALGO_MDO_MEM2_BEHAVE_COUNT, ALGO_MDO_MEM2_ALL_D_COUNT,
+                      selfHist, oppHist))
+
     # make sure we are in the correct state to choose a move
     if 2 <= ALGO_MDO_MEM2_ALL_D_COUNT:
+        sys.stderr.write("DEBUG pass D_COUNT=%s\n" % ALGO_MDO_MEM2_ALL_D_COUNT)
         pass # stay ALL-D forever
+    elif 1 <= ALGO_MDO_MEM2_BEHAVE_COUNT:
+        sys.stderr.write("DEBUG pass VE_COUNT==%s\n" % ALGO_MDO_MEM2_BEHAVE_COUNT)
+        pass # stay the course for this behavior
     elif 0 >= ALGO_MDO_MEM2_BEHAVE_COUNT: # reached another decision point
+        sys.stderr.write("DEBUG decision VE_COUNT==%s\n" % ALGO_MDO_MEM2_BEHAVE_COUNT)
         if (choices.COOPERATE == selfHist[1]) and (choices.COOPERATE == oppHist[1]) and \
                 (choices.COOPERATE == selfHist[0]) and (choices.COOPERATE == oppHist[0]):
             ALGO_MDO_MEM2_BEHAVIOR = "TIT-FOR-TAT"
             ALGO_MDO_MEM2_BEHAVE_COUNT = 2
     elif (oppHist[1] != selfHist[1]) and (oppHist[0] != selfHist[0]):
+        sys.stderr.write("DEBUG check1 VE_COUNT==%s\n" % ALGO_MDO_MEM2_BEHAVE_COUNT)
         ALGO_MDO_MEM2_BEHAVIOR = "TIT-FOR-2-TAT"
         ALGO_MDO_MEM2_BEHAVE_COUNT = 2
     else:
+        sys.stderr.write("DEBUG check2 VE_COUNT==%s\n" % ALGO_MDO_MEM2_BEHAVE_COUNT)
         ALGO_MDO_MEM2_BEHAVIOR = "ALL-D"
         ALGO_MDO_MEM2_BEHAVE_COUNT = 2
         ALGO_MDO_MEM2_ALL_D_COUNT += 1

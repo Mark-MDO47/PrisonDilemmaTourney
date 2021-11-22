@@ -7,7 +7,7 @@
 #    On all subsequent rounds, it alternates between DEFECT and COOPERATE
 #
 # For an algorithm python routine in a file (i.e. with filename algo_mdo_something.py), the calling sequence is
-#     choice = algo_mdo_something(myChoices, oppChoices)
+#     algo_mdo_something(selfHist, oppHist, ID))
 #     NOTE that the function name is the same as the python filename with the "*.py" removed
 #     I recommend adding your initials (mine are mdo) to your file/algorithm name so we don't have name collisions
 #     This template file is named algorithm_template.py so the function name is algorithm_template
@@ -16,9 +16,9 @@
 #       Thus the opponent choice made in previous round, assuming this isn't the first round, is oppChoices[0].
 #          if len(oppChoices) > 0, there was at least one prior round.
 #       note: len(oppChoices) should be identical to len(myChoices)
-#     value of each entry  in xxxChoices is one of value.DEFECT or value.COOPERATE
+#     value of each entry  in xxxHist is one of choices.DEFECT or choices.COOPERATE
 # The algorithm will return
-#     value.DEFECT or value.COOPERATE
+#     choices.DEFECT or choices.COOPERATE
 # The algorithm can keep state variables. Remember that the algorithm will "restart" multiple times to compete with
 #     other algorithms, so you must reset your state variables on the first move (0 == len(oppChoices)).
 #     Also remember that your states will be global, so use the name of the algorithm in the name of your global.
@@ -64,24 +64,29 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 # This is essentially the same effect as algo_mdo_per_cd.py
 #
 # NOTE: this has the debug code removed to show how simple the actual code is
-ALGORITHM_TEMPLATE_STATE = 1.0
-def algorithm_template(selfHist, oppHist):
-    global ALGORITHM_TEMPLATE_STATE
+# NOTE: use of static global storage is just for illustration, not actually used in the code itself
+ALGORITHM_TEMPLATE_STORAGE = {} # static global storage is just for illustration
+def algorithm_template(selfHist, oppHist, ID):
+    global ALGORITHM_TEMPLATE_STORAGE
 
     if (0 == len(oppHist)):
-        ALGORITHM_TEMPLATE_STATE = 1.0 # must reset state variable(s) if first move
+        ALGORITHM_TEMPLATE_STORAGE[ID] = 1.0 # must reset state variable(s) if first move
+    ALGORITHM_TEMPLATE_RANDOM = ALGORITHM_TEMPLATE_STORAGE[ID] # move state variables to local variables
 
     rtn = choices.DEFECT
     if (0 == (len(selfHist) % 2)) and (0 == (len(oppHist) % 2)): # both lengths guaranteed to be the same
         rtn = choices.COOPERATE
     else:
         rtn = choices.DEFECT
-    ALGORITHM_TEMPLATE_STATE *= random.random() # useless but is a demo; please do NOT call random.seed()!
+    ALGORITHM_TEMPLATE_RANDOM *= random.random() # useless but is a demo; please do NOT call random.seed()!
+
+    ALGORITHM_TEMPLATE_STORAGE[ID] = ALGORITHM_TEMPLATE_RANDOM # move local variables to state variables
+
     return rtn
 
 """
 # NOTE: Don't Panic! This just shows some potential debug code, not necessary!
-def algorithm_template(selfHist, oppHist):
+def algorithm_template(selfHist, oppHist, ID):
     DEBUG_ALGO = True
 
     if DEBUG_ALGO:
