@@ -63,8 +63,19 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 #
 # This is essentially the same effect as algo_mdo_per_cd.py
 #
-# NOTE: this has the debug code removed to show how simple the actual code is
-# NOTE: use of static global storage is just for illustration, not actually used in the code itself
+# NOTE: this has the debug code and static global storage removed to show how simple the actual code is
+#
+def algorithm_template(selfHist, oppHist, ID):
+    rtn = choices.DEFECT
+    if (0 == (len(selfHist) % 2)) and (0 == (len(oppHist) % 2)): # both lengths guaranteed to be the same
+        rtn = choices.COOPERATE
+    else:
+        rtn = choices.DEFECT
+    return rtn
+
+"""
+NOTE: this demonstrates use of static global storage. It is just for illustration, usage in code is just a toy.
+
 ALGORITHM_TEMPLATE_STORAGE = {} # static global storage is just for illustration
 def algorithm_template(selfHist, oppHist, ID):
     global ALGORITHM_TEMPLATE_STORAGE
@@ -74,7 +85,7 @@ def algorithm_template(selfHist, oppHist, ID):
     ALGORITHM_TEMPLATE_RANDOM = ALGORITHM_TEMPLATE_STORAGE[ID] # move state variables to local variables
 
     rtn = choices.DEFECT
-    if (0 == (len(selfHist) % 2)) and (0 == (len(oppHist) % 2)): # both lengths guaranteed to be the same
+    if 0 == (len(selfHist) % 2): # both lengths guaranteed to be the same
         rtn = choices.COOPERATE
     else:
         rtn = choices.DEFECT
@@ -83,6 +94,7 @@ def algorithm_template(selfHist, oppHist, ID):
     ALGORITHM_TEMPLATE_STORAGE[ID] = ALGORITHM_TEMPLATE_RANDOM # move local variables to state variables
 
     return rtn
+"""
 
 """
 # NOTE: Don't Panic! This just shows some potential debug code, not necessary!
