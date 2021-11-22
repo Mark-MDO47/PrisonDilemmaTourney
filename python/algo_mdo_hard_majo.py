@@ -59,27 +59,33 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
-algo_mdo_hard_majo_DEFECT_count = 0
-algo_mdo_hard_majo_COOPERATE_count = 0
+ALGO_MDO_HARD_MAJO_STORAGE = {}
 def algo_mdo_hard_majo(selfHist, oppHist, ID):
-    global algo_mdo_hard_majo_DEFECT_count # need some static storage or else it gets tedious
-    global algo_mdo_hard_majo_COOPERATE_count
+    global ALGO_MDO_HARD_MAJO_STORAGE # need some static storage or else it gets tedious
 
     # keep track of opponent moves
     if len(oppHist) <= 0:  # first move
-        algo_mdo_hard_majo_DEFECT_count = 0
-        algo_mdo_hard_majo_COOPERATE_count = 0
+        ALGO_MDO_HARD_MAJO_STORAGE[ID] = [0,0]
+
+    DEFECT_COUNT, COOPERATE_COUNT = ALGO_MDO_HARD_MAJO_STORAGE[ID]
+
+    rtn = choices.DEFECT
+    if len(oppHist) <= 0:  # first move
+        pass
     elif choices.DEFECT == oppHist[0]:
-        algo_mdo_hard_majo_DEFECT_count += 1
+        DEFECT_COUNT += 1
     else:
-        algo_mdo_hard_majo_COOPERATE_count += 1
+        COOPERATE_COUNT += 1
 
     # we do need to special case the first move here to force a defect
-    if (len(oppHist) <= 0) or (algo_mdo_hard_majo_COOPERATE_count <= algo_mdo_hard_majo_DEFECT_count):
-        return choices.DEFECT
+    if (len(oppHist) <= 0) or (COOPERATE_COUNT <= DEFECT_COUNT):
+        rtn = choices.DEFECT
     else:
-        return choices.COOPERATE
+        rtn = choices.COOPERATE
 
+    ALGO_MDO_HARD_MAJO_STORAGE[ID] = [DEFECT_COUNT, COOPERATE_COUNT]
+
+    return rtn
 
 if __name__ == "__main__":
     sys.stderr.write("ERROR - algo_mdo_tit_for_tat.py is not intended to be run stand-alone\n")

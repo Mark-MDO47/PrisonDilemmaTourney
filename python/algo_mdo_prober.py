@@ -60,25 +60,36 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
-ALGO_MDO_PROBER_BEHAVIOR = "NONE"
+ALGO_MDO_PROBER_STORAGE = {}
 def algo_mdo_prober(selfHist, oppHist, ID):
-    global ALGO_MDO_PROBER_BEHAVIOR
+    global ALGO_MDO_PROBER_STORAGE
 
+    if 0 == len(selfHist): # must reinitialize each "game"
+        ALGO_MDO_PROBER_STORAGE[ID] = "NONE"
+
+    BEHAVIOR = ALGO_MDO_PROBER_STORAGE[ID]
+
+    rtn = choices.DEFECT
     if 0 == len(selfHist):
-        ALGO_MDO_PROBER_BEHAVIOR = "NONE" # must reinitialize each "game"
-        return choices.DEFECT
-    elif (1 == len(selfHist)) or (2 == len(selfHist)):
-        return choices.COOPERATE
+        BEHAVIOR = "NONE"
+        rtn = choices.DEFECT
+    elif 2 <= len(selfHist):
+        rtn = choices.COOPERATE
     elif 3 == len(selfHist):
         if (choices.COOPERATE == oppHist[0]) or (choices.COOPERATE == oppHist[1]):
-            ALGO_MDO_PROBER_BEHAVIOR = "DEFECT"
+            BEHAVIOR = "DEFECT"
         else:
-            ALGO_MDO_PROBER_BEHAVIOR = "TIT-FOR-TAT"
+            BEHAVIOR = "TIT-FOR-TAT"
 
-    if "DEFECT" == ALGO_MDO_PROBER_BEHAVIOR:
-        return choices.DEFECT # always return DEFECT
-    else: # "TIT-FOR-TAT" == ALGO_MDO_PROBER_BEHAVIOR:
-        return oppHist[0]
+    # this section only happens after choice was made on 3rd move
+    if "DEFECT" == BEHAVIOR:
+        rtn = choices.DEFECT # always return DEFECT
+    elif "TIT-FOR-TAT" == BEHAVIOR:
+        rtn = oppHist[0]
+
+    ALGO_MDO_PROBER_STORAGE[ID] = BEHAVIOR
+
+    return rtn
 
 if __name__ == "__main__":
     sys.stderr.write("ERROR - algo_mdo_prober.py is not intended to be run stand-alone\n")

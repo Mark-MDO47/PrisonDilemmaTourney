@@ -57,21 +57,32 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
-ALGO_MDO_SPITEFUL_DEFECT = False
+DEFECT = False
+ALGO_MDO_SPITEFUL_STORAGE = {}
 def algo_mdo_spiteful(selfHist, oppHist, ID):
-    global ALGO_MDO_SPITEFUL_DEFECT # need some static storage or else it gets tedious
+    global ALGO_MDO_SPITEFUL_STORAGE # need some static storage or else it gets tedious
 
     if len(oppHist) <= 0: # first move
-        ALGO_MDO_SPITEFUL_DEFECT = False # reset static storage
-        return choices.COOPERATE
+        ALGO_MDO_SPITEFUL_STORAGE[ID] = False
+
+    DEFECT = ALGO_MDO_SPITEFUL_STORAGE[ID]
+
+    rtn = choices.DEFECT
+    if len(oppHist) <= 0: # first move
+        DEFECT = False
+        rtn = choices.COOPERATE
     else:
         if choices.DEFECT == oppHist[0]:
-            ALGO_MDO_SPITEFUL_DEFECT = True
-    if ALGO_MDO_SPITEFUL_DEFECT:
-        return choices.DEFECT
-    else:
-        return choices.COOPERATE
+            DEFECT = True
 
+    if DEFECT:
+        rtn = choices.DEFECT
+    else:
+        rtn = choices.COOPERATE
+
+    ALGO_MDO_SPITEFUL_STORAGE[ID] = DEFECT
+
+    return rtn
 
 
 if __name__ == "__main__":

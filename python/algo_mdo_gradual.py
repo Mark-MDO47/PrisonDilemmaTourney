@@ -86,38 +86,36 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 # note: len(selfHist) and len(oppHist) should always be the same
 #
 ALGO_MDO_GRADUAL_STORAGE = {}
-ALGO_MDO_GRADUAL_STATE = choices.COOPERATE
-ALGO_MDO_GRADUAL_MORE_COOP = 0
-ALGO_MDO_GRADUAL_MORE_DEFECTS = 0
-ALGO_MDO_GRADUAL_NUM_OPP_DEFECTS = 0
 def algo_mdo_gradual(selfHist, oppHist, ID):
-    global ALGO_MDO_GRADUAL_STATE # need some static storage
-    global ALGO_MDO_GRADUAL_MORE_COOP
-    global ALGO_MDO_GRADUAL_MORE_DEFECTS
-    global ALGO_MDO_GRADUAL_NUM_OPP_DEFECTS
+    global ALGO_MDO_GRADUAL_STORAGE # need some static storage
+
+    if len(oppHist) == 0: # first move
+        ALGO_MDO_GRADUAL_STORAGE[ID] = [choices.COOPERATE, 0, 0, 0]
+
+    STATE, MORE_COOP, MORE_DEFECTS, NUM_OPP_DEFECTS = ALGO_MDO_GRADUAL_STORAGE[ID]
 
     # keep track of total number of opponent defects for convenience; could use oppHist
     if (len(oppHist) != 0) and (choices.DEFECT == oppHist[0]):
-        ALGO_MDO_GRADUAL_NUM_OPP_DEFECTS += 1
+        NUM_OPP_DEFECTS += 1
 
     if len(oppHist) == 0: # first move
-        ALGO_MDO_GRADUAL_STATE = choices.COOPERATE
-        ALGO_MDO_GRADUAL_MORE_COOP = 0
-        ALGO_MDO_GRADUAL_MORE_DEFECTS = 0
-    elif ALGO_MDO_GRADUAL_STATE == choices.COOPERATE:
-        if ALGO_MDO_GRADUAL_MORE_COOP > 0:
-            ALGO_MDO_GRADUAL_MORE_COOP -= 1
+        pass
+    elif STATE == choices.COOPERATE:
+        if MORE_COOP > 0:
+            MORE_COOP -= 1
         elif choices.DEFECT == oppHist[0]:
-            ALGO_MDO_GRADUAL_STATE = choices.DEFECT
-            ALGO_MDO_GRADUAL_MORE_DEFECTS = ALGO_MDO_GRADUAL_NUM_OPP_DEFECTS-1
-    else: # if ALGO_MDO_GRADUAL_STATE = choices.DEFECT:
-        if ALGO_MDO_GRADUAL_MORE_DEFECTS > 0:
-            ALGO_MDO_GRADUAL_MORE_DEFECTS -= 1
-        else: # ALGO_MDO_GRADUAL_MORE_DEFECTS == 0
-            ALGO_MDO_GRADUAL_STATE = choices.COOPERATE
-            ALGO_MDO_GRADUAL_MORE_COOP = 1
+            STATE = choices.DEFECT
+            MORE_DEFECTS = NUM_OPP_DEFECTS-1
+    else: # if STATE = choices.DEFECT:
+        if MORE_DEFECTS > 0:
+            MORE_DEFECTS -= 1
+        else: # MORE_DEFECTS == 0
+            STATE = choices.COOPERATE
+            MORE_COOP = 1
 
-    return ALGO_MDO_GRADUAL_STATE
+    ALGO_MDO_GRADUAL_STORAGE[ID] = [STATE, MORE_COOP, MORE_DEFECTS, NUM_OPP_DEFECTS]
+
+    return STATE
 
 if __name__ == "__main__":
     sys.stderr.write("ERROR - algo_mdo_gradual.py is not intended to be run stand-alone\n")

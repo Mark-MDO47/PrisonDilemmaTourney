@@ -59,27 +59,35 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
-algo_mdo_soft_majo_DEFECT_count = 0
-algo_mdo_soft_majo_COOPERATE_count = 0
-def algo_mdo_soft_majo(selfHist, oppHist, ID):
-    global algo_mdo_soft_majo_DEFECT_count # need some static storage or else it gets tedious
-    global algo_mdo_soft_majo_COOPERATE_count
+ALGO_MDO_SOFT_MAJO_STORAGE = {}
 
+def algo_mdo_soft_majo(selfHist, oppHist, ID):
+    global ALGO_MDO_SOFT_MAJO_STORAGE # need some static storage or else it gets tedious
+
+    if len(oppHist) <= 0:  # first move
+        ALGO_MDO_SOFT_MAJO_STORAGE[ID] = [0,0]
+
+    DEFECT_COUNT, COOPERATE_COUNT = ALGO_MDO_SOFT_MAJO_STORAGE[ID]
+
+    rtn = choices.DEFECT
     # keep track of opponent moves
     if len(oppHist) <= 0:  # first move
-        algo_mdo_soft_majo_DEFECT_count = 0
-        algo_mdo_soft_majo_COOPERATE_count = 0
+        DEFECT_COUNT = 0
+        COOPERATE_COUNT = 0
     elif choices.DEFECT == oppHist[0]:
-        algo_mdo_soft_majo_DEFECT_count += 1
+        DEFECT_COUNT += 1
     else:
-        algo_mdo_soft_majo_COOPERATE_count += 1
+        COOPERATE_COUNT += 1
 
     # we don't need to special case the first move here; it happens automatically
-    if algo_mdo_soft_majo_COOPERATE_count < algo_mdo_soft_majo_DEFECT_count:
-        return choices.DEFECT
+    if COOPERATE_COUNT < DEFECT_COUNT:
+        rtn = choices.DEFECT
     else:
-        return choices.COOPERATE
+        rtn = choices.COOPERATE
 
+    ALGO_MDO_SOFT_MAJO_STORAGE[ID] = [DEFECT_COUNT, COOPERATE_COUNT]
+
+    return rtn
 
 if __name__ == "__main__":
     sys.stderr.write("ERROR - algo_mdo_tit_for_tat.py is not intended to be run stand-alone\n")

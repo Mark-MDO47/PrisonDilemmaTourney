@@ -60,15 +60,23 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
-ALGO_MDO_SLOW_TIT_FOR_TAT_STATE = choices.COOPERATE
+ALGO_MDO_SLOW_TIT_FOR_TAT_STORAGE = {}
 def algo_mdo_slow_tit_for_tat(selfHist, oppHist, ID):
-    global ALGO_MDO_SLOW_TIT_FOR_TAT_STATE # need some static storage
+    global STATE # need some static storage
+
+    if len(oppHist) == 0: # first two moves
+        ALGO_MDO_SLOW_TIT_FOR_TAT_STORAGE[ID] = choices.COOPERATE
+
+    STATE = ALGO_MDO_SLOW_TIT_FOR_TAT_STORAGE[ID]
 
     if len(oppHist) <= 1: # first two moves
-        ALGO_MDO_SLOW_TIT_FOR_TAT_STATE = choices.COOPERATE
+        STATE = choices.COOPERATE
     elif oppHist[0] == oppHist[1]:
-        ALGO_MDO_SLOW_TIT_FOR_TAT_STATE = oppHist[0]
-    return ALGO_MDO_SLOW_TIT_FOR_TAT_STATE
+        STATE = oppHist[0]
+
+    ALGO_MDO_SLOW_TIT_FOR_TAT_STORAGE[ID] = STATE
+
+    return STATE
 
 if __name__ == "__main__":
     sys.stderr.write("ERROR - algo_mdo_slow_tit_for_tat.py is not intended to be run stand-alone\n")

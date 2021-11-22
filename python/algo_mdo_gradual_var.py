@@ -93,38 +93,37 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
-ALGO_MDO_GRADUAL_VAR_STATE = choices.COOPERATE
-ALGO_MDO_GRADUAL_VAR_MORE_COOP = 0
-ALGO_MDO_GRADUAL_VAR_MORE_DEFECTS = 0
-ALGO_MDO_GRADUAL_VAR_NUM_OPP_DEFECTS = 0
+ALGO_MDO_GRADUAL_VAR_STORAGE = {}
 def algo_mdo_gradual_var(selfHist, oppHist, ID):
-    global ALGO_MDO_GRADUAL_VAR_STATE # need some static storage
-    global ALGO_MDO_GRADUAL_VAR_MORE_COOP
-    global ALGO_MDO_GRADUAL_VAR_MORE_DEFECTS
-    global ALGO_MDO_GRADUAL_VAR_NUM_OPP_DEFECTS
+    global ALGO_MDO_GRADUAL_VAR_STORAGE # need some static storage
+
+    if len(oppHist) == 0: # first move
+        ALGO_MDO_GRADUAL_VAR_STORAGE[ID] = [choices.COOPERATE, 0, 0, 0]
+
+    STATE, MORE_COOP, MORE_DEFECTS, NUM_OPP_DEFECTS = ALGO_MDO_GRADUAL_VAR_STORAGE[ID]
 
     # keep track of total number of opponent defects for convenience; could use oppHist
     if (len(oppHist) != 0) and (choices.DEFECT == oppHist[0]):
-        ALGO_MDO_GRADUAL_VAR_NUM_OPP_DEFECTS += 1
+        NUM_OPP_DEFECTS += 1
 
     if len(oppHist) == 0: # first move
-        ALGO_MDO_GRADUAL_VAR_STATE = choices.COOPERATE
-        ALGO_MDO_GRADUAL_VAR_MORE_COOP = 0
-        ALGO_MDO_GRADUAL_VAR_MORE_DEFECTS = 0
-    elif ALGO_MDO_GRADUAL_VAR_STATE == choices.COOPERATE:
-        if ALGO_MDO_GRADUAL_VAR_MORE_COOP > 0:
-            ALGO_MDO_GRADUAL_VAR_MORE_COOP -= 1
+        pass
+    elif STATE == choices.COOPERATE:
+        if MORE_COOP > 0:
+            MORE_COOP -= 1
         elif choices.DEFECT == oppHist[0]:
-            ALGO_MDO_GRADUAL_VAR_STATE = choices.DEFECT
-            ALGO_MDO_GRADUAL_VAR_MORE_DEFECTS = ALGO_MDO_GRADUAL_VAR_NUM_OPP_DEFECTS*(ALGO_MDO_GRADUAL_VAR_NUM_OPP_DEFECTS-1)/2 - 1
-    else: # if ALGO_MDO_GRADUAL_VAR_STATE = choices.DEFECT:
-        if ALGO_MDO_GRADUAL_VAR_MORE_DEFECTS > 0:
-            ALGO_MDO_GRADUAL_VAR_MORE_DEFECTS -= 1
-        else: # ALGO_MDO_GRADUAL_VAR_MORE_DEFECTS == 0
-            ALGO_MDO_GRADUAL_VAR_STATE = choices.COOPERATE
-            ALGO_MDO_GRADUAL_VAR_MORE_COOP = 1
+            STATE = choices.DEFECT
+            MORE_DEFECTS = NUM_OPP_DEFECTS*(NUM_OPP_DEFECTS-1)/2 - 1
+    else: # if STATE = choices.DEFECT:
+        if MORE_DEFECTS > 0:
+            MORE_DEFECTS -= 1
+        else: # MORE_DEFECTS == 0
+            STATE = choices.COOPERATE
+            MORE_COOP = 1
 
-    return ALGO_MDO_GRADUAL_VAR_STATE
+    ALGO_MDO_GRADUAL_VAR_STORAGE[ID] = [STATE, MORE_COOP, MORE_DEFECTS, NUM_OPP_DEFECTS]
+
+    return STATE
 
 if __name__ == "__main__":
     sys.stderr.write("ERROR - algo_mdo_gradual_var.py is not intended to be run stand-alone\n")

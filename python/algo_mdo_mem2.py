@@ -65,63 +65,64 @@ import PrisonersDilemmaTournament as choices # pick up choices.DEFECT and choice
 # note: the function name should be exactly the same as the filename but without the ".py"
 # note: len(selfHist) and len(oppHist) should always be the same
 #
-ALGO_MDO_MEM2_BEHAVIOR = "TIT-FOR-TAT"
-ALGO_MDO_MEM2_BEHAVE_COUNT = 2
-ALGO_MDO_MEM2_ALL_D_COUNT = 0
+ALGO_MDO_MEM2_STORAGE = {}
 def algo_mdo_mem2(selfHist, oppHist, ID):
-    global ALGO_MDO_MEM2_BEHAVIOR
-    global ALGO_MDO_MEM2_BEHAVE_COUNT
-    global ALGO_MDO_MEM2_ALL_D_COUNT
+    global ALGO_MDO_MEM2_STORAGE
 
     # handle the first move in the game
-    if 0 == len(selfHist):
-        ALGO_MDO_MEM2_BEHAVIOR = "TIT-FOR-TAT" # must reinitialize each "game"
-        ALGO_MDO_MEM2_BEHAVE_COUNT = 2
-        ALGO_MDO_MEM2_ALL_D_COUNT = 0
+    if 0 == len(selfHist): # must reinitialize each "game"
+        ALGO_MDO_MEM2_STORAGE[ID] = ["TIT-FOR-TAT", 2, 0]
 
-    sys.stderr.write("DEBUG move=%d VIOR=%s VE_COUNT=%s D_COUNT=%s\n   selfhist = %s\n    opphist = %s\n" % \
-                     (len(selfHist), ALGO_MDO_MEM2_BEHAVIOR, ALGO_MDO_MEM2_BEHAVE_COUNT, ALGO_MDO_MEM2_ALL_D_COUNT,
-                      selfHist, oppHist))
+    BEHAVIOR, BEHAVE_COUNT, ALL_D_COUNT = ALGO_MDO_MEM2_STORAGE[ID]
+
+    # sys.stderr.write("DEBUG move=%d ID=%s VIOR=%s VE_COUNT=%s D_COUNT=%s\n   selfhist = %s\n    opphist = %s\n" % \
+    #                  (len(selfHist), ID, BEHAVIOR, BEHAVE_COUNT, ALL_D_COUNT, selfHist, oppHist))
+
+    rtn = choices.DEFECT
 
     # make sure we are in the correct state to choose a move
-    if 2 <= ALGO_MDO_MEM2_ALL_D_COUNT:
-        sys.stderr.write("DEBUG pass D_COUNT=%s\n" % ALGO_MDO_MEM2_ALL_D_COUNT)
+    if 2 <= ALL_D_COUNT:
+        # sys.stderr.write("DEBUG pass D_COUNT=%s\n" % ALL_D_COUNT)
         pass # stay ALL-D forever
-    elif 1 <= ALGO_MDO_MEM2_BEHAVE_COUNT:
-        sys.stderr.write("DEBUG pass VE_COUNT==%s\n" % ALGO_MDO_MEM2_BEHAVE_COUNT)
+    elif 1 <= BEHAVE_COUNT:
+        # sys.stderr.write("DEBUG pass VE_COUNT==%s\n" % BEHAVE_COUNT)
         pass # stay the course for this behavior
-    elif 0 >= ALGO_MDO_MEM2_BEHAVE_COUNT: # reached another decision point
-        sys.stderr.write("DEBUG decision VE_COUNT==%s\n" % ALGO_MDO_MEM2_BEHAVE_COUNT)
+    elif 0 >= BEHAVE_COUNT: # reached another decision point
+        # sys.stderr.write("DEBUG decision VE_COUNT==%s\n" % BEHAVE_COUNT)
         if (choices.COOPERATE == selfHist[1]) and (choices.COOPERATE == oppHist[1]) and \
                 (choices.COOPERATE == selfHist[0]) and (choices.COOPERATE == oppHist[0]):
-            ALGO_MDO_MEM2_BEHAVIOR = "TIT-FOR-TAT"
-            ALGO_MDO_MEM2_BEHAVE_COUNT = 2
+            BEHAVIOR = "TIT-FOR-TAT"
+            BEHAVE_COUNT = 2
     elif (oppHist[1] != selfHist[1]) and (oppHist[0] != selfHist[0]):
-        sys.stderr.write("DEBUG check1 VE_COUNT==%s\n" % ALGO_MDO_MEM2_BEHAVE_COUNT)
-        ALGO_MDO_MEM2_BEHAVIOR = "TIT-FOR-2-TAT"
-        ALGO_MDO_MEM2_BEHAVE_COUNT = 2
+        # sys.stderr.write("DEBUG check1 VE_COUNT==%s\n" % BEHAVE_COUNT)
+        BEHAVIOR = "TIT-FOR-2-TAT"
+        BEHAVE_COUNT = 2
     else:
-        sys.stderr.write("DEBUG check2 VE_COUNT==%s\n" % ALGO_MDO_MEM2_BEHAVE_COUNT)
-        ALGO_MDO_MEM2_BEHAVIOR = "ALL-D"
-        ALGO_MDO_MEM2_BEHAVE_COUNT = 2
-        ALGO_MDO_MEM2_ALL_D_COUNT += 1
+        # sys.stderr.write("DEBUG check2 VE_COUNT==%s\n" % BEHAVE_COUNT)
+        BEHAVIOR = "ALL-D"
+        BEHAVE_COUNT = 2
+        ALL_D_COUNT += 1
 
-    if 1 <= ALGO_MDO_MEM2_BEHAVE_COUNT: # this is not really needed
-        ALGO_MDO_MEM2_BEHAVE_COUNT -= 1
-    if ("ALL-D" == ALGO_MDO_MEM2_BEHAVIOR) or (2 <= ALGO_MDO_MEM2_ALL_D_COUNT):
-        return choices.DEFECT # always return DEFECT
-    elif "TIT-FOR-TAT" == ALGO_MDO_MEM2_BEHAVIOR:
+    if 1 <= BEHAVE_COUNT: # this is not really needed
+        BEHAVE_COUNT -= 1
+    if ("ALL-D" == BEHAVIOR) or (2 <= ALL_D_COUNT):
+        rtn = choices.DEFECT # always return DEFECT
+    elif "TIT-FOR-TAT" == BEHAVIOR:
         if len(oppHist) <= 0:  # first move
-            return choices.COOPERATE
+            rtn = choices.COOPERATE
         else:
-            return oppHist[0]
-    elif "TIT-FOR-2-TAT" == ALGO_MDO_MEM2_BEHAVIOR:
+            rtn = oppHist[0]
+    elif "TIT-FOR-2-TAT" == BEHAVIOR:
         if (choices.DEFECT == oppHist[1]) or (choices.DEFECT == oppHist[0]):
-            return choices.DEFECT
+            rtn = choices.DEFECT
         else:
-            return oppHist[0]
+            rtn = oppHist[0]
     else:
-        sys.stderr.write("\nERROR algo_mdo_mem2 - invalid state %s\n\n" % ALGO_MDO_MEM2_BEHAVIOR)
+        sys.stderr.write("\nERROR algo_mdo_mem2 - invalid state %s\n\n" % BEHAVIOR)
+
+    ALGO_MDO_MEM2_STORAGE[ID] = [BEHAVIOR, BEHAVE_COUNT, ALL_D_COUNT]
+
+    return rtn
 
 if __name__ == "__main__":
     sys.stderr.write("ERROR - algo_mdo_mem2.py is not intended to be run stand-alone\n")
