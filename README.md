@@ -2,9 +2,9 @@
 
 ## Quick Introduction
 
-Quoting from the paper listed below:
+Quoting from the paper listed below `with slight editing`:
 * See https://www.jasss.org/20/4/12.html
-> "The iterated prisoner’s dilemma is a game that allows to understand various basic truths about social behaviour and how cooperation between entities is established and evolves sharing same space: living organisms sharing an ecological niche, companies competitors fighting over a market, people with questions about the value of conducting a jointwork, etc. ..."
+> "The iterated prisoner’s dilemma is a game that allows `one` to understand various basic truths about social behaviour and how cooperation between entities is established and evolves sharing `the` same space: living organisms sharing an ecological niche, companies competitors fighting over a market, people with questions about the value of conducting a joint work, etc. ..."
 
 > "Although based on an extreme simplification of the interactions between entities, the mathematical study of the iterated prisoner’s dilemma remains difficult, and often, only computer simulations are able to solve classical questions or identify ways of building efficient behaviours ..."
 
