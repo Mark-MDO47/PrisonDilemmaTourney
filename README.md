@@ -1,5 +1,15 @@
 # Prisoner's Dilemma tournament
 
+## Quick Introduction
+
+Quoting from the paper listed below:
+* See https://www.jasss.org/20/4/12.html
+> "The iterated prisoner’s dilemma is a game that allows to understand various basic truths about social behaviour and howcooperation between entities is established and evolves sharing same space: living organisms sharing an ecological niche, companies competitors fighting over a market, people with questions about the value of conducting a jointwork, etc. ..."
+
+> "Although based on an extreme simplification of the interactions between entities, the mathematical study of the iterated prisoner’s dilemma remains difficult, and often, only computer simulations are able to solve classical questions or identify ways of building efficient behaviours ..."
+
+For an excellent and gentle interactive introduction to the basics and then many of the factors that can affect the tournament, I highly recommend https://ncase.me/trust/, which is based on Robert Axelrod's book `THE EVOLUTION OF COOPERATION`.
+
 ## What is the Prisoner's Dilemma and the Iterated Prisoner's Dilemma?
 * See https://en.wikipedia.org/wiki/Prisoner%27s_dilemma
 * See https://cs.stanford.edu/people/eroberts/courses/soco/projects/1998-99/game-theory/axelrod.html
@@ -17,28 +27,38 @@ Robert Axelrod, professor of political science at the University of Michigan, ha
 
 Of course, there has been a lot of thinking about the issues around this game since then. For an excellent and gentle interactive introduction to the basics and then many of the factors that can affect the tournament, I highly recommend https://ncase.me/trust/, which is based on Robert Axelrod's book `THE EVOLUTION OF COOPERATION`.
 
-## What is this tournament?
+## What is this tournament and how do I participate?
 
-I plan to run an Iterated Prisoner's Dilemma tournament among members of my extended family and friends. This repository will contain a (hopefully) short Python program to run such touraments. It will also have an evolutionary competition.
+I plan to run an Iterated Prisoner's Dilemma tournament among members of my extended family and friends. This repository contains a short Python program (PrisonersDilemmaTournament.py) that runs both a tourament and an evolutionary competition.
 
-I will create a template for the python code for the algorithms and write code for the 19 basic deterministic strategies from the literature (including the simplest imaginable strategies such as always defect). Thus we will have at least the basics covered.
+I wrote a template for the python code for the algorithms (algorithm_template.py), and also wrote code for the 19 basic deterministic strategies from the literature (including the simplest imaginable strategies such as always defect). Thus we have at least the basics covered.
 
-Idea for the tournament is to create one or more algorithms and submit them, or choose an existing strategy and vote for it. If you wish to implement your own version of a strategy in the 19 I will provide, we will run that also. I suggest including your initials in the python filename of your algorithm to avoid name collisions.
+Submitted algorithms will have the naming convention algo_***yourInitials***_***description***.py; this will help avoid naming collisions.
+See algorithm_template.py for examples and information on this and other common techniques such as static storage for algorithms.
 
-Then I will have an extra-round-robin tournament in which each strategy plays versus each other strategy and (here is the extra part) also plays against itself.
+The idea for the tournament is to create one or more algorithms and submit them, or choose an existing strategy and vote for it. If you wish to implement your own version of a strategy in the 19 I included, we will run that also.
 
+With algorithms collected, I will run the tournament:
+* each strategy plays versus each other strategy and also plays against itself, with scores summed up
+* each strategy also plays in an "evolution" section, in which multiples of each algorithm are all started.
+  * In each evolution, each instance of algorithm is competed against all the others and then the worst few scorers are replaced with instances of the highest few scorers.
+  * This usually shows a clear winner pretty soon, with most eliminated and perhaps one or two others persisting at a low level.
+  
 I am aware that there is already existing software for this type of tournament such as https://evolution-outreach.biomedcentral.com/articles/10.1007/s12052-012-0434-x
 * although the link to the code is broken...
 * ... even if the link was not broken, it is more fun to write my own!
 
-There is the possibility of sensitivity of tournament results to the values used to calculate the score (number of years of sentence) under the different choices. Let's call the two participants X and Y and their choices (`C` or `D`) are selected by the horizontal and vertical axes of the table, respectively. 
+## Factors that will be varied during the tournament
+
+### Rewards or Scoring
+There is the possibility of sensitivity of tournament results to the values used to calculate the score (number of years of sentence) under the different choices. Let's call the two participants X and Y and their choices (`C` or `D`) are selected by the horizontal and vertical axes of the table, respectively. The score for each combination of choices by X and Y is indicated by the letters on the top and left of the cell, respectively. Also the highlighting style will help associate the score with the entry in the cell. These letters `S`, `P`, `R`, and `T` are used in the literature.
 
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; X <BR> `Y`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Cooperate | Defect |
 | --- | --- | --- |
 | **Cooperate** | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **R** <BR> `R`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **T** <BR> `S`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
 | **Defect** | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **S** <BR> `T`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; **P** <BR> `P`&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |
 
-This tournament will be played under several different payoff ranges, each with `S` > `P` > `R` > `T`.
+This tournament will be played under several different payoff ranges, each with `S` > `P` > `R` > `T`. `T` is typically zero in the literature.
 
 Personally, I find this `S` > `P` > `R` > `T` nomenclature a little hard to remember. I think of it (and the code refers to it) as the result a self-choice and an opponent-choice. Thinking of one of the participants as self and the other as opponent, here are the results as `self-choice`_`opponent-choice`:
 * `C_D` = `S` = I nobly `cooperate` but my dastardly opponent `defects`
@@ -46,9 +66,8 @@ Personally, I find this `S` > `P` > `R` > `T` nomenclature a little hard to reme
 * `C_C` = `R` = I nobly `cooperate` and my opponent probably slips and chooses to `cooperate` too
 * `D_C` = `T` = I slyly defect and my naive opponent cooperates
 
+### Number of moves per match
+Another factor is the number of moves per match. Again, this tournament will range through a range of moves per match. If the number of moves was known to be 10, you could have an algorithm always `defect` on the last move!
+
+### Errors
 Another factor that can affect the tournament is the concept of errors. In the real world, sometimes factors intervene to prevent us from implementing the choice we made. This tournament will range through some percentage of these errors.
-
-Another factor is the number of rounds per match. Again, this tournament will range through a range of rounds per match. If the number of rounds was known to be 10, you could have an algorithm always `defect` on the last round!
-
-The tournament will also include an "evolution" section, in which multiples of each algorithm are all started. In each evolution, each instance of algorithm is competed against all the others and then the worst few scorers are replaced with instances of the highest few scorers. This usually shows a clear winner pretty soon, with most eliminated and perhaps one or two others persisting at a low level.
-  
