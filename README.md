@@ -71,3 +71,13 @@ Another factor is the number of moves per match. Again, this tournament will ran
 
 ### Errors
 Another factor that can affect the tournament is the concept of errors. In the real world, sometimes factors intervene to prevent us from implementing the choice we made. This tournament will range through some percentage of these errors.
+
+## Factors that will be varied during Evolution
+In addition to the factors above, these factors will be varied:
+
+### Number of clones of each algorithm in the starting population
+
+### Number of bottom-ranked clones to be replaced by top-ranked clones on each Evolution iteration
+ 
+### Number of Evolution iterations before calculating the final score
+ 
