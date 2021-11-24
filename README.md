@@ -33,7 +33,7 @@ I plan to run an Iterated Prisoner's Dilemma tournament among members of my exte
 
 I wrote a template for the python code for the algorithms (algorithm_template.py), and also wrote code for the 19 basic deterministic strategies from the literature (including the simplest imaginable strategies such as always defect). Thus we have at least the basics covered.
 
-Submitted algorithms will have the naming convention algo_***yourInitials***_***description***.py; this will help avoid naming collisions.
+Submitted algorithms will have the naming convention algo_`your-initials`_`description`.py; this will help avoid naming collisions.
 See algorithm_template.py for examples and information on this and other common techniques such as static storage for algorithms.
 
 The idea for the tournament is to create one or more algorithms and submit them, or choose an existing strategy and vote for it. If you wish to implement your own version of a strategy in the 19 I included, we will run that also.
@@ -60,7 +60,7 @@ There is the possibility of sensitivity of tournament results to the values used
 
 This tournament will be played under several different payoff ranges, each with `S` > `P` > `R` > `T`. `T` is typically zero in the literature.
 
-Personally, I find this `S` > `P` > `R` > `T` nomenclature a little hard to remember. I think of it (and the code refers to it) as the result a self-choice and an opponent-choice. Thinking of one of the participants as self and the other as opponent, here are the results as `self-choice`_`opponent-choice`:
+Personally, I find this `S` > `P` > `R` > `T` nomenclature a little hard to remember. I think of it (and the code refers to it) as the result a self-choice and an opponent-choice. Thinking of one of the participants as self and the other as opponent, here are the results as `self-choice` _ `opponent-choice` or equivalently the `C` or `D` choices of `Y` _ **X** in the table above:
 * `C_D` = `S` = I nobly `cooperate` but my dastardly opponent `defects`
 * `D_D` = `P` = I reluctantly follow my short-term best interests and `defect` and my dastardly opponent self-interestedly `defects` too
 * `C_C` = `R` = I nobly `cooperate` and my opponent probably slips and chooses to `cooperate` too
