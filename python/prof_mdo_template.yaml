@@ -15,12 +15,7 @@ MISTAKE_PERCENTAGES_LIST:
 # NUM_MOVES_LIST is a list of lengths of contests to run
 #
 NUM_MOVES_LIST:
-- 3
-- 5
-- 10
 - 20
-- 50
-- 100
 #
 # The REWARDS_DICT gives a range of rewards to cycle through.
 # The order of rewards (lengths of prison sentences) is:
@@ -47,14 +42,12 @@ WHOOPSIE_MARKER: -whoopsie
 # EVOLUTION_START_MULTIPLE is a list of how many of each type to start
 #
 EVOLUTION_START_MULTIPLE:
-- 7
-- 11
+- 20
 #
 # EVOLUTION_REPLACE is how many to replace from bottom of list
 #
 EVOLUTION_REPLACE:
-- 3
-- 6
+- 40
 #
 # EVOLUTION_MOVES is how many times to move in each evolution pairing
 #
@@ -64,4 +57,4 @@ EVOLUTION_MOVES:
 # EVOLUTION_ITERATIONS is how many times to iterate pairings before taking score
 #
 EVOLUTION_ITERATIONS:
-- 100
+- 30
