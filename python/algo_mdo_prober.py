@@ -70,11 +70,9 @@ def algo_mdo_prober(selfHist, oppHist, ID):
     BEHAVIOR = ALGO_MDO_PROBER_STORAGE[ID]
 
     rtn = choices.DEFECT
-    if 0 == len(selfHist):
+    if 2 >= len(selfHist):
         BEHAVIOR = "NONE"
         rtn = choices.DEFECT
-    elif 2 >= len(selfHist):
-        rtn = choices.COOPERATE
     elif 3 == len(selfHist):
         if (choices.COOPERATE == oppHist[0]) or (choices.COOPERATE == oppHist[1]):
             BEHAVIOR = "DEFECT"
