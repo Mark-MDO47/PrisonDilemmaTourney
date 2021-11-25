@@ -416,10 +416,10 @@ if __name__ == "__main__":
         formatter_class=argparse.RawTextHelpFormatter,
         description="stdout receives tab-separated-values results of tournament or evolution or both\n",
         epilog="""Example:
-python PrisonersDilemmaTournament.py -e randomseed prof_mdo_template.yaml > formattedResults_just_the_facts.txt
-python PrisonersDilemmaTournament.py -t -dt 47 prof_mdo_template.yaml > formattedResults_detailed.txt
+python PrisonersDilemmaTournament.py -e randomseed fname_parms.yaml > formattedResults_just_the_facts.txt
+python PrisonersDilemmaTournament.py -t -dt 47 fname_parms.yaml > formattedResults_detailed.txt
 """,
-        usage='python %(prog)s randseed profile.yaml\n' +
+        usage='python %(prog)s {optional arguments} randseed fname_parms.yaml\n' +
               "   note: runs all files algo_*.py in directory\n" +
               "   note: algo_*.py written per algorithm_template.py")
     my_parser.add_argument('-dt', '--print-detail-tournament', action='store_true',
@@ -433,7 +433,7 @@ python PrisonersDilemmaTournament.py -t -dt 47 prof_mdo_template.yaml > formatte
                            help='run the evolution only')
     my_group.add_argument('-b', '--both', action='store_true',
                            help='(default) run both the tournament and evolution')
-    my_parser.add_argument('randseed', type=str, help='if integer, seed for random number; else random seed')
+    my_parser.add_argument('randseed', type=str, help='if integer, seed for random number; else random seed based on millisecond time')
     my_parser.add_argument('fname_parms', type=str, help='filename in YAML format of parameters to range such as NUM_MOVES_LIST')
     args = my_parser.parse_args()
 
