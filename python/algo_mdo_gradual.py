@@ -28,8 +28,8 @@
 #
 # For an algorithm python routine in a file (i.e. with filename algo_mdo_something.py), the calling sequence is
 #     algo_mdo_something(selfHist, oppHist, ID))
-#     NOTE that the function name is the same as the python filename with the "*.py" removed
 #     I recommend adding your initials (mine are mdo) to your file/algorithm name so we don't have name collisions
+#     NOTE that the function name is the same as the python filename with the *.py removed
 #     This template file is named algorithm_template.py so the function name is algorithm_template
 # Each call to the algorithm will have the following for parameters:
 #     list of history all the choices made by both parties in reverse order (latest choice before this is [0], prev [1])
