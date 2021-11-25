@@ -76,8 +76,11 @@ Another factor that can affect the tournament is the concept of errors. In the r
 In addition to the factors above, these factors will be varied:
 
 ### Number of clones of each algorithm in the starting population
+In the literature it is typical to start evolution with 100 clones or instances of each algorithm in a giant round-robin for each Evolution iteration. Even with just my 19 initial algorithms, this would be 1900 * (1900-1) / 2 pairings, or 1,804,050 pairings (each with a number of moves) for each Evolution iteration. Then if I wanted to explore the effects of anything across a range, that would be multiplied many times over. I will typically use a much smaller number of clones for my starting population. Maybe after doing some explorations, I will do a few with 100 clones to validate that my results are representative.
 
 ### Number of bottom-ranked clones to be replaced by top-ranked clones on each Evolution iteration
+This one is pretty self-explanatory. If this number is significantly smaller than the number of clones in the starting population, it will take a while for any one algorithm to be eliminated or reach a low self-sustaining level. The downside is that it takes more Evolution iterations before the final result becomes evident.
  
 ### Number of Evolution iterations before calculating the final score
- 
+Most of the results in the literature show a steady or near-steady state after 25 Evolution iterations or so. Just eyeballing the graphs, it looks to me like the trends become clear after 15 iterations or so.
+
