@@ -81,6 +81,8 @@ In the literature it is typical to start evolution with 100 clones or instances 
 ### Number of bottom-ranked clones to be replaced by top-ranked clones on each Evolution iteration
 This one is pretty self-explanatory. If this number is significantly smaller than the number of clones in the starting population, it will take a while for any one algorithm to be eliminated or reach a low self-sustaining level. The downside is that it takes more Evolution iterations before the final result becomes evident.
  
+In the literature they seem to start with 100 clones and then reach a near steady state after 25 iterations. In one example with 17 algorithms, 7 algorithms have gone to zero population counts after 25 Evolution iterations. This means that they must be replacing about 700/25 or 28 (probably 30) of the bottom-ranked clones each Evolution iteration.
+ 
 ### Number of Evolution iterations before calculating the final score
-Most of the results in the literature show a steady or near-steady state after 25 Evolution iterations or so. Just eyeballing the graphs, it looks to me like the trends become clear after 15 iterations or so.
+Most of the results in the literature show a steady or near-steady state after 25 Evolution iterations or so. Just eyeballing the graphs, it looks to me like the trends become clear after 15 iterations or so. Of course, as described above, to achieve this one must adjust the other parameters so that it can reach stability so quickly.
 
