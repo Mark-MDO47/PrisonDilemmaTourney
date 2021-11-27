@@ -31,12 +31,16 @@ Of course, there has been a lot of thinking about the issues around this game si
 
 I plan to run an Iterated Prisoner's Dilemma tournament among members of my extended family and friends. This repository contains a short Python program (PrisonersDilemmaTournament.py) that runs both a tourament and an evolutionary competition.
 
-I wrote a template for the python code for the algorithms (algorithm_template.py), and also wrote code for the 19 basic deterministic strategies from the literature (including the simplest imaginable strategies such as always defect). Thus we have at least the basics covered.
+I wrote a template for the python code for the algorithms (algorithm_template.py), and also wrote code for the 18 basic deterministic strategies from the literature (including the simplest imaginable strategies such as always defect). Thus we have at least the basics covered.
+
+I also implemented 12 probabilistic algorithms just for fun.
 
 Submitted algorithms will have the naming convention algo_`your-initials`_`description`.py; this will help avoid naming collisions.
 See algorithm_template.py for examples and information on this and other common techniques such as static storage for algorithms.
 
-The idea for the tournament is to create one or more algorithms and submit them, or choose an existing strategy and vote for it. If you wish to implement your own version of a strategy in the 19 I included, we will run that also.
+See https://github.com/Mark-MDO47/PrisonDilemmaTourney/blob/main/python/README.md for more description of the algorithms I included.
+
+The idea for the tournament is to create one or more algorithms and submit them, or choose an existing strategy and vote for it. If you wish to implement your own version of a strategy in the 30 I included, we will run that also.
 
 With algorithms collected, I will run the tournament:
 * each strategy plays versus each other strategy and also plays against itself, with scores summed up
