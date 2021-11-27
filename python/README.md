@@ -10,20 +10,21 @@ The algorithms here are my attempts to implement some famous algorithms from the
 
 ## DETERMINISTIC ALGORITHMS
 
-I won't list in alphabetical order. I will first list the simplest, then tit-for-tat and variations, then others.
+I won't list in alphabetical order. I will first list the simplest, then tit-for-tat and variations.
 
 - **algo_mdo_all_coop.py** - On every move it returns COOPERATE
 - **algo_mdo_all_defect.py** - On every move it returns DEFECT
 - **algo_mdo_per_cd.py** - sequences through COOPERATE, DEFECT
 - **algo_mdo_per_ccd.py** - sequences through COOPERATE, COOPERATE, DEFECT
 - **algo_mdo_per_ddc.py** - sequences through DEFECT, DEFECT, COOPERATE
-
 - **algo_mdo_spiteful.py** - first move it returns COOPERATE, after that
   - it returns COOPERATE unless and until the opponent ever does DEFECT
   - if the opponent ever does a DEFECT, it will return DEFECT forever
 - **algo_mdo_pavlov.py** - first move it returns COOPERATE, after that if on previous move both self and opponent
   - disagree: return DEFECT
   - agree: return COOPERATE
+
+<br>
 
 - **algo_mdo_tit_for_tat.py** - first move it returns COOPERATE, after that it does what the opponent did on the previous move
 - **algo_mdo_susp_tit_for_tat.py** - first move it returns DEFECT, after that it does what the opponent did on the previous move
