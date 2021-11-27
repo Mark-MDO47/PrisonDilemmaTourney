@@ -5,8 +5,8 @@
 # The algo_mdo_tit_for_2_tat algorithm behaves as follows:
 #    On the first two moves it returns choices.COOPERATE
 #    On all subsequent moves:
-#       if the opponent did choices.DEFECT in the last two moves, we return choices.DEFECT this move
-#       else we return choices.COOPERATE this move
+#       if the opponent did choices.DEFECT within the last two moves, it returns choices.DEFECT this move
+#       else it returns choices.COOPERATE this move
 #
 # For an algorithm python routine in a file (i.e. with filename algo_mdo_something.py), the calling sequence is
 #     algo_mdo_something(selfHist, oppHist, ID))

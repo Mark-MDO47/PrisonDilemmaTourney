@@ -4,7 +4,7 @@
 #
 # The algo_mdo_spiteful algorithm behaves as follows:
 #    On the first move it returns choices.COOPERATE
-#    After that, it always returns choices.COOPERATE unless the opponent ever does choices.DEFECT
+#    After that, it returns choices.COOPERATE unless and until the opponent ever does choices.DEFECT
 #    Once seeing a choices.DEFECT, it will return choices.DEFECT forever
 #
 # For an algorithm python routine in a file (i.e. with filename algo_mdo_something.py), the calling sequence is
