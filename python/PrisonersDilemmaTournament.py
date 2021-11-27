@@ -70,8 +70,6 @@ import os
 import sys
 import yaml
 
-import probabilistic_strategy
-
 """
 import string
 import pandas as pd
@@ -151,21 +149,21 @@ def whoopsie(choice1, choice2, mistake_percent):
 
     whoopsie_count += 1
     if (choice1 not in whoopsie_checkit) or (choice2 not in whoopsie_checkit):
-        print("ERROR: input to whoopsie is %d %d %0.3f on count %d" % (choice1, choice2, mistake_percent, whoopsie_count))
+        sys.stdout.write("ERROR: input to whoopsie is %d %d %0.3f on count %d\n" % (choice1, choice2, mistake_percent, whoopsie_count))
         exit()
     try1 = random.random()
     if try1 < mistake_percent:
         choice1 = 1-choice1
-        # print("DEBUG whoopsie   change choice1=%d try1 %0.3f mistake %0.1f" % (choice1, try1, 100*mistake_percent))
+        # sys.stdout.write("DEBUG whoopsie   change choice1=%d try1 %0.3f mistake %0.1f\n" % (choice1, try1, 100*mistake_percent))
     else:
-        # print("DEBUG whoopsie nochange choice1=%d try1 %0.3f mistake %0.1f" % (choice1, try1, 100*mistake_percent))
+        # sys.stdout.write("DEBUG whoopsie nochange choice1=%d try1 %0.3f mistake %0.1f\n" % (choice1, try1, 100*mistake_percent))
         pass
     try2 = random.random()
     if try2 < mistake_percent:
         choice2 = 1-choice2
-        # print("DEBUG whoopsie   change choice2=%d try2 %0.3f mistake %0.1f" % (choice2, try2, 100 * mistake_percent))
+        # sys.stdout.write("DEBUG whoopsie   change choice2=%d try2 %0.3f mistake %0.1f\n" % (choice2, try2, 100 * mistake_percent))
     else:
-        # print("DEBUG whoopsie nochange choice2=%d try2 %0.3f mistake %0.1f" % (choice2, try2, 100 * mistake_percent))
+        # sys.stdout.write("DEBUG whoopsie nochange choice2=%d try2 %0.3f mistake %0.1f\n" % (choice2, try2, 100 * mistake_percent))
         pass
     return choice1, choice2
 
@@ -175,12 +173,13 @@ def whoopsie(choice1, choice2, mistake_percent):
 # print_scores - print results
 #
 def print_scores(title, algolist, num_moves, mistake_percent, percent_symb, rand_seed, reward_key, rslttbl, results_type):
-    print("\n\n%s Results of Prisoner's Dilemma Tournament: %s moves, %s%s mistakes (seed %s), ResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s" % \
+    sys.stdout.write("\n\n%s Results of Prisoner's Dilemma Tournament: %s moves, %s%s mistakes (seed %s), ResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s\n" % \
         (title, num_moves, mistake_percent, percent_symb, rand_seed, reward_key,
          rslttbl[IDX_RESULT_D_C], rslttbl[IDX_RESULT_C_C], rslttbl[IDX_RESULT_D_D], rslttbl[IDX_RESULT_C_D]))
-    print("Algorithm\tTotalScore")
+    sys.stdout.write("Algorithm\tTotalScore\n")
     for idx1 in range(len(algolist)):
-        print("%s\t%s" % (algolist[idx1], results_type[idx1]))
+        sys.stdout.write("%s\t%s\n" % (algolist[idx1], results_type[idx1]))
+    sys.stdout.flush()
 
     # end print_scores()
 
@@ -251,6 +250,7 @@ def print_algo_population(evolve_iter, algolist, population_algoidx):
     for algo_idx in range(len(algolist)):
         sys.stdout.write("%d\t" % population_count[algo_idx])
     sys.stdout.write("\n")
+    sys.stdout.flush()
 
     # end print_algo_population()
 
@@ -260,6 +260,7 @@ def print_algo_population(evolve_iter, algolist, population_algoidx):
 # So you say you want an evolution - well, you know... The Beatles (sic)
 #
 def doEvolution(algolist, algofunc, rand_seed, print_detail):
+    random.seed(theSeed)
     rewards_keys = sorted(REWARDS_DICT.keys())
     population_algoidx = []
     population_score = []
@@ -284,9 +285,11 @@ def doEvolution(algolist, algofunc, rand_seed, print_detail):
         for algo_name in algolist:
             sys.stdout.write("%s\t" % algo_name)
         sys.stdout.write("\t\t")
+        sys.stdout.write("rand_seed %0.3f\t" % rand_seed)
         for idx, paramname in enumerate(param_names):
             sys.stdout.write("%s: %s\t" % (paramname, this_param_set[idx]))
         sys.stdout.write("\n")
+        sys.stdout.flush()
         # print starting population counts
         if print_detail:
             print_algo_population(-1, algolist, population_algoidx)
@@ -329,6 +332,7 @@ def doEvolution(algolist, algofunc, rand_seed, print_detail):
 #
 def doTournament(algolist, algofunc, rand_seed, print_detail):
 
+    random.seed(theSeed)
     rewards_keys = sorted(REWARDS_DICT.keys())
     rslttbl = []  # so python knows it exists
 
@@ -355,14 +359,14 @@ def doTournament(algolist, algofunc, rand_seed, print_detail):
                             orig_choice2 = algofunc[idx2](selfHist2,selfHist1, 1)
                             choice1, choice2 = whoopsie(orig_choice1, orig_choice2, mistake_percent)
 
-                            # print("DEBUG doTournament: orig_choice1 %s choice1 %s" % (orig_choice1, choice1))
-                            # print("DEBUG doTournament: orig_choice2 %s choice2 %s" % (orig_choice2, choice2))
+                            # sys.stdout.write("DEBUG doTournament: orig_choice1 %s choice1 %s\n" % (orig_choice1, choice1))
+                            # sys.stdout.write("DEBUG doTournament: orig_choice2 %s choice2 %s\n" % (orig_choice2, choice2))
                             selfHist1 = [choice1] + selfHist1 # latest choice is always [0]
                             selfHist2 = [choice2] + selfHist2
                             origHist1 = [orig_choice1] + origHist1 # scoring is based on orig choice + whoopsie
                             origHist2 = [orig_choice2] + origHist2
-                            # print("DEBUG doTournament: origHist1 %s selfHist1 %s" % (origHist1, selfHist1))
-                            # print("DEBUG doTournament: origHist2 %s selfHist2 %s" % (origHist2, selfHist2))
+                            # sys.stdout.write\n("DEBUG doTournament: origHist1 %s selfHist1 %s\n" % (origHist1, selfHist1))
+                            # sys.stdout.write("DEBUG doTournament: origHist2 %s selfHist2 %s\n" % (origHist2, selfHist2))
                             result1, rlsttbl = calcResult(this_reward_key, choice1, choice2)
                             result2, rslttbl = calcResult(this_reward_key, choice2, choice1)
                             selfScore1 = [result1] + selfScore1
@@ -378,7 +382,7 @@ def doTournament(algolist, algofunc, rand_seed, print_detail):
                             scores_overall[idx2] += result2
 
                         if print_detail:
-                            print("\nMove\t%s\tScore\t%s\tScore\t%s%s mistakes (seed %s)\tResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s" % \
+                            sys.stdout.write("\nMove\t%s\tScore\t%s\tScore\t%s%s mistakes (seed %s)\tResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s\n" % \
                                   (algolist[idx1], algolist[idx2], "%0.1f" % (100.0*mistake_percent), "%", rand_seed,
                                    this_reward_key, rslttbl[IDX_RESULT_D_C], rslttbl[IDX_RESULT_C_C], rslttbl[IDX_RESULT_D_D],
                                    rslttbl[IDX_RESULT_C_D]))
@@ -393,10 +397,11 @@ def doTournament(algolist, algofunc, rand_seed, print_detail):
                                 move2 = TEXT_INTERP[selfHist2[revIdx]]
                                 if origHist2[revIdx] != selfHist2[revIdx]:
                                     move2 += WHOOPSIE_MARKER
-                                print("%d\t%s\t%s\t%s\t%s\t" % (1+idx, move1, selfScore1[revIdx], move2, selfScore2[revIdx]))
+                                sys.stdout.write("%d\t%s\t%s\t%s\t%s\t\n" % (1+idx, move1, selfScore1[revIdx], move2, selfScore2[revIdx]))
                                 sum1 += selfScore1[revIdx]
                                 sum2 += selfScore2[revIdx]
-                            print("Final Score\t%s\t%s\t%s\t%s\t" % (algolist[idx1], sum1, algolist[idx2], sum2))
+                            sys.stdout.write("Final Score\t%s\t%s\t%s\t%s\t\n" % (algolist[idx1], sum1, algolist[idx2], sum2))
+                            sys.stdout.flush()
 
                 print_scores("Pairing", algolist, num_moves, "%0.1f" % (100.0*mistake_percent), "%", rand_seed, this_reward_key, rslttbl, scores_pairing)
             print_scores("RewardsTable", algolist, "N/A", "%0.1f" % (100.0*mistake_percent), "%", rand_seed, this_reward_key, rslttbl, scores_rewardstbl)
@@ -443,7 +448,7 @@ python PrisonersDilemmaTournament.py -t -dt 47 fname_parms.yaml > formattedResul
         theSeed = int(args.randseed)
     else:
         theSeed = round(time.time() * 1000) # random seed based on time in milliseconds
-    random.seed(theSeed)
+    # the working routines will set the random seed
 
     doTourn = True
     doEvolu = True
