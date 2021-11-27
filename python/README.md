@@ -4,7 +4,7 @@ Each algorithm has a file that starts with algo_ and ends with .py. It is sugges
 
 The file algorithm_template.py has information on naming conventions and methodology for creating algorithms, plus examples.
 
-Each algorithm has access to the entire history of play so far for this round, but does not know what the opponent will do for this move. The two choices available are `cooperate` (c) or `defect` (d).
+Each algorithm has access to the entire history of play previous to this move, but does not know what the opponent will do this move. The two choices available are `cooperate` (c) or `defect` (d).
 
 The algorithms here are my attempts to implement some famous algorithms from the literature. Currently there are two categories of algorithms here: deterministic and probabilistic.
 
