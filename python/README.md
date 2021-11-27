@@ -70,15 +70,25 @@ I won't list in alphabetical order. I will first list the simplest, then tit-for
 
 ## PROBABILISTIC ALGORITHMS
 
-- **algo_mdo_equalizerA.py**
-- **algo_mdo_equalizerB.py**
-- **algo_mdo_equalizerC.py**
-- **algo_mdo_equalizerD.py**
-- **algo_mdo_equalizerE.py**
-- **algo_mdo_equalizerF.py**
-- **algo_mdo_extortionA.py**
-- **algo_mdo_extortionB.py**
-- **algo_mdo_extortionC.py**
-- **algo_mdo_extortionD.py**
-- **algo_mdo_extortionE.py**
-- **algo_mdo_extortionF.py**
+These probabilistic algorithms are based on the paper found here: https://www.jasss.org/20/4/12.html<br>
+On the first move they return COOPERATE<br>
+On all subsequent moves, the calculate return with probabilty dependent on last self_opponent move<br>
+- p1 = p_c_c if the last self,opponent move was COOPERATE,COOPERATE
+- p2 = p_c_d if the last self,opponent move was COOPERATE,DEFECT
+- p3 = p_d_c if the last self,opponent move was DEFECT,COOPERATE
+- p4 = p_d_d if the last self,opponent move was DEFECT,DEFECT
+
+<br>
+
+- **algo_mdo_equalizerA.py** - p_c_c = 0.75, p_c_d = 0.25, p_d_c = 0.50, p_d_d = 0.25
+- **algo_mdo_equalizerB.py** - p_c_c = 0.90, p_c_d = 0.70, p_d_c = 0.20, p_d_d = 0.10
+- **algo_mdo_equalizerC.py** - p_c_c = 0.90, p_c_d = 0.50, p_d_c = 0.50, p_d_d = 0.30
+- **algo_mdo_equalizerD.py** - p_c_c = 27.0/35.0, p_c_d = 17.0/35.0, p_d_c = 0.20, p_d_d = 2.0/35.0
+- **algo_mdo_equalizerE.py** - p_c_c = 2.0/3.0, p_c_d = 0.00, p_d_c = 2.0/3.0, p_d_d = 1.0/3.0
+- **algo_mdo_equalizerF.py** - p_c_c = 1.00, p_c_d = 13.0/15.0, p_d_c = 0.20, p_d_d = 0.40
+- **algo_mdo_extortionA.py** - p_c_c = 8.0/9.0, p_c_d = 2.0/9.0, p_d_c = 11.0/18.0, p_d_d = 0.00
+- **algo_mdo_extortionB.py** - p_c_c = 0.80, p_c_d = 0.10, p_d_c = 0.60, p_d_d = 0.00
+- **algo_mdo_extortionC.py** - p_c_c = 11.0/12.0, p_c_d = 5.0/24.0, p_d_c = 2.0/3.0, p_d_d = 0.00
+- **algo_mdo_extortionD.py** - p_c_c = 5.0/6.0, p_c_d = 0.25, p_d_c = 0.50, p_d_d = 0.00
+- **algo_mdo_extortionE.py** - p_c_c = 0.85, p_c_d = 3.0/40.0, p_d_c = 0.70, p_d_d = 0.00
+- **algo_mdo_extortionF.py** - p_c_c = 11.0/15.0, p_c_d = 2.0/15.0, p_d_c = 7.0/15.0, p_d_d = 0.00
