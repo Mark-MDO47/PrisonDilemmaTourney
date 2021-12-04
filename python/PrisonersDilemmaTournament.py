@@ -102,12 +102,12 @@ WHOOPSIE_MARKER = "*"         # in detail tournament printout, marks the mistake
 # D_D is my result if I defect and my opponent defects       ("P" in literature)
 # C_D is my result if I cooperate and my opponent defects    ("T" in literature)
 #
-def calcResult(range, selfChoice, oppChoice):
+def calcResult(rewardKey, selfChoice, oppChoice):
     the_result = 0
-    D_C = REWARDS_DICT[range][IDX_RESULT_D_C]
-    C_C = REWARDS_DICT[range][IDX_RESULT_C_C]
-    D_D = REWARDS_DICT[range][IDX_RESULT_D_D]
-    C_D = REWARDS_DICT[range][IDX_RESULT_C_D]
+    D_C = REWARDS_DICT[rewardKey][IDX_RESULT_D_C]
+    C_C = REWARDS_DICT[rewardKey][IDX_RESULT_C_C]
+    D_D = REWARDS_DICT[rewardKey][IDX_RESULT_D_D]
+    C_D = REWARDS_DICT[rewardKey][IDX_RESULT_C_D]
     if (DEFECT == selfChoice) and (DEFECT == oppChoice):
         the_result = D_D
     elif (COOPERATE == selfChoice) and (COOPERATE == oppChoice):
@@ -176,9 +176,13 @@ def print_scores(title, algolist, num_moves, mistake_percent, percent_symb, rand
     sys.stdout.write("\n\n%s Results of Prisoner's Dilemma Tournament: %s moves, %s%s mistakes (seed %s), ResultsTbl=%s: D_D=%s C_C=%s D_C=%s C_D=%s\n" % \
         (title, num_moves, mistake_percent, percent_symb, rand_seed, reward_key,
          rslttbl[IDX_RESULT_D_C], rslttbl[IDX_RESULT_C_C], rslttbl[IDX_RESULT_D_D], rslttbl[IDX_RESULT_C_D]))
-    sys.stdout.write("Algorithm\tTotalScore\n")
+
+    sys.stdout.write("Algorithm\tTotalScore\tTitle\tMoves\tMistakes\tSeed\tResultsTbl\tD_D\tC_C\tD_C\tC_D\t\n")
     for idx1 in range(len(algolist)):
-        sys.stdout.write("%s\t%s\n" % (algolist[idx1], results_type[idx1]))
+        sys.stdout.write("%s\t%s\t%s\t%s\t%s%s\t%s\t%s\t%s\t%s\t%s\t%s\t\n" % (algolist[idx1], results_type[idx1],
+                         title, num_moves, mistake_percent, percent_symb, rand_seed, reward_key,
+                         rslttbl[IDX_RESULT_D_C], rslttbl[IDX_RESULT_C_C], rslttbl[IDX_RESULT_D_D],
+                         rslttbl[IDX_RESULT_C_D]))
     sys.stdout.flush()
 
     # end print_scores()
@@ -239,7 +243,7 @@ def make_combos(list_of_lists):
 ###################################################################################
 # print_algo_population - print evolution population counts
 #
-def print_algo_population(evolve_iter, algolist, population_algoidx):
+def print_algo_population(evolve_iter, algolist, population_algoidx, this_param_set):
     # count the population for each algorithm
     population_count = [0] * len(algolist)
     # sys.stdout.write("DEBUG print_algo_population: evolve_iter=%s algolist=%s population_algoidx=%s\n" % (evolve_iter, algolist, population_algoidx))
@@ -249,6 +253,8 @@ def print_algo_population(evolve_iter, algolist, population_algoidx):
     sys.stdout.write("%d\t" % (1 + evolve_iter))
     for algo_idx in range(len(algolist)):
         sys.stdout.write("%d\t" % population_count[algo_idx])
+    for param in this_param_set:
+        sys.stdout.write("%s\t" % param)
     sys.stdout.write("\n")
     sys.stdout.flush()
 
@@ -270,29 +276,32 @@ def doEvolution(algolist, algofunc, rand_seed, print_detail):
     selfScore2 = []
 
     param_combos = make_combos ((MISTAKE_PERCENTAGES_LIST, rewards_keys, EVOLUTION_ITERATIONS, EVOLUTION_REPLACE, EVOLUTION_START_MULTIPLE, EVOLUTION_MOVES))
-    param_names = ["% Mistakes", "Rewards", "NumEvolveIter", "NumEvolveReplace", "NumEvolveStart", "NumEvolveMoves"]
+    param_names = ["NumEvolveIter", "NumEvolveReplace", "NumEvolveStart", "NumEvolveMoves", "rand_seed", "% Mistakes", "Rewards", "D_D", "C_C", "D_C", "C_D"]
     for mistake_percent, this_reward_key, evolve_iteration_max, evolve_replace, evolve_start_multiple, evolve_moves \
             in param_combos:
-        # build the data for tracking the results
-        this_param_set = [mistake_percent, this_reward_key, evolve_iteration_max, evolve_replace, evolve_start_multiple, evolve_moves]
+        # build the data for printing and tracking the results
+        this_param_set = [evolve_iteration_max, evolve_replace, evolve_start_multiple, evolve_moves,
+                          rand_seed, "%0.2f%s" % (mistake_percent*100.0, "%"), this_reward_key,
+                          REWARDS_DICT[this_reward_key][IDX_RESULT_D_D], REWARDS_DICT[this_reward_key][IDX_RESULT_C_C],
+                          REWARDS_DICT[this_reward_key][IDX_RESULT_D_C], REWARDS_DICT[this_reward_key][IDX_RESULT_C_D]]
         population_algoidx = []
         population_score = []
         for algo_idx in range(len(algolist)):
             for idx_num_start in range(evolve_start_multiple):
                 population_algoidx.append(algo_idx)
                 population_score.append(0)
+
+        # print header line
         sys.stdout.write("\nEvolutionNum\t")
         for algo_name in algolist:
             sys.stdout.write("%s\t" % algo_name)
-        sys.stdout.write("\t\t")
-        sys.stdout.write("rand_seed %0.3f\t" % rand_seed)
         for idx, paramname in enumerate(param_names):
-            sys.stdout.write("%s: %s\t" % (paramname, this_param_set[idx]))
+            sys.stdout.write("%s\t" % paramname)
         sys.stdout.write("\n")
         sys.stdout.flush()
-        # print starting population counts
+        # print starting population counts if print detail
         if print_detail:
-            print_algo_population(-1, algolist, population_algoidx)
+            print_algo_population(-1, algolist, population_algoidx, this_param_set)
 
         # round-robin we don't compete against ourselves
         for evolve_iter in range(evolve_iteration_max):
@@ -321,7 +330,7 @@ def doEvolution(algolist, algofunc, rand_seed, print_detail):
                 population_algoidx[int(loser)] = population_algoidx[int(winner)]
             # print current population counts
             if print_detail or ((evolve_iter+1) == evolve_iteration_max):
-                print_algo_population(evolve_iter, algolist, population_algoidx)
+                print_algo_population(evolve_iter, algolist, population_algoidx, this_param_set)
 
     # end doEvolution()
 
